@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "731400997160",
+    "project_id": "arkea-afc5c",
+    "storage_bucket": "arkea-afc5c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:731400997160:android:61936597ee162e4b31e81d",
+        "android_client_info": {
+          "package_name": "com.example.ARkea"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "731400997160-9gjrhjvhc548okn5iju4o2hinovnpvdu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAI0zcB0phXJVMSstd2gSHBDMz3V6OmQ54"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "731400997160-9gjrhjvhc548okn5iju4o2hinovnpvdu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
