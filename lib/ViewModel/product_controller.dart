@@ -89,7 +89,7 @@ class ProductController extends GetxController {
     var response =
         await NetworkHandler.get("product/product-by-category/$categoryId");
     ProductModel productModel = ProductModel.fromJson(json.decode(response));
-
+    count = productModel.count.obs;
     isLoading(false);
     return productModel;
   }

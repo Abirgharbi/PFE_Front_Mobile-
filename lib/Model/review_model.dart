@@ -33,24 +33,27 @@ class ReviewModel {
 }
 
 class Review {
+  double rating;
+  String comment;
+  String customerImage;
+  String customerName;
+  String? productId;
+  DateTime? createdAt;
+
   Review({
     required this.rating,
     required this.comment,
-    required this.customerId,
+    required this.customerName,
+    required this.customerImage,
     this.productId,
     this.createdAt,
   });
 
-  String rating;
-  int comment;
-  String customerId;
-  String? productId;
-  DateTime? createdAt;
-
   factory Review.fromJson(Map<String, dynamic> json) => Review(
-        rating: json["rating"],
+        rating: json["rating"].toDouble(),
         comment: json["comment"],
-        customerId: json["customerId"],
+        customerName: json["customerName"],
+        customerImage: json["customerImage"],
         productId: json["productId"],
         createdAt: json["compare_at_price"],
       );
@@ -58,7 +61,8 @@ class Review {
   Map<String, dynamic> toJson() => {
         "rating": rating,
         "comment": comment,
-        "customerId": customerId,
+        "customerName": customerName,
+        "customerImage": customerImage,
         "productId": productId,
         "createdAt": createdAt,
       };

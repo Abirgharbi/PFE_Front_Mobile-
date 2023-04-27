@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 
 import '../../../../ViewModel/review_controller.dart';
 import '../../../../utils/sizes.dart';
 
 class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
   final double rating;
+  final String thumbnail;
   final String productId;
 
-  CustomAppBar({required this.rating,required this.productId, Key? key}) : super(key: key);
+  CustomAppBar(
+      {required this.rating,
+      required this.thumbnail,
+      required this.productId,
+      Key? key})
+      : super(key: key);
 
   @override
   Size get preferredSize => Size.fromHeight(AppBar().preferredSize.height);
@@ -45,48 +50,10 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
                 _reviewController.getProductReviews(productId);
                 Get.toNamed(
                   '/review',
-                  arguments: {
-                    'imageUrl':
-                        'https://res.cloudinary.com/dbkivxzek/image/upload/v1681557790/ARkea/moo8hs2jle9evi5u8o1z.png',
-                    'reviews': [
-                      {
-                        'userName': 'ilyes bhd',
-                        'userImage':
-                            'https://res.cloudinary.com/dbkivxzek/image/upload/v1681427867/ARkea/slmxeqmrbjxth5cgfwtu.jpg',
-                        'comment': 'This is a great product!',
-                        'rating': 4.5,
-                      },
-                      {
-                        'userName': 'ilyes bhd',
-                        'userImage':
-                            'https://res.cloudinary.com/dbkivxzek/image/upload/v1681427867/ARkea/slmxeqmrbjxth5cgfwtu.jpg',
-                        'comment': 'Not what I expected.',
-                        'rating': 2.0,
-                      },
-                      {
-                        'userName': 'ilyes bhd',
-                        'userImage':
-                            'https://res.cloudinary.com/dbkivxzek/image/upload/v1681427867/ARkea/slmxeqmrbjxth5cgfwtu.jpg',
-                        'comment': 'This is a great product!',
-                        'rating': 4.5,
-                      },
-                      {
-                        'userName': 'ilyes bhd',
-                        'userImage':
-                            'https://res.cloudinary.com/dbkivxzek/image/upload/v1681427867/ARkea/slmxeqmrbjxth5cgfwtu.jpg',
-                        'comment':
-                            'This is a great product! This is a great product! This is a great product! This is a great product! ',
-                        'rating': 4.5,
-                      },
-                      {
-                        'userName': 'ilyes bhd',
-                        'userImage':
-                            'https://res.cloudinary.com/dbkivxzek/image/upload/v1681427867/ARkea/slmxeqmrbjxth5cgfwtu.jpg',
-                        'comment': 'This is a great product!',
-                        'rating': 4.5,
-                      },
-                    ],
-                  },
+                  arguments: [
+                    {'thumbnail': thumbnail},
+                    {'productId': productId}
+                  ],
                 );
               },
               child: Container(

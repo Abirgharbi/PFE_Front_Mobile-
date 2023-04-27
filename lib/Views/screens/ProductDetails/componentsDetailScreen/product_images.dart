@@ -23,7 +23,6 @@ class _ProductImagesState extends State<ProductImages> {
 
   @override
   Widget build(BuildContext context) {
-    print('this is the widget ' + widget.product.toString());
     return Column(
       children: [
         SizedBox(

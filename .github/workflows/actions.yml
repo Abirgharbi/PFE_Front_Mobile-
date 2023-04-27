@@ -1,0 +1,6 @@
+# name : arkea mobile
+
+# on: 
+#     pull_request:
+#         branches:
+#             - main

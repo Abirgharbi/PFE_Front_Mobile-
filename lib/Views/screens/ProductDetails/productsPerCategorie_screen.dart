@@ -13,7 +13,7 @@ class productsPerCategorieScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: const CustomAppBar(),
-      backgroundColor: const Color(0xFFF5F6F9),
+      backgroundColor: Colors.white,
       body: Body(
         category: agrs!.category,
       ),

@@ -24,36 +24,34 @@ class Body extends StatefulWidget {
 
 class _BodyState extends State<Body> {
   final productController = Get.put(ProductController());
-  List<Product> productByCategoryList = [];
-  int count = 0;
   @override
   void initState() {
     super.initState();
     getProductList();
   }
 
+  bool fetched = false;
+  List<Product> productByCategoryList = <Product>[];
   void getProductList() async {
     final product =
         await productController.getProductsByCategory(widget.category.id);
 
     final productList = product.products;
-    count = product.count;
-    print("=========================================");
-    print(count);
-    print("productList: $productList");
+    fetched = true;
+
     setState(() {
       productByCategoryList = productList;
+      fetched = true;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    print(count);
-    return count == 0
+    return productByCategoryList.isEmpty && fetched == true
         ? const Center(
             child: Text("No product found"),
           )
-        : productController.isLoading.value
+        : !fetched
             ? const Center(child: CircularProgressIndicator())
             : GridView.builder(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(

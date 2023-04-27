@@ -156,7 +156,7 @@ class SpecialOffers extends StatelessWidget {
                 press: () {},
               ),
               SpecialOfferCard(
-                image: "assets/images/Image Banner 3.png",
+                image: "assets/images/Image Banner 2.png",
                 category: "Fashion",
                 discount: "Discount 50%%",
                 press: () {},

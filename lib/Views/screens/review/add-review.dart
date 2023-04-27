@@ -21,7 +21,8 @@ class _AddReviewScreenState extends State<AddReviewScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final String imageUrl = Get.arguments['imageUrl'];
+    final String thumbnail = Get.arguments[0]['thumbnail'];
+    final String productId = Get.arguments[1]['productId'];
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -32,7 +33,7 @@ class _AddReviewScreenState extends State<AddReviewScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Image.network(
-                imageUrl,
+                thumbnail,
                 fit: BoxFit.cover,
                 height: 250,
               ),
@@ -96,10 +97,9 @@ class _AddReviewScreenState extends State<AddReviewScreen> {
                   child: InkWell(
                     borderRadius: BorderRadius.circular(15),
                     onTap: () {
-                      print('=====================');
-                      print(_comment);
-                      print(_rating);
-                      _reviewController.addReview(_comment, _rating);
+                      _reviewController.addReview(_comment, _rating, productId);
+                      Get.snackbar("Success", "Review Added successfully");
+                      Get.toNamed('/landing');
                     },
                     splashColor: MyColors.btnBorderColor,
                     child: const Center(

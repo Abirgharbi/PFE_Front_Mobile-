@@ -33,6 +33,23 @@ class ProductModel {
 }
 
 class Product {
+  String id;
+  String name;
+  double price;
+  double? compareAtPrice;
+  String description;
+  String? category;
+  List<dynamic> images;
+  List<dynamic> colors;
+  String thumbnail;
+  String? model;
+  int? quantity;
+  String? promotion;
+  DateTime? createdAt;
+  DateTime? updatedAt;
+  double ratingsAverage;
+  bool? liked;
+
   Product({
     required this.id,
     required this.name,
@@ -51,22 +68,6 @@ class Product {
     required this.ratingsAverage,
     this.liked,
   });
-  String id;
-  String name;
-  int price;
-  int? compareAtPrice;
-  String description;
-  String? category;
-  List<dynamic> images;
-  List<dynamic> colors;
-  String thumbnail;
-  String? model;
-  int? quantity;
-  String? promotion;
-  DateTime? createdAt;
-  DateTime? updatedAt;
-  int ratingsAverage;
-  bool? liked;
 
   factory Product.fromJson(Map<String, dynamic> json) => Product(
         id: json["_id"],
