@@ -92,32 +92,52 @@ class _addQuantityWidgetState extends State<addQuantityWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        RoundedIconBtn(
-          icon: Icons.remove,
-          press: () {
-            setState(() {
-              if (quantity > 1) quantity--;
-            });
-          },
-        ),
-        SizedBox(width: getProportionateScreenWidth(8)),
-        Text(
-          '$quantity',
-          style: const TextStyle(fontWeight: FontWeight.w600),
-        ),
-        SizedBox(width: getProportionateScreenWidth(8)),
-        RoundedIconBtn(
-          icon: Icons.add,
-          showShadow: true,
-          press: () {
-            setState(() {
-              quantity++;
-            });
-          },
-        ),
-      ],
-    );
+    return quantity == 1
+        ? Row(
+            children: [
+              SizedBox(width: getProportionateScreenWidth(8)),
+              Text(
+                '${quantity}',
+                style: const TextStyle(fontWeight: FontWeight.w600),
+              ),
+              SizedBox(width: getProportionateScreenWidth(8)),
+              RoundedIconBtn(
+                icon: Icons.add,
+                showShadow: true,
+                press: () {
+                  setState(() {
+                    quantity++;
+                  });
+                },
+              ),
+            ],
+          )
+        : Row(
+            children: [
+              RoundedIconBtn(
+                icon: Icons.remove,
+                press: () {
+                  setState(() {
+                    quantity = quantity - 1;
+                  });
+                },
+              ),
+              SizedBox(width: getProportionateScreenWidth(8)),
+              Text(
+                '${quantity}',
+                style: const TextStyle(fontWeight: FontWeight.w600),
+              ),
+              SizedBox(width: getProportionateScreenWidth(8)),
+              RoundedIconBtn(
+                icon: Icons.add,
+                showShadow: true,
+                press: () {
+                  setState(() {
+                    quantity++;
+                  });
+                },
+              ),
+            ],
+          );
   }
 }

@@ -1,3 +1,4 @@
+import 'package:ARkea/utils/colors.dart';
 import 'package:flutter/material.dart';
 
 import '../../utils/sizes.dart';
@@ -17,25 +18,18 @@ class RoundedIconBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: (40 / 375.0) * gWidth,
-      width: (40 / 375.0) * gWidth,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        boxShadow: [
-          if (showShadow)
-            BoxShadow(
-              offset: const Offset(0, 6),
-              blurRadius: 10,
-              color: const Color(0xFFB0B0B0).withOpacity(0.2),
-            ),
-        ],
-      ),
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
+      height: 40,
+      width: 40,
+      child: TextButton(
+        style: TextButton.styleFrom(
           padding: EdgeInsets.zero,
           backgroundColor: Colors.white,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+          shape: RoundedRectangleBorder(
+              side: const BorderSide(
+                  color: MyColors.btnBorderColor,
+                  width: 1,
+                  style: BorderStyle.solid),
+              borderRadius: BorderRadius.circular(10)),
         ),
         onPressed: press,
         child: Icon(

@@ -4,7 +4,7 @@ import 'product_model.dart';
 
 class Cart {
   final Product product;
-  final int? quantity;
+  int quantity;
 
-  Cart({required this.product, this.quantity});
+  Cart({required this.product, this.quantity = 1});
 }

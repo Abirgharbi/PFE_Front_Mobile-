@@ -6,9 +6,14 @@ import 'package:get/get.dart';
 
 class ProductController extends GetxController {
   RxBool isLoading = false.obs;
+  RxInt countPopular = 0.obs;
   RxInt count = 0.obs;
+  RxInt countRecent = 0.obs;
   RxInt length = 5.obs;
+  RxInt popularLength = 5.obs;
   RxInt productNumber = 0.obs;
+  RxInt popularProductNumber = 0.obs;
+  RxInt recentProductNumber = 0.obs;
 
   var product = 0.obs;
 
@@ -30,16 +35,16 @@ class ProductController extends GetxController {
     var response = await NetworkHandler.get("product/recent?page=0");
     ProductModel productModel = ProductModel.fromJson(json.decode(response));
     recentProductsList = productModel.products;
-    productNumber.value = productModel.count;
+    recentProductNumber.value = productModel.count;
     isLoading(false);
 
     return recentProductsList;
   }
 
   getMoreRecentProducts(List<Product> list) async {
-    count.value = count.value + 1;
+    countRecent.value = countRecent.value + 1;
 
-    var response = await NetworkHandler.get("product/recent?page=$count");
+    var response = await NetworkHandler.get("product/recent?page=$countRecent");
     ProductModel productModel = ProductModel.fromJson(json.decode(response));
     list.addAll(productModel.products);
     length.value = list.length;
@@ -50,19 +55,20 @@ class ProductController extends GetxController {
     var response = await NetworkHandler.get("product/most-liked?page=0");
     ProductModel productModel = ProductModel.fromJson(json.decode(response));
     mostLikedProductList = productModel.products;
-    productNumber.value = productModel.count;
+    popularProductNumber.value = productModel.count;
     isLoading(false);
 
     return mostLikedProductList;
   }
 
   getMoreMostLikedProducts(List<Product> list) async {
-    count.value = count.value + 1;
+    countPopular.value = countPopular.value + 1;
 
-    var response = await NetworkHandler.get("product/most-liked?page=$count");
+    var response =
+        await NetworkHandler.get("product/most-liked?page=$countPopular");
     ProductModel productModel = ProductModel.fromJson(json.decode(response));
     list.addAll(productModel.products);
-    length.value = list.length;
+    popularLength.value = list.length;
   }
 
   getProductDetails() async {

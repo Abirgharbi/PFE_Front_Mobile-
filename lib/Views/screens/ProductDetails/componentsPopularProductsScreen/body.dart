@@ -9,19 +9,41 @@ import '../../../../Model/product_model.dart';
 import '../../../../ViewModel/product_controller.dart';
 import '../../../../utils/colors.dart';
 import '../../../../utils/sizes.dart';
+import '../../../widgets/search_bar.dart';
 import '../../Home/filter_page.dart';
 import '../../Home/home_page.dart';
 import '../details_screen.dart';
 
 var productController = Get.put(ProductController());
 
-class Body extends StatelessWidget {
+class Body extends StatefulWidget {
   List<Product> mostLikedProductList;
-  int length = productController.mostLikedProductList.length;
+
+  Body({Key? key, required this.mostLikedProductList}) : super(key: key);
+
+  @override
+  State<Body> createState() => _BodyState();
+}
+
+class _BodyState extends State<Body> {
+  //int length = productController.mostLikedProductList.length;
 
   RxBool done = false.obs;
 
-  Body({Key? key, required this.mostLikedProductList}) : super(key: key);
+  List<Product> filteredPopularProductList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    filteredPopularProductList = widget.mostLikedProductList;
+  }
+
+  void filterProducts(List<Product> productList) {
+    setState(() {
+      filteredPopularProductList = productList;
+      productController.popularLength.value = filteredPopularProductList.length;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,11 +52,14 @@ class Body extends StatelessWidget {
       child: ListView(
         children: [
           const SizedBox(
-            height: 25,
+            height: 20,
           ),
-          SearchForm(),
+          SearchBar(
+            productList: widget.mostLikedProductList,
+            onFilter: filterProducts,
+          ),
           const SizedBox(
-            height: 25,
+            height: 20,
           ),
           Obx(
             () => MasonryGridView.count(
@@ -43,7 +68,7 @@ class Body extends StatelessWidget {
               crossAxisCount: 2,
               crossAxisSpacing: 20,
               mainAxisSpacing: 23,
-              itemCount: productController.length.value,
+              itemCount: productController.popularLength.value,
               padding: const EdgeInsets.symmetric(
                 horizontal: kPaddingHorizontal,
               ),
@@ -53,7 +78,7 @@ class Body extends StatelessWidget {
                     context,
                     "/detail",
                     arguments: ProductDetailsArguments(
-                        product: mostLikedProductList[index]),
+                        product: filteredPopularProductList[index]),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -65,7 +90,7 @@ class Body extends StatelessWidget {
                               borderRadius:
                                   BorderRadius.circular(kBorderRadius),
                               child: Image.network(
-                                mostLikedProductList[index].thumbnail,
+                                filteredPopularProductList[index].thumbnail,
                                 fit: BoxFit.cover,
                               ),
                             ),
@@ -82,7 +107,7 @@ class Body extends StatelessWidget {
                               ),
                             ),
                           ),
-                          mostLikedProductList[index].model != null
+                          filteredPopularProductList[index].model != null
                               ? Positioned(
                                   left: 12,
                                   top: 12,
@@ -102,7 +127,7 @@ class Body extends StatelessWidget {
                         height: 8,
                       ),
                       Text(
-                        mostLikedProductList[index].name,
+                        filteredPopularProductList[index].name,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: kEncodeSansSemibold.copyWith(
@@ -111,7 +136,7 @@ class Body extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        mostLikedProductList[index].description,
+                        filteredPopularProductList[index].description,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: kEncodeSansRagular.copyWith(
@@ -127,7 +152,7 @@ class Body extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
-                            "${mostLikedProductList[index].price}",
+                            "${filteredPopularProductList[index].price}",
                             style: kEncodeSansSemibold.copyWith(
                               color: kDarkBrown,
                               fontSize: gWidth / 100 * 3.5,
@@ -144,7 +169,7 @@ class Body extends StatelessWidget {
                                 width: 8,
                               ),
                               Text(
-                                '5.0',
+                                "${filteredPopularProductList[index].ratingsAverage}",
                                 style: kEncodeSansRagular.copyWith(
                                   color: kDarkBrown,
                                   fontSize: gWidth / 100 * 3,
@@ -160,11 +185,12 @@ class Body extends StatelessWidget {
               },
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 25,
           ),
           Obx(
-            () => productController.length == productController.productNumber
+            () => productController.popularLength ==
+                    productController.popularProductNumber
                 ? Center(
                     child: SizedBox(
                         height: 20,
@@ -179,11 +205,11 @@ class Body extends StatelessWidget {
                   )
                 : ElevatedButton(
                     onPressed: () => {
-                          productController
-                              .getMoreRecentProducts(mostLikedProductList),
-                          productController.length.value =
-                              mostLikedProductList.length,
-                          print("${productController.length}" + "hello")
+                          productController.getMoreMostLikedProducts(
+                              widget.mostLikedProductList),
+                          productController.popularLength.value =
+                              widget.mostLikedProductList.length,
+                          // print("${productController.length}" + "hello")
                         },
                     child: Text("See More")),
           )

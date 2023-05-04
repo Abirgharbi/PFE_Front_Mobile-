@@ -60,23 +60,25 @@ class _LandingPageState extends State<LandingPage> {
             GButton(
                 icon: Icons.shopping_cart_outlined,
                 text: "Cart",
-                leading: orderController.demoCarts.length == 0
+                leading: orderController.productNbInCart == 0
                     ? null
-                    : badges.Badge(
-                        position:
-                            badges.BadgePosition.topStart(top: -12, start: -10),
-                        badgeContent: Text(
-                          orderController.demoCarts.length.toString(),
-                          style: const TextStyle(color: Colors.white),
+                    : Obx(
+                        () => badges.Badge(
+                          position: badges.BadgePosition.topStart(
+                              top: -12, start: -10),
+                          badgeContent: Text(
+                            orderController.demoCarts.length.toString(),
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                          badgeStyle: badges.BadgeStyle(
+                            shape: badges.BadgeShape.circle,
+                            badgeColor: Colors.red,
+                            padding: const EdgeInsets.all(5),
+                            borderRadius: BorderRadius.circular(100),
+                          ),
+                          child: const Icon(Icons.shopping_cart_outlined,
+                              color: MyColors.btnBorderColor),
                         ),
-                        badgeStyle: badges.BadgeStyle(
-                          shape: badges.BadgeShape.circle,
-                          badgeColor: Colors.red,
-                          padding: const EdgeInsets.all(5),
-                          borderRadius: BorderRadius.circular(100),
-                        ),
-                        child: const Icon(Icons.shopping_cart_outlined,
-                            color: MyColors.btnBorderColor),
                       )
 
                 // )
