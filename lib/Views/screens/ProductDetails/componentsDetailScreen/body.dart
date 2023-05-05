@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import '../../../../Model/product_model.dart';
 import '../../../../utils/colors.dart';
 
+import '../../../widgets/rounded_icon_btn.dart';
 import 'color_dots.dart';
 import 'product_description.dart';
 import 'top_rounded_container.dart';
@@ -92,5 +93,60 @@ class Body extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+class _addQuantityWidgetState extends State<addQuantityWidget> {
+  int quantity = 1;
+
+  @override
+  Widget build(BuildContext context) {
+    return quantity == 1
+        ? Row(
+            children: [
+              SizedBox(width: getProportionateScreenWidth(8)),
+              Text(
+                '${quantity}',
+                style: const TextStyle(fontWeight: FontWeight.w600),
+              ),
+              SizedBox(width: getProportionateScreenWidth(8)),
+              RoundedIconBtn(
+                icon: Icons.add,
+                showShadow: true,
+                press: () {
+                  setState(() {
+                    quantity++;
+                  });
+                },
+              ),
+            ],
+          )
+        : Row(
+            children: [
+              RoundedIconBtn(
+                icon: Icons.remove,
+                press: () {
+                  setState(() {
+                    quantity = quantity - 1;
+                  });
+                },
+              ),
+              SizedBox(width: getProportionateScreenWidth(8)),
+              Text(
+                '${quantity}',
+                style: const TextStyle(fontWeight: FontWeight.w600),
+              ),
+              SizedBox(width: getProportionateScreenWidth(8)),
+              RoundedIconBtn(
+                icon: Icons.add,
+                showShadow: true,
+                press: () {
+                  setState(() {
+                    quantity++;
+                  });
+                },
+              ),
+            ],
+          );
   }
 }

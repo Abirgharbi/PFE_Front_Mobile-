@@ -25,18 +25,18 @@ class Body extends StatefulWidget {
 class _BodyState extends State<Body> {
   RxBool done = false.obs;
 
-  List<Product> _filteredProductList = [];
+  List<Product> filteredProductList = [];
 
   @override
   void initState() {
     super.initState();
-    _filteredProductList = widget.recentProductList;
+    filteredProductList = widget.recentProductList;
   }
 
-  void _filterProducts(List<Product> productList) {
+  void filterProducts(List<Product> productList) {
     setState(() {
-      _filteredProductList = productList;
-      productController.length.value = _filteredProductList.length;
+      filteredProductList = productList;
+      productController.length.value = filteredProductList.length;
     });
   }
 
@@ -50,7 +50,7 @@ class _BodyState extends State<Body> {
           ),
           SearchBar(
             productList: widget.recentProductList,
-            onFilter: _filterProducts,
+            onFilter: filterProducts,
           ),
           const SizedBox(
             height: 25,
@@ -71,7 +71,7 @@ class _BodyState extends State<Body> {
                   onTap: () => Get.toNamed(
                     "/detail",
                     arguments: ProductDetailsArguments(
-                        product: _filteredProductList[index]),
+                        product: filteredProductList[index]),
                   ),
                   child: Container(
                     color: Color.fromARGB(
@@ -90,7 +90,7 @@ class _BodyState extends State<Body> {
                                 borderRadius:
                                     BorderRadius.circular(kBorderRadius),
                                 child: Image.network(
-                                  _filteredProductList[index].thumbnail,
+                                  filteredProductList[index].thumbnail,
                                   fit: BoxFit.cover,
                                 ),
                               ),
@@ -107,7 +107,7 @@ class _BodyState extends State<Body> {
                                 ),
                               ),
                             ),
-                            _filteredProductList[index].model != null
+                            filteredProductList[index].model != null
                                 ? Positioned(
                                     left: 12,
                                     top: 12,
@@ -127,7 +127,7 @@ class _BodyState extends State<Body> {
                           height: 8,
                         ),
                         Text(
-                          _filteredProductList[index].name,
+                          filteredProductList[index].name,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                           style: kEncodeSansSemibold.copyWith(
@@ -136,7 +136,7 @@ class _BodyState extends State<Body> {
                           ),
                         ),
                         Text(
-                          _filteredProductList[index].description,
+                          filteredProductList[index].description,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: kEncodeSansRagular.copyWith(
@@ -152,7 +152,7 @@ class _BodyState extends State<Body> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
-                              "${_filteredProductList[index].price}",
+                              "${filteredProductList[index].price}",
                               style: kEncodeSansSemibold.copyWith(
                                 color: kDarkBrown,
                                 fontSize: gWidth / 100 * 3.5,
@@ -169,7 +169,7 @@ class _BodyState extends State<Body> {
                                   width: 8,
                                 ),
                                 Text(
-                                  '5.0',
+                                  "${filteredProductList[index].ratingsAverage}",
                                   style: kEncodeSansRagular.copyWith(
                                     color: kDarkBrown,
                                     fontSize: gWidth / 100 * 3,
@@ -189,31 +189,29 @@ class _BodyState extends State<Body> {
           const SizedBox(
             height: 25,
           ),
-          Obx(
-            () => (productController.length == productController.productNumber)
-                ? Center(
-                    child: SizedBox(
-                        height: 20,
-                        width: 100,
-                        child: Text(
-                          "No More products to load",
-                          style: kEncodeSansSemibold.copyWith(
-                            color: kDarkBrown,
-                            fontSize: gWidth / 100 * 3.5,
-                          ),
-                        )),
-                  )
-                : productController.length > 2
-                    ? ElevatedButton(
-                        onPressed: () => {
-                              productController
-                                  .getMoreRecentProducts(_filteredProductList),
-                              productController.length.value =
-                                  _filteredProductList.length,
-                            },
-                        child: const Text("See More"))
-                    : Container(),
-          ),
+          Obx(() => (productController.length ==
+                  productController.recentProductNumber)
+              ? Center(
+                  child: SizedBox(
+                      height: 20,
+                      width: 100,
+                      child: Text(
+                        "No More products to load",
+                        style: kEncodeSansSemibold.copyWith(
+                          color: kDarkBrown,
+                          fontSize: gWidth / 100 * 3.5,
+                        ),
+                      )),
+                )
+              : ElevatedButton(
+                  onPressed: () => {
+                        productController
+                            .getMoreRecentProducts(widget.recentProductList),
+                        productController.length.value =
+                            widget.recentProductList.length,
+                        print("hello")
+                      },
+                  child: const Text("See More"))),
           const SizedBox(
             height: 10,
           ),

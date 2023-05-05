@@ -1,62 +1,204 @@
 import 'package:ARkea/utils/colors.dart';
 import 'package:ARkea/utils/sizes.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 
 import '../../../../Model/cart_model.dart';
 
-import '../../../../utils/sizes.dart';
+import '../../../../ViewModel/order_controller.dart';
+import '../../../widgets/rounded_icon_btn.dart';
 
-class CartCard extends StatelessWidget {
-  const CartCard({
+var orderController = Get.put(OrderController());
+
+class CartCard extends StatefulWidget {
+  final Cart cart;
+
+  CartCard({
     Key? key,
     required this.cart,
   }) : super(key: key);
 
-  final Cart cart;
+  @override
+  State<CartCard> createState() => _CartCardState();
+}
 
+class _CartCardState extends State<CartCard> {
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        SizedBox(
-          width: 88,
-          child: AspectRatio(
-            aspectRatio: 0.88,
-            child: Container(
-              padding: EdgeInsets.all(gWidth / 50),
-              decoration: BoxDecoration(
-                color: const Color(0xFFF5F6F9),
-                borderRadius: BorderRadius.circular(15),
-              ),
-              child: Image.network(cart.product.thumbnail),
-            ),
-          ),
-        ),
-        const SizedBox(width: 20),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+    int quantity = widget.cart.quantity;
+    return ColoredBox(
+      color: Colors.white,
+      child: Padding(
+        padding: EdgeInsets.only(right: 10, left: 10, top: 20, bottom: 20),
+        child: Container(
+            child: Row(
           children: [
-            Text(
-              cart.product.name,
-              style: const TextStyle(color: Colors.black, fontSize: 16),
-              maxLines: 2,
-            ),
-            const SizedBox(height: 10),
-            Text.rich(
-              TextSpan(
-                text: "\$${cart.product.price}",
-                style: const TextStyle(
-                    fontWeight: FontWeight.w600, color: MyColors.btnColor),
-                children: [
-                  TextSpan(
-                      text: " x${cart.quantity}",
-                      style: Theme.of(context).textTheme.bodyLarge),
-                ],
+            SizedBox(
+              width: 88,
+              child: AspectRatio(
+                aspectRatio: 0.88,
+                child: Container(
+                  padding: EdgeInsets.all(gWidth / 50),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFF5F6F9),
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  child: Image.network(widget.cart.product.thumbnail),
+                ),
               ),
-            )
+            ),
+            const SizedBox(width: 20),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  widget.cart.product.name,
+                  style: const TextStyle(color: Colors.black, fontSize: 16),
+                  maxLines: 2,
+                ),
+                const SizedBox(height: 10),
+                Text.rich(
+                  TextSpan(
+                    text: "\$${widget.cart.product.price}",
+                    style: const TextStyle(
+                        fontWeight: FontWeight.w600, color: MyColors.btnColor),
+                    children: [
+                      TextSpan(
+                          text: " x${widget.cart.quantity}",
+                          style: Theme.of(context).textTheme.bodyLarge),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(width: 120),
+            widget.cart.quantity == 1
+                ? Column(
+                    children: [
+                      SizedBox(width: getProportionateScreenWidth(9)),
+                      Text(
+                        '${widget.cart.quantity}',
+                        style: const TextStyle(fontWeight: FontWeight.w600),
+                      ),
+                      SizedBox(width: getProportionateScreenWidth(9)),
+                      RoundedIconBtn(
+                        icon: Icons.add,
+                        showShadow: true,
+                        press: () {
+                          print('${widget.cart.quantity}');
+                          orderController.addToCart(widget.cart.product);
+                          setState(() {
+                            quantity = widget.cart.quantity;
+                          });
+                        },
+                      ),
+                    ],
+                  )
+                : Column(
+                    children: [
+                      RoundedIconBtn(
+                        icon: Icons.remove,
+                        press: () {
+                          orderController.decreaseQuantity(widget.cart.product);
+                          setState(() {
+                            quantity = widget.cart.quantity;
+                          });
+                        },
+                      ),
+                      SizedBox(width: getProportionateScreenWidth(8)),
+                      Text(
+                        '${quantity}',
+                        style: const TextStyle(fontWeight: FontWeight.w600),
+                      ),
+                      SizedBox(width: getProportionateScreenWidth(8)),
+                      RoundedIconBtn(
+                        icon: Icons.add,
+                        showShadow: true,
+                        press: () {
+                          print('${widget.cart.quantity}');
+                          orderController.addToCart(widget.cart.product);
+                          setState(() {
+                            quantity = widget.cart.quantity;
+                          });
+                        },
+                      ),
+                    ],
+                  ),
           ],
-        )
-      ],
+        )),
+      ),
     );
   }
 }
+
+// class addQuantityWidget extends StatefulWidget {
+//   const addQuantityWidget({super.key});
+
+//   @override
+//   State<addQuantityWidget> createState() => addQuantityWidgetState();
+// }
+
+// class addQuantityWidgetState extends State<addQuantityWidget> {
+//   int quantity = 1;
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Obx(
+//       () => orderController.quantity.value == 1
+//           ? Column(
+//               children: [
+//                 SizedBox(width: getProportionateScreenWidth(9)),
+//                 Obx(
+//                   () => Text(
+//                     '${orderController.quantity}',
+//                     style: const TextStyle(fontWeight: FontWeight.w600),
+//                   ),
+//                 ),
+//                 SizedBox(width: getProportionateScreenWidth(9)),
+//                 RoundedIconBtn(
+//                   icon: Icons.add,
+//                   showShadow: true,
+//                   press: () {
+//                     // setState(() {
+//                     //   quantity++;
+//                     // });
+             
+//                   },
+//                 ),
+//               ],
+//             )
+//           : Column(
+//               children: [
+//                 RoundedIconBtn(
+//                   icon: Icons.remove,
+//                   press: () {
+//                     // setState(() {
+//                     //   quantity = quantity - 1;
+//                     // });
+//                     orderController.dicreaseQuantity();
+//                   },
+//                 ),
+//                 SizedBox(width: getProportionateScreenWidth(8)),
+//                 Obx(
+//                   () => Text(
+//                     '${orderController.quantity}',
+//                     style: const TextStyle(fontWeight: FontWeight.w600),
+//                   ),
+//                 ),
+//                 SizedBox(width: getProportionateScreenWidth(8)),
+//                 RoundedIconBtn(
+//                   icon: Icons.add,
+//                   showShadow: true,
+//                   press: () {
+//                     // setState(() {
+//                     //   quantity++;
+//                     // });
+//                     orderController.increaseQuantity();
+//                   },
+//                 ),
+//               ],
+//             ),
+//     );
+//   }
+// }

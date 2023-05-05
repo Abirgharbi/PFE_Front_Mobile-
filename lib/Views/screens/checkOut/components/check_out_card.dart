@@ -2,8 +2,11 @@ import 'package:ARkea/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../../ViewModel/order_controller.dart';
 import '../../../../utils/sizes.dart';
 import '../../payment_card_form.dart';
+
+var orderController = Get.put(OrderController());
 
 class CheckoutCard extends StatelessWidget {
   const CheckoutCard({
@@ -38,42 +41,45 @@ class CheckoutCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  height: gHeight / 10,
-                  width: gWidth / 10,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFF5F6F9),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: const Icon(
-                    Icons.payments_outlined,
-                    color: MyColors.btnColor,
-                  ),
-                ),
-                const Spacer(),
-                const Text("Add voucher code"),
-                const SizedBox(width: 10),
-                const Icon(
-                  Icons.arrow_forward_ios,
-                  size: 12,
-                )
+              children: const [
+                // Add Discount code
+                // Container(
+                //   padding: const EdgeInsets.all(10),
+                //   height: gHeight / 10,
+                //   width: gWidth / 10,
+                //   decoration: BoxDecoration(
+                //     color: const Color(0xFFF5F6F9),
+                //     borderRadius: BorderRadius.circular(10),
+                //   ),
+                //   child: const Icon(
+                //     Icons.payments_outlined,
+                //     color: MyColors.btnColor,
+                //   ),
+                // ),
+                // const Spacer(),
+                // const Text("Add voucher code"),
+                // const SizedBox(width: 10),
+                // const Icon(
+                //   Icons.arrow_forward_ios,
+                //   size: 12,
+                // )
               ],
             ),
             SizedBox(height: gHeight / 50),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text.rich(
-                  TextSpan(
-                    text: "Total:\n",
-                    children: [
-                      TextSpan(
-                        text: "\$337.15",
-                        style: TextStyle(fontSize: 16, color: Colors.black),
-                      ),
-                    ],
+                Obx(
+                  () => Text.rich(
+                    TextSpan(
+                      text: "Total:\n",
+                      children: [
+                        TextSpan(
+                          text: "\$ ${orderController.orderSum}",
+                          style: TextStyle(fontSize: 16, color: Colors.black),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 SizedBox(
