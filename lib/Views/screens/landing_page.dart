@@ -13,7 +13,6 @@ import 'Home/home_page.dart';
 import 'package:badges/badges.dart' as badges;
 
 import 'favorite_screen.dart';
-import 'profil_page/edit_profile.dart';
 
 final loginController = Get.put(LoginController());
 final signUpController = Get.put(SignupScreenController());
@@ -48,7 +47,6 @@ class _LandingPageState extends State<LandingPage> {
             setState(() {
               currentIndex = index;
             });
-            // print(currentIndex);
           },
           activeColor: MyColors.btnBorderColor,
           tabBackgroundColor: Colors.grey.shade100,
@@ -78,19 +76,6 @@ class _LandingPageState extends State<LandingPage> {
                         child: const Icon(Icons.shopping_cart_outlined,
                             color: MyColors.btnBorderColor),
                       )
-
-                // )
-
-                // Badge(
-
-                //     badgeColor: Colors.red.shade100,
-                //     elevation: 0,
-                //     position: BadgePosition.topEnd(top: -12, end: -12),
-                //     badgeContent: Text(
-                //       badge.toString(),
-                //       style: TextStyle(color: Colors.red.shade900),
-                //     ),
-                //   ),
                 ),
             const GButton(
               icon: Icons.favorite_border_outlined,

@@ -305,6 +305,7 @@ class SearchForm extends StatelessWidget {
                         borderRadius: BorderRadius.all(Radius.circular(12)))),
                 onPressed: () {
                   Get.to(() => FilterPage());
+                  
                 },
                 child: SvgPicture.asset(
                   'assets/images/filter_icon.svg',

@@ -22,6 +22,7 @@ class ReviewController extends GetxController {
         // i need to get customerimge and name from the current user
         '{"comment": "$comment", "rating": "$rating" ,"customerImage": "https://res.cloudinary.com/dbkivxzek/image/upload/v1682574096/ARkea/wz2ey0i5bf72l4n7vaqp.jpg","customerName":"ilyes BHD","productId": "$productId"}',
         "review/add");
+        
     isLoading(false);
   }
 

@@ -15,6 +15,7 @@ import 'Views/screens/ProductDetails/productsPerCategorie_screen.dart';
 import 'Views/screens/auth/login_page.dart';
 import 'Views/screens/auth/signup.dart';
 import 'Views/screens/checkOut/cart_screen.dart';
+import 'Views/screens/filtred_product.dart';
 import 'Views/screens/landing_page.dart';
 import 'Views/screens/payment_card_form.dart';
 import 'Views/screens/profil_page/noLoggedIn_profilPage.dart';
@@ -24,9 +25,7 @@ import 'Views/screens/review/review.dart';
 import 'Views/screens/side_menu.dart';
 import 'Views/screens/success_screen.dart';
 import 'utils/text_theme.dart';
-
-const stripePublishableKey =
-    "pk_test_51MUXnaHnGXkn2o1CZwSKUnWXtmo5xpjCCxjdoCi7T6flbs1vC30WKK4TSuBQzmOKHuHNozAIPnfgERCsWoKXdnGi00FzPIHDh9";
+import '.env.dart';
 
 void main() async {
   await GetStorage.init();
@@ -90,8 +89,9 @@ class MyApp extends StatelessWidget {
             name: '/noLoggedInprofil',
             page: () => const noLoggedIn_profilPage()),
         GetPage(name: '/cart', page: () => CartScreen()),
-        GetPage(name: '/review', page: () =>  ReviewScreen()),
+        GetPage(name: '/review', page: () => ReviewScreen()),
         GetPage(name: '/add-review', page: () => const AddReviewScreen()),
+        GetPage(name: '/filtredProducts', page: () => FiltredProductScreen()),
       ],
 
       home: const LandingPage(),

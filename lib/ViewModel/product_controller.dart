@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
+
 import '../Model/product_model.dart';
 import '../Model/service/network_handler.dart';
 import 'package:get/get.dart';
@@ -16,6 +18,7 @@ class ProductController extends GetxController {
   List<Product> productByCategoryList = [];
   List<Product> mostLikedProductList = [];
   List<Product> recentProductsList = [];
+  List<Product> filtredProductsList = [];
 
   @override
   void onInit() {
@@ -109,11 +112,22 @@ class ProductController extends GetxController {
     _wishlist.remove(product);
     updateLikedStatus(product);
   }
-
   void updateLikedStatus(Product product) {
+
     final index = productList.indexOf(product);
     if (index >= 0) {
       productList[index].liked = _wishlist.contains(product);
     }
+  }
+
+  getFiltredProducts(RangeValues rangeValue, double rating) async {
+    isLoading(true);
+    var response = await NetworkHandler.get(
+        "product/filter?rating=$rating&min=${rangeValue.start}&max=${rangeValue.end}");
+    ProductModel productModel = ProductModel.fromJson(json.decode(response));
+    print(productModel.products);
+    filtredProductsList = productModel.products;
+    isLoading(false);
+    return productModel;
   }
 }

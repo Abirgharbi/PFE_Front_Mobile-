@@ -3,13 +3,14 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:http/http.dart' as http;
-import '../../utils/colors.dart';
 import '../widgets/app_bar.dart';
 import '../widgets/card_form.dart';
 import '../widgets/loading_button.dart';
 import 'package:get/get.dart';
 
 class PaymentCardForm extends StatefulWidget {
+  const PaymentCardForm({super.key});
+
   @override
   PaymentCardFormState createState() => PaymentCardFormState();
 }
@@ -42,8 +43,7 @@ class PaymentCardFormState extends State<PaymentCardForm> {
           padding: const EdgeInsets.symmetric(horizontal: 16),
           children: [
             CardFormField(
-              // controller: CardFormEditController(),
-              controller: controller,
+              controller: CardFormEditController(),
               countryCode: 'CH',
               style: CardFormStyle(
                 backgroundColor: Colors.white,
