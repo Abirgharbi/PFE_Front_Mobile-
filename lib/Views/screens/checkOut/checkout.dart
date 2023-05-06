@@ -1,7 +1,11 @@
 import 'package:ARkea/Views/screens/checkOut/shipping-information.dart';
+import 'package:ARkea/utils/colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '../../../ViewModel/order_controller.dart';
+
 // Carrito de compras
 class Checkout extends StatefulWidget {
   Checkout({Key? key}) : super(key: key);
@@ -10,101 +14,71 @@ class Checkout extends StatefulWidget {
   State<Checkout> createState() => _CheckoutState();
 }
 
+var orderController = Get.put(OrderController());
+
 class _CheckoutState extends State<Checkout> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Color(0xFFF5F5F8),
-      appBar: AppBar(
-        elevation: 0,
-        centerTitle: true,
-        backgroundColor: Colors.transparent,
-        leading: IconButton(
-          onPressed: () {
-            Get.back();
-          },
-          icon: Icon(Icons.arrow_back, color: Colors.black),
-        ),
-        title: const Text(
-          "Checkout",
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
-      body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 50),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            SizedBox(height: 30),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                const Text(
-                  'Shipping information',
-                  style: TextStyle(
-                    fontSize: 17,
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(20),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              const Text(
+                'Shipping information',
+                style: TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              TextButton(
+                style: TextButton.styleFrom(
+                  textStyle: const TextStyle(
+                    fontSize: 15,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                TextButton(
-                  style: TextButton.styleFrom(
-                    textStyle: const TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  onPressed: () {},
-                  child: const Text('change'),
-                )
-              ],
-            ),
-            // Checkout(),
-            ShippingInfo(),
-            // Expanded(child: PaymentMethods()),
-            const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const <Widget>[
-                Text(
-                  'Total',
-                  style: TextStyle(fontSize: 17),
-                ),
-                Text(
-                  '\$ 954',
+                onPressed: () {
+                  Get.toNamed("/address");
+                },
+                child: const Text(
+                  'change',
                   style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF5956E9),
+                    color: MyColors.btnBorderColor,
                   ),
                 ),
-              ],
-            ),
-            SizedBox(height: 30),
-            // LargeButton(
-            //   text: 'Confirm and pay',
-            //   onClick: () {
-            //     showModalBottomSheet<void>(
-            //       context: context,
-            //       shape: const RoundedRectangleBorder(
-            //         borderRadius: BorderRadius.only(
-            //           topLeft: Radius.circular(24.0),
-            //           topRight: Radius.circular(24.0),
-            //         ),
-            //       ),
-            //       builder: (BuildContext context) {
-            //         return PaymentModal();
-            //       },
-            //     );
-            //   },
-            // ),
-            SizedBox(height: 20)
-          ],
+              )
+            ],
+          ),
         ),
-      ),
+        const ShippingInfo(),
+        Padding(
+          padding: const EdgeInsets.all(20),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                'Total',
+                style: TextStyle(
+                  fontSize: 17,
+                ),
+              ),
+              Obx(
+                () => Text(
+                  "\$ ${orderController.orderSum}",
+                  style: const TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: MyColors.btnBorderColor),
+                ),
+              )
+            ],
+          ),
+        ),
+      ],
+      // ),
     );
   }
 }

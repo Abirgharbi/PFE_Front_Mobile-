@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:ARkea/utils/colors.dart';
 import 'package:flutter/material.dart';
 
 class LoadingButton extends StatefulWidget {
@@ -21,9 +22,13 @@ class _LoadingButtonState extends State<LoadingButton> {
     return Row(
       mainAxisSize: MainAxisSize.max,
       children: [
+        const SizedBox(
+          height: 20,
+        ),
         Expanded(
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
+                backgroundColor: MyColors.btnBorderColor,
                 padding: const EdgeInsets.symmetric(vertical: 12)),
             onPressed:
                 (_isLoading || widget.onPressed == null) ? null : _loadFuture,
@@ -34,7 +39,11 @@ class _LoadingButtonState extends State<LoadingButton> {
                     child: CircularProgressIndicator(
                       strokeWidth: 2,
                     ))
-                : Text(widget.text),
+                : Text(
+                    widget.text,
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 18),
+                  ),
           ),
         ),
       ],

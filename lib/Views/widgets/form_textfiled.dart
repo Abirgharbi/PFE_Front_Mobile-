@@ -61,7 +61,7 @@ class FormTextFiled extends StatelessWidget {
                   focusedBorder: const OutlineInputBorder(
                     borderSide: BorderSide(color: MyColors.btnBorderColor),
                   ),
-                  focusedErrorBorder: OutlineInputBorder(
+                  focusedErrorBorder: const OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.red, width: 2),
                   ),
                   prefixIcon: prefIcon,

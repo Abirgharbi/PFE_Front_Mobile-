@@ -58,10 +58,11 @@ class _LandingPageState extends State<LandingPage> {
             GButton(
                 icon: Icons.shopping_cart_outlined,
                 text: "Cart",
-                leading: orderController.productNbInCart == 0
-                    ? null
-                    : Obx(
-                        () => badges.Badge(
+                leading: Obx(
+                  () => orderController.productNbInCart.value == 0
+                      ? const Icon(Icons.shopping_cart_outlined,
+                          color: MyColors.btnBorderColor)
+                      : badges.Badge(
                           position: badges.BadgePosition.topStart(
                               top: -12, start: -10),
                           badgeContent: Text(
@@ -77,8 +78,7 @@ class _LandingPageState extends State<LandingPage> {
                           child: const Icon(Icons.shopping_cart_outlined,
                               color: MyColors.btnBorderColor),
                         ),
-                      )
-                ),
+                )),
             const GButton(
               icon: Icons.favorite_border_outlined,
               text: "Favorites",

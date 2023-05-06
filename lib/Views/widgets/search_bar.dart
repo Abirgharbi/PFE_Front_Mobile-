@@ -28,6 +28,8 @@ class _SearchBarState extends State<SearchBar> {
   List<Product> _filteredProductList = [];
   double _rating = 4;
   ProductController _productController = Get.put(ProductController());
+  RangeValues rangeValue = const RangeValues(0.0, 300);
+
   @override
   void initState() {
     super.initState();
@@ -61,6 +63,7 @@ class _SearchBarState extends State<SearchBar> {
                     // Get.to(() => FilterPage());
                     showModalBottomSheet(
                       context: context,
+                      isDismissible: false,
                       builder: (context) {
                         return Container(
                             padding: const EdgeInsets.symmetric(
@@ -151,7 +154,6 @@ class _SearchBarState extends State<SearchBar> {
                                           onChangeEnd: (s) {
                                             setState(() {
                                               rangeValue = s;
-                                              print(rangeValue);
                                             });
                                           },
                                         )
@@ -229,6 +231,4 @@ class _SearchBarState extends State<SearchBar> {
     _searchController.dispose();
     super.dispose();
   }
-
-  RangeValues rangeValue = const RangeValues(0.0, 300);
 }

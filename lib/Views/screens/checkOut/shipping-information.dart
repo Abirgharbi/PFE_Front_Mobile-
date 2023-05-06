@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../../../Model/service/network_handler.dart';
+
 class ShippingInfo extends StatelessWidget {
   const ShippingInfo({Key? key}) : super(key: key);
 
@@ -14,22 +16,85 @@ class ShippingInfo extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15.0),
       ),
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 15),
-        child: Column(children: <Widget>[
-          ShippingInfoItem(
-            iconData: Icons.person_outline,
-            text: 'Rosina Doe',
+      child: Column(
+        children: [
+          FutureBuilder<String>(
+            future: NetworkHandler.getItem('customerName'),
+            builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+              List<Widget> children;
+              if (snapshot.hasData) {
+                children = <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 24, vertical: 15),
+                    child: Column(children: <Widget>[
+                      ShippingInfoItem(
+                        iconData: Icons.person_outline,
+                        text: '${snapshot.data}',
+                      ),
+                    ]),
+                  ),
+                ];
+              } else if (snapshot.hasError) {
+                children = <Widget>[Text('${snapshot.error}')];
+              } else {
+                children = const <Widget>[
+                  SizedBox(
+                    width: 60,
+                    height: 60,
+                    child: CircularProgressIndicator(),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 16),
+                    child: Text('Awaiting result...'),
+                  ),
+                ];
+              }
+              return Center(
+                child: Column(
+                  children: children,
+                ),
+              );
+            },
           ),
-          ShippingInfoItem(
-            iconData: Icons.location_on_outlined,
-            text: '43 Oxford Road M13 4GR Manchester, UK',
+          FutureBuilder<String>(
+            future: NetworkHandler.getItem('address'),
+            builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+              List<Widget> children;
+              if (snapshot.hasData) {
+                children = <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 24, vertical: 15),
+                    child: ShippingInfoItem(
+                      iconData: Icons.location_on_outlined,
+                      text: '${snapshot.data}',
+                    ),
+                  ),
+                ];
+              } else if (snapshot.hasError) {
+                children = <Widget>[Text('${snapshot.error}')];
+              } else {
+                children = const <Widget>[
+                  SizedBox(
+                    width: 60,
+                    height: 60,
+                    child: CircularProgressIndicator(),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 16),
+                    child: Text('Awaiting result...'),
+                  ),
+                ];
+              }
+              return Center(
+                child: Column(
+                  children: children,
+                ),
+              );
+            },
           ),
-          ShippingInfoItem(
-            iconData: Icons.phone_outlined,
-            text: '+234 9011039271',
-          ),
-        ]),
+        ],
       ),
     );
   }

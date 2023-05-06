@@ -38,225 +38,221 @@ class ProfileScreen extends StatelessWidget {
           style: Theme.of(context).textTheme.displayMedium,
         ),
       ),
-      body: loginController.isLogged.value == false &&
-              signupController.isSigned.value == false
-          ? noLoggedIn_profilPage()
-          : SingleChildScrollView(
-              child: Container(
-                padding: const EdgeInsets.all(tDefaultSize),
-                child: Column(
-                  children: [
-                    Stack(
-                      children: [
-                        FutureBuilder<String>(
-                          future: NetworkHandler.getItem(
-                              'customerImage'), // a previously-obtained Future<String> or null
-                          builder: (BuildContext context,
-                              AsyncSnapshot<String> snapshot) {
-                            List<Widget> children;
-                            if (snapshot.hasData) {
-                              children = <Widget>[
-                                SizedBox(
-                                  height: 120,
-                                  width: 120,
-                                  child: ClipOval(
-                                    child: SizedBox.fromSize(
-                                      size:
-                                          Size.fromRadius(100), // Image radius
-                                      child: Image.network(
-                                        '${snapshot.data}',
-                                        fit: BoxFit.cover,
+      body: Obx(
+        () => loginController.isLogged.value == false &&
+                signupController.isSigned.value == false
+            ? const noLoggedIn_profilPage()
+            : SingleChildScrollView(
+                child: Container(
+                  padding: const EdgeInsets.all(tDefaultSize),
+                  child: Column(
+                    children: [
+                      Stack(
+                        children: [
+                          FutureBuilder<String>(
+                            future: NetworkHandler.getItem(
+                                'customerImage'), // a previously-obtained Future<String> or null
+                            builder: (BuildContext context,
+                                AsyncSnapshot<String> snapshot) {
+                              List<Widget> children;
+                              if (snapshot.hasData) {
+                                children = <Widget>[
+                                  SizedBox(
+                                    height: 120,
+                                    width: 120,
+                                    child: ClipOval(
+                                      child: SizedBox.fromSize(
+                                        size: Size.fromRadius(
+                                            100), // Image radius
+                                        child: Image.network(
+                                          '${snapshot.data}',
+                                          fit: BoxFit.cover,
+                                        ),
                                       ),
                                     ),
+                                  )
+                                ];
+                              } else if (snapshot.hasError) {
+                                children = <Widget>[Text('${snapshot.error}')];
+                              } else {
+                                children = const <Widget>[
+                                  SizedBox(
+                                    width: 60,
+                                    height: 60,
+                                    child: CircularProgressIndicator(),
                                   ),
-                                )
-                              ];
-                            } else if (snapshot.hasError) {
-                              children = <Widget>[Text('${snapshot.error}')];
-                            } else {
-                              children = const <Widget>[
-                                SizedBox(
-                                  width: 60,
-                                  height: 60,
-                                  child: CircularProgressIndicator(),
+                                  Padding(
+                                    padding: EdgeInsets.only(top: 16),
+                                    child: Text('Awaiting result...'),
+                                  ),
+                                ];
+                              }
+                              return Center(
+                                child: Column(
+                                  children: children,
                                 ),
-                                Padding(
-                                  padding: EdgeInsets.only(top: 16),
-                                  child: Text('Awaiting result...'),
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+
+                      const SizedBox(
+                        height: 10,
+                      ),
+
+                      FutureBuilder<String>(
+                        future: NetworkHandler.getItem(
+                            'customerName'), // a previously-obtained Future<String> or null
+                        builder: (BuildContext context,
+                            AsyncSnapshot<String> snapshot) {
+                          List<Widget> children;
+                          if (snapshot.hasData) {
+                            children = <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.only(top: 16),
+                                child: Text(
+                                  '${snapshot.data}',
+                                  style:
+                                      Theme.of(context).textTheme.displayMedium,
                                 ),
-                              ];
-                            }
-                            return Center(
-                              child: Column(
-                                children: children,
                               ),
-                            );
-                          },
-                        ),
-                      ],
-                    ),
+                            ];
+                          } else if (snapshot.hasError) {
+                            children = <Widget>[Text('${snapshot.error}')];
+                          } else {
+                            children = const <Widget>[
+                              SizedBox(
+                                width: 60,
+                                height: 60,
+                                child: CircularProgressIndicator(),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(top: 16),
+                                child: Text('Awaiting result...'),
+                              ),
+                            ];
+                          }
+                          return Center(
+                            child: Column(
+                              children: children,
+                            ),
+                          );
+                        },
+                      ),
 
-                    const SizedBox(
-                      height: 10,
-                    ),
-
-                    FutureBuilder<String>(
-                      future: NetworkHandler.getItem(
-                          'customerName'), // a previously-obtained Future<String> or null
-                      builder: (BuildContext context,
-                          AsyncSnapshot<String> snapshot) {
-                        List<Widget> children;
-                        if (snapshot.hasData) {
-                          children = <Widget>[
-                            Padding(
-                              padding: const EdgeInsets.only(top: 16),
-                              child: Text(
+                      FutureBuilder<String>(
+                        future: NetworkHandler.getItem(
+                            'customerEmail'), // a previously-obtained Future<String> or null
+                        builder: (BuildContext context,
+                            AsyncSnapshot<String> snapshot) {
+                          List<Widget> children;
+                          if (snapshot.hasData) {
+                            children = <Widget>[
+                              Text(
                                 '${snapshot.data}',
                                 style:
-                                    Theme.of(context).textTheme.displayMedium,
+                                    Theme.of(context).textTheme.headlineMedium,
                               ),
+                            ];
+                          } else if (snapshot.hasError) {
+                            children = <Widget>[Text('${snapshot.error}')];
+                          } else {
+                            children = const <Widget>[
+                              SizedBox(
+                                width: 60,
+                                height: 60,
+                                child: CircularProgressIndicator(),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(top: 16),
+                                child: Text('Awaiting result...'),
+                              ),
+                            ];
+                          }
+                          return Center(
+                            child: Column(
+                              children: children,
                             ),
-                          ];
-                        } else if (snapshot.hasError) {
-                          children = <Widget>[Text('${snapshot.error}')];
-                        } else {
-                          children = const <Widget>[
-                            SizedBox(
-                              width: 60,
-                              height: 60,
-                              child: CircularProgressIndicator(),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(top: 16),
-                              child: Text('Awaiting result...'),
-                            ),
-                          ];
-                        }
-                        return Center(
-                          child: Column(
-                            children: children,
-                          ),
-                        );
-                      },
-                    ),
-
-                    FutureBuilder<String>(
-                      future: NetworkHandler.getItem(
-                          'customerEmail'), // a previously-obtained Future<String> or null
-                      builder: (BuildContext context,
-                          AsyncSnapshot<String> snapshot) {
-                        List<Widget> children;
-                        if (snapshot.hasData) {
-                          children = <Widget>[
-                            Text(
-                              '${snapshot.data}',
-                              style: Theme.of(context).textTheme.headlineMedium,
-                            ),
-                          ];
-                        } else if (snapshot.hasError) {
-                          children = <Widget>[Text('${snapshot.error}')];
-                        } else {
-                          children = const <Widget>[
-                            SizedBox(
-                              width: 60,
-                              height: 60,
-                              child: CircularProgressIndicator(),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(top: 16),
-                              child: Text('Awaiting result...'),
-                            ),
-                          ];
-                        }
-                        return Center(
-                          child: Column(
-                            children: children,
-                          ),
-                        );
-                      },
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    SizedBox(
-                      width: 200,
-                      height: 45,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          Get.to(() => EditProfileScreen());
+                          );
                         },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: MyColors.btnColor,
-                          side: BorderSide.none,
-                          shape: const StadiumBorder(),
-                        ),
-                        child: const Text(
-                          "Edit Profile",
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      SizedBox(
+                        width: 200,
+                        height: 45,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Get.to(() => EditProfileScreen());
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: MyColors.btnColor,
+                            side: BorderSide.none,
+                            shape: const StadiumBorder(),
+                          ),
+                          child: const Text(
+                            "Edit Profile",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
                         ),
                       ),
-                    ),
-                    const SizedBox(
-                      height: 30,
-                    ),
-                    const Divider(
-                      color: Colors.white,
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
 
-                    ///Menu
-                    ProfileMenuWidget(
-                      title: "My orders",
-                      icon: LineAwesomeIcons.dolly,
-                      onPress: () {},
-                    ),
-                    ProfileMenuWidget(
-                      title: "Delivery Status ",
-                      icon: LineAwesomeIcons.shipping_fast,
-                      onPress: () {},
-                    ),
-                    ProfileMenuWidget(
-                      title: "Language",
-                      icon: LineAwesomeIcons.language,
-                      endIcon: false,
-                      onPress: () {},
-                    ),
-                    ProfileMenuWidget(
-                      title: "Help Center",
-                      icon: LineAwesomeIcons.headset,
-                      onPress: () {},
-                    ),
-                    const Divider(
-                      color: Colors.white,
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    ProfileMenuWidget(
-                      title: "Abou Us",
-                      icon: LineAwesomeIcons.info_circle,
-                      onPress: () {},
-                    ),
-                    ProfileMenuWidget(
-                      title: "Rate Us",
-                      icon: LineAwesomeIcons.star,
-                      onPress: () {},
-                    ),
-                    ProfileMenuWidget(
-                      title: "Logout ",
-                      textColor: Colors.red,
-                      endIcon: false,
-                      icon: LineAwesomeIcons.alternate_sign_out,
-                      onPress: () {
-                        loginController.logOut();
-                      },
-                    ),
-                  ],
+                      const SizedBox(
+                        height: 60,
+                      ),
+
+                      ///Menu
+                      ProfileMenuWidget(
+                        title: "My orders",
+                        icon: LineAwesomeIcons.dolly,
+                        onPress: () {},
+                      ),
+
+                      ProfileMenuWidget(
+                        title: "Address",
+                        icon: LineAwesomeIcons.dolly,
+                        onPress: () {
+                          Get.toNamed('/address');
+                        },
+                      ),
+
+                      ProfileMenuWidget(
+                        title: "Help Center",
+                        icon: LineAwesomeIcons.headset,
+                        onPress: () {},
+                      ),
+                      const Divider(
+                        color: Colors.white,
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      ProfileMenuWidget(
+                        title: "About Us",
+                        icon: LineAwesomeIcons.info_circle,
+                        onPress: () {},
+                      ),
+                      ProfileMenuWidget(
+                        title: "Rate Us",
+                        icon: LineAwesomeIcons.star,
+                        onPress: () {},
+                      ),
+                      ProfileMenuWidget(
+                        title: "Logout ",
+                        textColor: Colors.red,
+                        endIcon: false,
+                        icon: LineAwesomeIcons.alternate_sign_out,
+                        onPress: () {
+                          loginController.logOut();
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
+      ),
     );
   }
 }

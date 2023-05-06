@@ -282,12 +282,6 @@ class EditProfileScreenState extends State<EditProfileScreen> {
                         prefIcon: Icon(LineAwesomeIcons.phone,
                             color: MyColors.captionColor)),
                     const SizedBox(height: 20),
-                    FormTextFiled(
-                        label: "Adress",
-                        prefIcon: Icon(
-                          LineAwesomeIcons.address_card_1,
-                          color: MyColors.captionColor,
-                        )),
                   ],
                 )),
                 const SizedBox(
@@ -313,56 +307,6 @@ class EditProfileScreenState extends State<EditProfileScreen> {
                     ),
                   ),
                 ),
-                const SizedBox(
-                  height: 50,
-                ),
-                Row(
-                  children: [
-                    FutureBuilder<String>(
-                      future: NetworkHandler.getItem(
-                          'customerJoinedDate'), // a previously-obtained Future<String> or null
-                      builder: (BuildContext context,
-                          AsyncSnapshot<String> snapshot) {
-                        List<Widget> children;
-                        if (snapshot.hasData) {
-                          children = <Widget>[
-                            Padding(
-                                padding: const EdgeInsets.only(top: 16),
-                                child: Text.rich(TextSpan(
-                                    text: "Joined :",
-                                    style: TextStyle(fontSize: 12),
-                                    children: [
-                                      TextSpan(
-                                          text: "${snapshot.data}",
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 12))
-                                    ]))),
-                          ];
-                        } else if (snapshot.hasError) {
-                          children = <Widget>[Text('${snapshot.error}')];
-                        } else {
-                          children = const <Widget>[
-                            SizedBox(
-                              width: 60,
-                              height: 60,
-                              child: CircularProgressIndicator(),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(top: 16),
-                              child: Text('Awaiting result...'),
-                            ),
-                          ];
-                        }
-                        return Center(
-                          child: Column(
-                            children: children,
-                          ),
-                        );
-                      },
-                    ),
-                  ],
-                )
               ])),
         ));
   }

@@ -5,12 +5,9 @@ import 'package:string_to_color/string_to_color.dart';
 
 import '../../../../Model/product_model.dart';
 
-import '../../../../utils/sizes.dart';
-import '../../../widgets/rounded_icon_btn.dart';
-
 class ColorImage extends StatefulWidget {
   const ColorImage({
-    Key? key,
+    super.key,
     this.color,
     this.isSelected = false,
     required this.product,
@@ -36,8 +33,6 @@ class ColorImageState extends State<ColorImage> {
               widget.product.colors.length,
               (index) => productPreview(index,
                   ColorUtils.stringToColor(widget.product.colors[index]))),
-          Spacer(),
-          addQuantityWidget(),
         ],
       ),
     );
@@ -52,7 +47,7 @@ class ColorImageState extends State<ColorImage> {
       },
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        margin: EdgeInsets.only(right: 2),
+        margin: const EdgeInsets.only(right: 2),
         padding: EdgeInsets.all((8 / 375.0) * gWidth),
         height: (40 / 375.0) * gWidth,
         width: (40 / 375.0) * gWidth,
@@ -77,67 +72,5 @@ class ColorImageState extends State<ColorImage> {
 
       //widget.product.images[index]
     );
-  }
-}
-
-class addQuantityWidget extends StatefulWidget {
-  const addQuantityWidget({super.key});
-
-  @override
-  State<addQuantityWidget> createState() => _addQuantityWidgetState();
-}
-
-class _addQuantityWidgetState extends State<addQuantityWidget> {
-  int quantity = 1;
-
-  @override
-  Widget build(BuildContext context) {
-    return quantity == 1
-        ? Row(
-            children: [
-              SizedBox(width: getProportionateScreenWidth(8)),
-              Text(
-                '${quantity}',
-                style: const TextStyle(fontWeight: FontWeight.w600),
-              ),
-              SizedBox(width: getProportionateScreenWidth(8)),
-              RoundedIconBtn(
-                icon: Icons.add,
-                showShadow: true,
-                press: () {
-                  setState(() {
-                    quantity++;
-                  });
-                },
-              ),
-            ],
-          )
-        : Row(
-            children: [
-              RoundedIconBtn(
-                icon: Icons.remove,
-                press: () {
-                  setState(() {
-                    quantity = quantity - 1;
-                  });
-                },
-              ),
-              SizedBox(width: getProportionateScreenWidth(8)),
-              Text(
-                '${quantity}',
-                style: const TextStyle(fontWeight: FontWeight.w600),
-              ),
-              SizedBox(width: getProportionateScreenWidth(8)),
-              RoundedIconBtn(
-                icon: Icons.add,
-                showShadow: true,
-                press: () {
-                  setState(() {
-                    quantity++;
-                  });
-                },
-              ),
-            ],
-          );
   }
 }

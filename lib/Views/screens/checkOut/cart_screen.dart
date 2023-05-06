@@ -20,6 +20,12 @@ class CartScreen extends StatelessWidget {
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: Colors.transparent,
+        leading: IconButton(
+          onPressed: () {
+            Get.back();
+          },
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+        ),
         elevation: 0,
         title: Column(
           children: [
@@ -29,7 +35,7 @@ class CartScreen extends StatelessWidget {
             ),
             Text(
               "${orderController.demoCarts.length} items",
-              style: Theme.of(context).textTheme.caption,
+              style: Theme.of(context).textTheme.bodySmall,
             ),
           ],
         ),

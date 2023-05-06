@@ -42,8 +42,15 @@ class LoginController extends GetxController {
       );
     } else {
       var data = json.decode(response);
-      print(data);
-      NetworkHandler.storeToken(data['Token']);
+      if (data['token'].toString().isNotEmpty) {
+        QuickAlert.show(
+          context: context!,
+          type: QuickAlertType.success,
+          text: "verify your magic link in your inbox",
+        );
+      }
+
+      NetworkHandler.storeToken(data['token']);
       NetworkHandler.storeCustomer('customerName', data['customer']['name']);
       NetworkHandler.storeCustomer('customerEmail', data['customer']['email']);
       NetworkHandler.storeCustomer('customerId', data['customer']['_id']);
@@ -54,7 +61,7 @@ class LoginController extends GetxController {
 
       NetworkHandler.storeCustomer('customerJoinedDate', JoinedDate);
 
-      Get.to(() => LandingPage());
+      // Get.to(() => LandingPage());
     }
   }
 
@@ -68,7 +75,7 @@ class LoginController extends GetxController {
     accessToken = null;
     userDataf = null;
 
-    Get.offAll(LandingPage());
+    Get.offAll(const LandingPage());
   }
 
   Map<String, dynamic>? userDataf = Map<String, dynamic>().obs;
@@ -101,7 +108,7 @@ class LoginController extends GetxController {
   Future loginfacebook() async {
     final LoginResult result = await FacebookAuth.instance
         .login(permissions: ['public_profile', 'email']);
-    // isLogged.value = true;
+    isLogged.value = true;
     isNameEnabled.value = false;
     if (result.status == LoginStatus.success) {
       accessToken = result.accessToken;
@@ -113,7 +120,7 @@ class LoginController extends GetxController {
       NetworkHandler.storeCustomer('customerEmail', userDataf!['email']);
       NetworkHandler.storeCustomer(
           'customerImage', userDataf!['picture']['data']['url']);
-      Get.to(() => LandingPage());
+      Get.to(() => const LandingPage());
     } else {
       // essai.value = "gharbi";
     }
@@ -130,7 +137,7 @@ class LoginController extends GetxController {
   Future<GoogleSignInAccount?> loginWithGoogle() async {
     try {
       var user = await _googleSignIn.signIn();
-      // isLogged.value = true;
+      isLogged.value = true;
       isNameEnabled.value = false;
 
       userDataf!.addAll({
@@ -141,15 +148,10 @@ class LoginController extends GetxController {
       NetworkHandler.storeCustomer('customerName', user.displayName.toString());
       NetworkHandler.storeCustomer('customerEmail', user.email);
       NetworkHandler.storeCustomer('customerImage', user.photoUrl.toString());
-      Get.to(() => LandingPage());
+      Get.to(() => const LandingPage());
     } catch (error) {
       print(error);
     }
+    return null;
   }
-
-  // _logout() async {
-  //   await FacebookAuth.instance.logOut();
-  //   accessToken = null;
-  //   userData = null;
-  // }
 }

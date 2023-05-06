@@ -41,28 +41,28 @@ class CheckoutCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
-              children: const [
+              children: [
                 // Add Discount code
-                // Container(
-                //   padding: const EdgeInsets.all(10),
-                //   height: gHeight / 10,
-                //   width: gWidth / 10,
-                //   decoration: BoxDecoration(
-                //     color: const Color(0xFFF5F6F9),
-                //     borderRadius: BorderRadius.circular(10),
-                //   ),
-                //   child: const Icon(
-                //     Icons.payments_outlined,
-                //     color: MyColors.btnColor,
-                //   ),
-                // ),
-                // const Spacer(),
-                // const Text("Add voucher code"),
-                // const SizedBox(width: 10),
-                // const Icon(
-                //   Icons.arrow_forward_ios,
-                //   size: 12,
-                // )
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  height: gHeight / 10,
+                  width: gWidth / 10,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFF5F6F9),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: const Icon(
+                    Icons.payments_outlined,
+                    color: MyColors.btnColor,
+                  ),
+                ),
+                const Spacer(),
+                const Text("Add voucher code"),
+                const SizedBox(width: 10),
+                const Icon(
+                  Icons.arrow_forward_ios,
+                  size: 12,
+                )
               ],
             ),
             SizedBox(height: gHeight / 50),
