@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:ARkea/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
@@ -203,15 +204,28 @@ class _BodyState extends State<Body> {
                         ),
                       )),
                 )
-              : ElevatedButton(
-                  onPressed: () => {
-                        productController
-                            .getMoreRecentProducts(widget.recentProductList),
-                        productController.length.value =
-                            widget.recentProductList.length,
-                        print("hello")
-                      },
-                  child: const Text("See More"))),
+              : Container(
+                  margin: EdgeInsets.fromLTRB(gWidth / 10, 0, gWidth / 10, 10),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      productController
+                          .getMoreRecentProducts(widget.recentProductList);
+                      productController.length.value =
+                          widget.recentProductList.length;
+                    },
+                    style: ElevatedButton.styleFrom(
+                      fixedSize: const Size(50, 50),
+                      backgroundColor: MyColors.btnColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                    ),
+                    child: const Text(
+                      "See More",
+                      style: TextStyle(fontSize: 20),
+                    ),
+                  ),
+                )),
           const SizedBox(
             height: 10,
           ),

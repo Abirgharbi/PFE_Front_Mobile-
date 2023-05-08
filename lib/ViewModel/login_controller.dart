@@ -33,7 +33,13 @@ class LoginController extends GetxController {
         customerModelToJson(customerModel), "user/login");
     isLogged.value = true;
     var message = json.decode(response)["message"];
-
+    if (message == "Please create an account.") {
+      QuickAlert.show(
+        context: context!,
+        type: QuickAlertType.warning,
+        text: message,
+      );
+    }
     if (message == "Verify your Account.") {
       QuickAlert.show(
         context: context!,

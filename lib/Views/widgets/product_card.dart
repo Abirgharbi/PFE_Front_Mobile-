@@ -1,4 +1,3 @@
-import 'package:ARkea/Model/cart_model.dart';
 import 'package:flutter/material.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 
@@ -120,12 +119,27 @@ class _ProductCardState extends State<ProductCard> {
                 const SizedBox(
                   width: 4,
                 ),
-                Text(
-                  "\$${widget.product.price}",
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleMedium!
-                      .copyWith(fontWeight: FontWeight.bold),
+                Text.rich(
+                  TextSpan(
+                    children: [
+                      TextSpan(
+                        text: '\$${widget.product.compareAtPrice}\n',
+                        style: const TextStyle(
+                          decoration: TextDecoration.lineThrough,
+                          color: Colors.grey,
+                          fontSize: 12,
+                        ),
+                      ),
+                      TextSpan(
+                        text: '\$${widget.product.price}',
+                        style: const TextStyle(
+                          color: Colors.red, 
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                        ),
+                      ),
+                    ],
+                  ),
                 )
               ],
             )

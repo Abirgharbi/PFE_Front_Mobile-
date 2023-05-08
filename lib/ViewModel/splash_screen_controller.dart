@@ -1,3 +1,5 @@
+import 'package:ARkea/ViewModel/product_controller.dart';
+import 'package:ARkea/Views/screens/landing_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -8,6 +10,14 @@ import '../Views/screens/onBoardingscreen/boarding_page.dart';
 
 class SplashScreenController extends GetxController {
   static SplashScreenController get find => Get.find();
+  ProductController productController = Get.put(ProductController());
+  @override
+  void onInit() {
+    // TODO: implement onInit
+    super.onInit();
+    productController.getRecentProducts();
+    productController.getMostLikedProducts();
+  }
 
   RxBool animate = false.obs;
   bool? seenOnboard;
@@ -24,6 +34,6 @@ class SplashScreenController extends GetxController {
     animate.value = true;
 
     await Future.delayed(const Duration(milliseconds: 5000));
-    Get.to(() => seenOnboard == true ? LoginPage() : boradingScreen());
+    Get.to(() => seenOnboard == true ? LandingPage() : boradingScreen());
   }
 }

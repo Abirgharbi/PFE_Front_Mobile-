@@ -21,6 +21,20 @@ class NetworkHandler {
     return response.toString();
   }
 
+  static Future<String> delete(var body, String endpoint) async {
+    var response = await client
+        .delete(buildUrl(endpoint), body: body, headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Accept': "*/*",
+          'connection': 'keep-alive',
+          'Accept-Encoding': 'gzip, deflate, br',
+        })
+        .then((http.Response response) => response.body)
+        .catchError((Object error) => print(error));
+
+    return response.toString();
+  }
+
   static Future<String> get(String endpoint) async {
     var response = await client
         .get(buildUrl(endpoint), headers: {

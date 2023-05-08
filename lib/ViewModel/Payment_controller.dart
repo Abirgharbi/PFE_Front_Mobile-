@@ -1,35 +1,20 @@
 import 'dart:convert';
 
+import 'package:ARkea/ViewModel/order_controller.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:get/get.dart';
 
 import '../Model/service/network_handler.dart';
 
 class PaymentController extends GetxController {
-  // final controller = CardFormEditController();
-
-  // @override
-  // void initState() {
-  //   controller.addListener(update);
-  // }
-
-  // @override
-  // void dispose() {
-  //   controller.removeListener(update);
-  //   controller.dispose();
-  //   super.dispose();
-  // }
-
   @override
   void onInit() {
     super.onInit();
   }
 
+  OrderController orderController = Get.put(OrderController());
   Future<void> handlePayPress() async {
-    // if (!controller.details.complete) {
-    //   return;
-    // }
-
+    // update product quantity
     try {
       const billingDetails = BillingDetails(
         email: 'ilyesbenhajdahmane@gmail.com',
@@ -91,26 +76,11 @@ class PaymentController extends GetxController {
       'useStripeSdk': useStripeSdk,
       'paymentMethodId': paymentMethodId,
       'currency': currency,
-      'items': items
+      'items': items,
+      'amount': orderController.orderSum.value,
     });
 
     var response = await NetworkHandler.post(body, "order/pay");
     return json.decode(response);
-
-    //   final url = Uri.parse('https://arkea.up.railway.app/order/pay');
-    //   final response = await http.post(
-    //     url,
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //     },
-    //     body: json.encode({
-    //       'useStripeSdk': useStripeSdk,
-    //       'paymentMethodId': paymentMethodId,
-    //       'currency': currency,
-    //       'items': items
-    //     }),
-    //   );
-    //   return json.decode(response.body);
-    // }
   }
 }

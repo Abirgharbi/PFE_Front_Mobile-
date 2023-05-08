@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ARkea/Views/screens/Home/filter_page.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -27,7 +26,7 @@ class _SearchBarState extends State<SearchBar> {
   final TextEditingController _searchController = TextEditingController();
   List<Product> _filteredProductList = [];
   double _rating = 4;
-  ProductController _productController = Get.put(ProductController());
+  final ProductController _productController = Get.put(ProductController());
   RangeValues rangeValue = const RangeValues(0.0, 300);
 
   @override

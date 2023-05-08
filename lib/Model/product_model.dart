@@ -72,8 +72,8 @@ class Product {
   factory Product.fromJson(Map<String, dynamic> json) => Product(
         id: json["_id"],
         name: json["name"],
-        price: json["price"],
-        compareAtPrice: json["compare_at_price"],
+        price: json["price"].toDouble(),
+        compareAtPrice: json["compare_at_price"].toDouble(),
         description: json["description"],
         category: json["category"],
         images: List<dynamic>.from(json["images"].map((x) => x)),
@@ -83,7 +83,7 @@ class Product {
         quantity: json["quantity"],
         promotion: json["promotion"],
         liked: json["liked"],
-        ratingsAverage: json["ratingsAverage"],
+        ratingsAverage: json["ratingsAverage"].toDouble(),
         createdAt: DateTime.parse(json["createdAt"]),
         updatedAt: DateTime.parse(json["updatedAt"]),
       );

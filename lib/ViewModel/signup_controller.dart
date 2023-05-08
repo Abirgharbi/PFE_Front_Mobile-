@@ -30,16 +30,12 @@ class SignupScreenController extends GetxController {
     var response = await NetworkHandler.post(
         customerModelToJson(customerModel), "user/register");
 
-    // print(response);
-    var data = json.decode(response);
-
-    var decode = json.decode(response);
-    // print(decode);
-    if (decode["message"] == "Email already exists") {
+    var data = await json.decode(response);
+    if (data["message"] == "Email already exists") {
       QuickAlert.show(
         context: context!,
         type: QuickAlertType.warning,
-        text: decode["message"],
+        text: data["message"],
       );
     } else {
       QuickAlert.show(
@@ -59,9 +55,6 @@ class SignupScreenController extends GetxController {
       NetworkHandler.storeCustomer('customerJoinedDate', joinedDate);
       Get.to(() => const LandingPage());
     }
-    // Get.to(() => LandingPage());
-
-    //  Get.to(() => (seenOnboard == true ? LandingPage() : boradingScreen());
   }
 
   Map<String, dynamic>? userDataf = Map<String, dynamic>().obs;

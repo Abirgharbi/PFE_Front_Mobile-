@@ -24,6 +24,7 @@ class ProductController extends GetxController {
   List<Product> mostLikedProductList = [];
   List<Product> recentProductsList = [];
   List<Product> filtredProductsList = [];
+  List<Product> discountedProductsList = [];
 
   @override
   void onInit() {
@@ -94,13 +95,11 @@ class ProductController extends GetxController {
   }
 
   getProductsByCategory(String categoryId) async {
-    isLoading(true);
     var response =
         await NetworkHandler.get("product/product-by-category/$categoryId");
     ProductModel productModel = ProductModel.fromJson(json.decode(response));
-    count = productModel.count.obs;
-    isLoading(false);
-    return productModel;
+    productByCategoryList = productModel.products;
+    return productByCategoryList;
   }
 
   final RxList<Product> _wishlist = RxList<Product>([]);
@@ -111,15 +110,19 @@ class ProductController extends GetxController {
     product.liked = true;
     _wishlist.add(product);
     updateLikedStatus(product);
+    // var response = NetworkHandler.post(
+    //     {"productId": product.id}, "user/customer/add-liked-product");
   }
 
   void removeFromWishlist(Product product) {
     product.liked = false;
     _wishlist.remove(product);
     updateLikedStatus(product);
+    // var response = NetworkHandler.delete(
+    //     {"productId": product.id}, "user/customer/remove-liked-product");
   }
-  void updateLikedStatus(Product product) {
 
+  void updateLikedStatus(Product product) {
     final index = productList.indexOf(product);
     if (index >= 0) {
       productList[index].liked = _wishlist.contains(product);
@@ -135,5 +138,13 @@ class ProductController extends GetxController {
     filtredProductsList = productModel.products;
     isLoading(false);
     return productModel;
+  }
+
+  getDiscountedProducts(int discount) async {
+    var response =
+        await NetworkHandler.get("product/discount?discount=$discount");
+    ProductModel productModel = ProductModel.fromJson(json.decode(response));
+    discountedProductsList = productModel.products;
+    return discountedProductsList;
   }
 }

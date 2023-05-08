@@ -1,5 +1,5 @@
-import 'package:ARkea/utils/colors.dart';
-import 'package:ARkea/utils/sizes.dart';
+import '../../utils/colors.dart';
+import '../../utils/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';

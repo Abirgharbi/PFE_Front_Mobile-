@@ -5,18 +5,42 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
+import '../../../Model/product_model.dart';
 import '../../../ViewModel/product_controller.dart';
 
 import '../../../utils/colors.dart';
-import '../../../utils/sizes.dart';
 import '../../widgets/product_card.dart';
+import '../../widgets/search_bar.dart';
 import '../ProductDetails/newArrival_screen.dart';
 import '../ProductDetails/popular_products_screen.dart';
 
 var productController = Get.put(ProductController());
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  List<Product> filteredProductList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    filteredProductList = productController.mostLikedProductList +
+        productController.recentProductsList;
+  }
+
+  void filterProducts(List<Product> productList) {
+    setState(() {
+      print(productList);
+      filteredProductList = productList;
+      print(filteredProductList);
+      productController.popularLength.value = filteredProductList.length;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,24 +49,26 @@ class HomeScreen extends StatelessWidget {
             physics: const BouncingScrollPhysics(
                 parent: AlwaysScrollableScrollPhysics()),
             padding: const EdgeInsets.all(16),
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
-                  SizedBox(
-                    height: 50,
-                  ),
-                  SearchForm(),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Categories(),
-                  SpecialOffers(),
-                  SizedBox(
-                    height: 16,
-                  ),
-                  NewArrivalSection(),
-                  PopularProductSection(),
-                ])));
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              const SizedBox(
+                height: 50,
+              ),
+              SearchBar(
+                productList: filteredProductList,
+                onFilter: filterProducts,
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              const Categories(),
+              const SpecialOffers(),
+              const SizedBox(
+                height: 16,
+              ),
+              const NewArrivalSection(),
+              const PopularProductSection(),
+            ])));
   }
 }
 
@@ -153,13 +179,17 @@ class SpecialOffers extends StatelessWidget {
                 image: "assets/images/Image Banner 2.png",
                 category: "Tech",
                 discount: "Discount 20%",
-                press: () {},
+                press: () {
+                  Get.toNamed('/discount', arguments: {"discount": 20});
+                },
               ),
               SpecialOfferCard(
                 image: "assets/images/Image Banner 2.png",
                 category: "Fashion",
                 discount: "Discount 50%%",
-                press: () {},
+                press: () {
+                  Get.toNamed('/discount', arguments: {"discount": 50});
+                },
               ),
             ],
           ),
@@ -271,47 +301,6 @@ class SectionTitle extends StatelessWidget {
               style: TextStyle(color: Colors.black54),
             ))
       ],
-    );
-  }
-}
-
-class SearchForm extends StatelessWidget {
-  const SearchForm({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Form(
-      child: TextFormField(
-          decoration: InputDecoration(
-        hintText: "Search items...",
-        filled: true,
-        fillColor: Colors.white,
-        border: outlineInputBorder,
-        enabledBorder: outlineInputBorder,
-        focusedBorder: outlineInputBorder,
-        contentPadding: const EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 0.0),
-        prefixIcon: const Icon(Icons.search, color: Colors.black),
-        suffixIcon: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: SizedBox(
-              height: 48,
-              width: 48,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: MyColors.btnColor.withOpacity(0.9),
-                    shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(12)))),
-                onPressed: () {
-                  Get.to(() => FilterPage());
-                },
-                child: SvgPicture.asset(
-                  'assets/images/filter_icon.svg',
-                ),
-              )),
-        ),
-      )),
     );
   }
 }

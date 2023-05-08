@@ -1,3 +1,5 @@
+import 'package:ARkea/Views/screens/splash_screen.dart';
+
 import 'Views/screens/ProductDetails/popular_products_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
@@ -13,6 +15,7 @@ import 'Views/screens/ProductDetails/productsPerCategorie_screen.dart';
 import 'Views/screens/auth/login_page.dart';
 import 'Views/screens/auth/signup.dart';
 import 'Views/screens/checkOut/cart_screen.dart';
+import 'Views/screens/discount.dart';
 import 'Views/screens/filtred_product.dart';
 import 'Views/screens/landing_page.dart';
 import 'Views/screens/profil_page/noLoggedIn_profilPage.dart';
@@ -61,7 +64,7 @@ class MyApp extends StatelessWidget {
       themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
       defaultTransition: Transition.fade,
-      initialRoute: "/landing",
+      initialRoute: "/splash",
       initialBinding: MyBindings(),
       getPages: [
         GetPage(
@@ -89,9 +92,12 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/review', page: () => ReviewScreen()),
         GetPage(name: '/add-review', page: () => const AddReviewScreen()),
         GetPage(name: '/filtredProducts', page: () => FiltredProductScreen()),
-        GetPage(name: '/address', page: () => const AddressScreen())
+        GetPage(name: '/address', page: () => const AddressScreen()),
+        GetPage(name: '/discount', page: () => const DiscountScreen()),
+        GetPage(name: '/splash', page: () =>  SplashScreen())
+
       ],
-      home: const LandingPage(),
+      home: SplashScreen(),
     );
   }
 }

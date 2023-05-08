@@ -26,10 +26,6 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
-  //int length = productController.mostLikedProductList.length;
-
-  RxBool done = false.obs;
-
   List<Product> filteredPopularProductList = [];
 
   @override
