@@ -212,7 +212,7 @@ class ProfileScreen extends StatelessWidget {
 
                       ProfileMenuWidget(
                         title: "Address",
-                        icon: LineAwesomeIcons.dolly,
+                        icon: LineAwesomeIcons.map_marker,
                         onPress: () {
                           Get.toNamed('/address');
                         },

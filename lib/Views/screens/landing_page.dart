@@ -59,7 +59,7 @@ class _LandingPageState extends State<LandingPage> {
                 icon: Icons.shopping_cart_outlined,
                 text: "Cart",
                 leading: Obx(
-                  () => orderController.productNbInCart.value == 0
+                  () => orderController.productNbInCart == 0
                       ? const Icon(Icons.shopping_cart_outlined,
                           color: MyColors.btnBorderColor)
                       : badges.Badge(

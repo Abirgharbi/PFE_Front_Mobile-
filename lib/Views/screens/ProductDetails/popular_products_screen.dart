@@ -15,12 +15,11 @@ class PopularProductScreen extends StatelessWidget {
         .settings
         .arguments as PopularProductListArguments?;
     return Scaffold(
-      appBar: const CustomAppBar(),
-      backgroundColor: const Color(0xFFF5F6F9),
-      body: Body(
-        mostLikedProductList: agrs!.productList,
-      ),
-    );
+        appBar: const CustomAppBar(),
+        backgroundColor: const Color(0xFFF5F6F9),
+        body: Body(
+          mostLikedProductList: agrs!.productList,
+        ));
   }
 }
 

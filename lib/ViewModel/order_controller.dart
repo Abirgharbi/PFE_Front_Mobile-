@@ -1,17 +1,28 @@
+import 'dart:convert';
+
 import 'package:ARkea/Model/cart_model.dart';
 import 'package:ARkea/Model/product_model.dart';
 import 'package:ARkea/ViewModel/product_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../Model/promo_model.dart';
+import '../Model/service/network_handler.dart';
+
 var productController = Get.put(ProductController());
 
 class OrderController extends GetxController {
+  TextEditingController promoCode = TextEditingController();
   final RxList<Cart> demoCarts = RxList<Cart>([]);
   RxBool exist = false.obs;
+  RxBool applyDisabled = false.obs;
   late Cart foundProduct;
+  late Promo validPromo;
   RxDouble orderSum = 0.0.obs;
+  RxString message = "".obs;
   RxBool isAdded = false.obs;
+  RxBool isValidCode = false.obs;
+  List<Promo> validPromoList = [];
 
   RxInt productNbInCart = 0.obs;
   @override
@@ -61,6 +72,41 @@ class OrderController extends GetxController {
         }
         i++;
       } while (i < demoCarts.length && exist.isFalse);
+    }
+  }
+
+  void applyPromoCode() async {
+    int i = 0;
+    var response = await NetworkHandler.get("order/promo/getValidPromos");
+
+    try {
+      //var data = await json.decode(json.encode(response));
+      //promoList = json.decode(json.encode(response));
+
+      PromoModel promoModel = PromoModel.fromJson(json.decode(response));
+
+      print(promoModel.promos.elementAt(0).code);
+      validPromoList = promoModel.promos;
+
+      if (validPromoList.length != 0) {
+        do {
+          if (validPromoList.elementAt(i).code == promoCode.text) {
+            isValidCode.value = true;
+            validPromo = validPromoList.elementAt(i);
+          }
+          i++;
+        } while (i < validPromoList.length && isValidCode.isFalse);
+      }
+
+      if (isValidCode == true) {
+        orderSum.value = orderSum.value * (validPromo.discount / 100);
+        applyDisabled.value = true;
+        message.value = "";
+      } else {
+        message.value = "Invalid promo code";
+      }
+    } catch (e) {
+      print(e);
     }
   }
 }

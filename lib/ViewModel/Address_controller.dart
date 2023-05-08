@@ -18,6 +18,11 @@ class AddressController extends GetxController {
   void onInit() async {
     super.onInit();
     city.text = await NetworkHandler.getItem('city');
+    country.text = await NetworkHandler.getItem('country');
+    state.text = await NetworkHandler.getItem('state');
+    zipCode.text = await NetworkHandler.getItem('zipCode');
+    line1.text = await NetworkHandler.getItem('line1');
+    line2.text = await NetworkHandler.getItem('line2');
   }
 
   // add address

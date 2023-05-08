@@ -22,10 +22,10 @@ class Body extends StatefulWidget {
   Body({Key? key, required this.mostLikedProductList}) : super(key: key);
 
   @override
-  State<Body> createState() => _BodyState();
+  State<Body> createState() => BodyState();
 }
 
-class _BodyState extends State<Body> {
+class BodyState extends State<Body> {
   //int length = productController.mostLikedProductList.length;
 
   RxBool done = false.obs;
@@ -188,31 +188,6 @@ class _BodyState extends State<Body> {
           const SizedBox(
             height: 25,
           ),
-          Obx(
-            () => productController.popularLength ==
-                    productController.popularProductNumber
-                ? Center(
-                    child: SizedBox(
-                        height: 20,
-                        width: 100,
-                        child: Text(
-                          "No More",
-                          style: kEncodeSansSemibold.copyWith(
-                            color: kDarkBrown,
-                            fontSize: gWidth / 100 * 3.5,
-                          ),
-                        )),
-                  )
-                : ElevatedButton(
-                    onPressed: () => {
-                          productController.getMoreMostLikedProducts(
-                              widget.mostLikedProductList),
-                          productController.popularLength.value =
-                              widget.mostLikedProductList.length,
-                          // print("${productController.length}" + "hello")
-                        },
-                    child: Text("See More")),
-          )
         ],
       ),
     );
