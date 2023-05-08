@@ -25,7 +25,7 @@ import 'Views/screens/review/review.dart';
 import 'Views/screens/side_menu.dart';
 import 'utils/text_theme.dart';
 import '.env.dart';
-import 'Views/screens/AddressScreen.dart';
+import 'Views/screens/profil_page/AddressScreen.dart';
 
 void main() async {
   await GetStorage.init();

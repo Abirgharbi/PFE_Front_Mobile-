@@ -7,30 +7,47 @@ import 'package:get/get.dart';
 import '../Model/service/network_handler.dart';
 
 class PaymentController extends GetxController {
+  var email = '';
+  var phone = '';
+  var city = '';
+  var country = '';
+  var state = '';
+  var zipCode = '';
+  var line1 = '';
+  var line2 = '';
+
   @override
-  void onInit() {
+  void onInit() async {
     super.onInit();
+    email = await NetworkHandler.getItem('customerEmail');
+    phone = await NetworkHandler.getItem('customerPhoneNumber');
+    city = await NetworkHandler.getItem('city');
+    country = await NetworkHandler.getItem('country');
+    state = await NetworkHandler.getItem('state');
+    zipCode = await NetworkHandler.getItem('zipCode');
+    line1 = await NetworkHandler.getItem('line1');
+    line2 = await NetworkHandler.getItem('line2');
   }
 
   OrderController orderController = Get.put(OrderController());
   Future<void> handlePayPress() async {
     // update product quantity
     try {
-      const billingDetails = BillingDetails(
-        email: 'ilyesbenhajdahmane@gmail.com',
-        phone: '+41 79 123 45 67',
+      var billingDetails = BillingDetails(
+        email: email,
+        phone: phone,
         address: Address(
-          city: 'Lausanne',
-          country: 'CH',
-          line1: 'Rue de la Paix 10',
-          line2: '',
-          state: 'lausanne',
-          postalCode: '4000',
+          city: city,
+          country: country,
+          line1: line1,
+          line2: line2,
+          state: state,
+          postalCode: zipCode,
         ),
       ); // mocked data for tests
 
       final paymentMethod = await Stripe.instance.createPaymentMethod(
-          params: const PaymentMethodParams.card(
+          params: PaymentMethodParams.card(
         paymentMethodData: PaymentMethodData(
           billingDetails: billingDetails,
         ),
@@ -77,7 +94,7 @@ class PaymentController extends GetxController {
       'paymentMethodId': paymentMethodId,
       'currency': currency,
       'items': items,
-      'amount': orderController.orderSum.value,
+      'amount': orderController.orderSum.value * 100,
     });
 
     var response = await NetworkHandler.post(body, "order/pay");

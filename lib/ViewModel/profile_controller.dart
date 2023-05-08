@@ -10,6 +10,7 @@ import '../Views/screens/profil_page/profil_page.dart';
 
 class ProfileController extends GetxController {
   final TextEditingController name = TextEditingController();
+  final TextEditingController phoneNumber = TextEditingController();
 
   @override
   void onInit() async {
@@ -17,12 +18,16 @@ class ProfileController extends GetxController {
 
     super.onInit();
     name.text = await NetworkHandler.getItem('customerName');
+    phoneNumber.text = await NetworkHandler.getItem('customerPhoneNumber');
   }
 
-  void updateProfile(String imageUrl) async {
+  void updateProfile(String? imageUrl) async {
     final customerEmail = (await NetworkHandler.getItem('customerEmail'));
-    CustomerModel customerModel =
-        CustomerModel(name: name.text, email: customerEmail, image: imageUrl);
+    CustomerModel customerModel = CustomerModel(
+        name: name.text,
+        email: customerEmail,
+        image: imageUrl,
+        phone: phoneNumber.text);
     print(customerModel);
 
     final id = (await NetworkHandler.getItem('customerId'));
@@ -32,7 +37,8 @@ class ProfileController extends GetxController {
     var response = NetworkHandler.put(
         customerModelToJson(customerModel), "user/customer/update/$id");
     NetworkHandler.storeCustomer('customerName', name.text);
-    NetworkHandler.storeCustomer('customerImage', imageUrl);
+    NetworkHandler.storeCustomer('customerImage', imageUrl!);
+    NetworkHandler.storeCustomer('customerPhoneNumber', phoneNumber.text);
     //var data = json.decode(response);
     // Get.to(() => ProfileScreen());
   }

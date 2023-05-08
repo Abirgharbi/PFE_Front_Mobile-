@@ -42,7 +42,7 @@ class ProfileScreen extends StatelessWidget {
                         children: [
                           FutureBuilder<String>(
                             future: NetworkHandler.getItem(
-                                'customerImage'), // a previously-obtained Future<String> or null
+                                'customerImage'), 
                             builder: (BuildContext context,
                                 AsyncSnapshot<String> snapshot) {
                               List<Widget> children;
@@ -53,7 +53,7 @@ class ProfileScreen extends StatelessWidget {
                                     width: 120,
                                     child: ClipOval(
                                       child: SizedBox.fromSize(
-                                        size: Size.fromRadius(
+                                        size: const Size.fromRadius(
                                             100), // Image radius
                                         child: Image.network(
                                           '${snapshot.data}',
@@ -203,7 +203,7 @@ class ProfileScreen extends StatelessWidget {
 
                       ProfileMenuWidget(
                         title: "Address",
-                        icon: LineAwesomeIcons.dolly,
+                        icon: LineAwesomeIcons.map_marker,
                         onPress: () {
                           Get.toNamed('/address');
                         },

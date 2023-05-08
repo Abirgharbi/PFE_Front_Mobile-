@@ -26,12 +26,13 @@ class LoginController extends GetxController {
   RxBool isLogged = false.obs;
 
   void login() async {
+    isLogged.value = true;
     isNameEnabled.value = true;
     CustomerModel customerModel =
         CustomerModel(email: emailEditingController.text);
     var response = await NetworkHandler.post(
         customerModelToJson(customerModel), "user/login");
-    isLogged.value = true;
+
     var message = json.decode(response)["message"];
     if (message == "Please create an account.") {
       QuickAlert.show(
@@ -55,19 +56,39 @@ class LoginController extends GetxController {
           text: "verify your magic link in your inbox",
         );
       }
+      print(data);
+
+      var customerAdress = await NetworkHandler.get(
+          "user/customer/address/${data['customer']['email']}");
+      var adressData = json.decode(customerAdress);
+      print(adressData);
 
       NetworkHandler.storeToken(data['token']);
       NetworkHandler.storeCustomer('customerName', data['customer']['name']);
       NetworkHandler.storeCustomer('customerEmail', data['customer']['email']);
       NetworkHandler.storeCustomer('customerId', data['customer']['_id']);
       NetworkHandler.storeCustomer('customerImage', data['customer']['image']);
+      NetworkHandler.storeCustomer(
+          'customerPhoneNumber', data['customer']['phone']!);
 
       var dateTime = DateTime.parse(data['customer']['createdAt']);
       var JoinedDate = DateFormat.yMMMd("en-US").format(dateTime);
 
       NetworkHandler.storeCustomer('customerJoinedDate', JoinedDate);
+      NetworkHandler.storeCustomer('city', adressData['address'][0]['city']);
+      NetworkHandler.storeCustomer(
+          'country', adressData['address'][0]['country']);
+      NetworkHandler.storeCustomer('line1', adressData['address'][0]['line1']);
+      NetworkHandler.storeCustomer('line2', adressData['address'][0]['line2']);
+      NetworkHandler.storeCustomer('state', adressData['address'][0]['state']);
+      NetworkHandler.storeCustomer(
+          'zipCode', adressData['address'][0]['zipCode'].toString());
 
-      // Get.to(() => LandingPage());
+      String address =
+          "${adressData['address'][0]['line1']}, ${adressData['address'][0]['city']}, ${adressData['address'][0]['country']}";
+      NetworkHandler.storeCustomer('address', address);
+
+      Get.to(() => LandingPage());
     }
   }
 
@@ -114,7 +135,7 @@ class LoginController extends GetxController {
   Future loginfacebook() async {
     final LoginResult result = await FacebookAuth.instance
         .login(permissions: ['public_profile', 'email']);
-    isLogged.value = true;
+    //isLogged.value = true;
     isNameEnabled.value = false;
     if (result.status == LoginStatus.success) {
       accessToken = result.accessToken;

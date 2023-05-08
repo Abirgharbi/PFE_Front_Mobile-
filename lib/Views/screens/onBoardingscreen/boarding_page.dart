@@ -1,3 +1,4 @@
+import 'package:ARkea/Views/screens/landing_page.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -7,7 +8,6 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../../Model/boarding_items_model.dart';
 import '../../../utils/colors.dart';
-import '../auth/login_page.dart';
 import 'GetStartBtnBoardingPage.dart';
 
 class boradingScreen extends StatefulWidget {
@@ -181,7 +181,7 @@ class _boradingScreenState extends State<boradingScreen> {
                             borderRadius: BorderRadius.circular(15.0),
                             onTap: () {
                               Get.offAll(
-                                () => LoginPage(),
+                                () => const LandingPage(),
                                 transition: Transition.leftToRight,
                               );
                             },

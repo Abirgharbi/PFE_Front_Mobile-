@@ -31,7 +31,6 @@ class LoginPageState extends State<LoginPage> {
       return "Please Enter a Valid Email";
     } else {
       isEnabled = true;
-
       return null;
     }
   }

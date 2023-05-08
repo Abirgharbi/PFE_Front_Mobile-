@@ -196,7 +196,6 @@ class EditProfileScreenState extends State<EditProfileScreen> {
                                   ? FormTextFiled(
                                       enabled: false,
                                       label: "Full Name",
-                                      hintText: "${snapshot.data}",
                                       prefIcon: Icon(
                                         LineAwesomeIcons.user,
                                         color: MyColors.captionColor,
@@ -204,7 +203,6 @@ class EditProfileScreenState extends State<EditProfileScreen> {
                                       controller: profileController.name)
                                   : FormTextFiled(
                                       label: "Full Name",
-                                      hintText: "${snapshot.data}",
                                       prefIcon: Icon(
                                         LineAwesomeIcons.user,
                                         color: MyColors.captionColor,
@@ -277,10 +275,45 @@ class EditProfileScreenState extends State<EditProfileScreen> {
                       },
                     ),
                     const SizedBox(height: 20),
-                    FormTextFiled(
-                        label: "Phone N°",
-                        prefIcon: Icon(LineAwesomeIcons.phone,
-                            color: MyColors.captionColor)),
+                    FutureBuilder<String>(
+                      future: NetworkHandler.getItem(
+                          'customerPhoneNumber'), // a previously-obtained Future<String> or null
+                      builder: (BuildContext context,
+                          AsyncSnapshot<String> snapshot) {
+                        List<Widget> children;
+                        if (snapshot.hasData) {
+                          children = <Widget>[
+                            Padding(
+                              padding: const EdgeInsets.only(top: 16),
+                              child: FormTextFiled(
+                                  label: "Phone N°",
+                                  prefIcon: Icon(LineAwesomeIcons.phone,
+                                      color: MyColors.captionColor),
+                                  controller: profileController.phoneNumber),
+                            ),
+                          ];
+                        } else if (snapshot.hasError) {
+                          children = <Widget>[Text('${snapshot.error}')];
+                        } else {
+                          children = const <Widget>[
+                            SizedBox(
+                              width: 60,
+                              height: 60,
+                              child: CircularProgressIndicator(),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(top: 16),
+                              child: Text('Awaiting result...'),
+                            ),
+                          ];
+                        }
+                        return Center(
+                          child: Column(
+                            children: children,
+                          ),
+                        );
+                      },
+                    ),
                     const SizedBox(height: 20),
                   ],
                 )),

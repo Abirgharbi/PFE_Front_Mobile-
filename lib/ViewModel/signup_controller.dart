@@ -23,7 +23,7 @@ class SignupScreenController extends GetxController {
 
   void signUp() async {
     isEnabledName.value = true;
-    privacy.value = false;
+    privacy.value = true;
     isSigned.value = true;
     CustomerModel customerModel = CustomerModel(
         email: emailEditingController.text, name: nameEditingController.text);
@@ -38,11 +38,17 @@ class SignupScreenController extends GetxController {
         text: data["message"],
       );
     } else {
+      var data = json.decode(response);
       QuickAlert.show(
         context: context!,
         type: QuickAlertType.success,
         text: "Your account has been created. please check your email",
       );
+
+      var customerAdress = await NetworkHandler.get(
+          "user/customer/address/${data['customer']['email']}");
+      var adressData = json.decode(customerAdress);
+      print(adressData);
       NetworkHandler.storeToken(data['Token']);
       NetworkHandler.storeCustomer('customerName', data['customer']['name']);
       NetworkHandler.storeCustomer('customerEmail', data['customer']['email']);
@@ -53,6 +59,19 @@ class SignupScreenController extends GetxController {
       var joinedDate = DateFormat.yMMMd("en-US").format(dateTime);
 
       NetworkHandler.storeCustomer('customerJoinedDate', joinedDate);
+
+      NetworkHandler.storeCustomer('city', adressData['address'][0]['city']);
+      NetworkHandler.storeCustomer(
+          'country', adressData['address'][0]['country']);
+      NetworkHandler.storeCustomer('line1', adressData['address'][0]['line1']);
+      NetworkHandler.storeCustomer('line2', adressData['address'][0]['line2']);
+      NetworkHandler.storeCustomer('state', adressData['address'][0]['state']);
+      NetworkHandler.storeCustomer(
+          'zipCode', adressData['address'][0]['zipCode'].toString());
+
+      String address =
+          "${adressData['address'][0]['line1']}, ${adressData['address'][0]['city']}, ${adressData['address'][0]['country']}";
+      NetworkHandler.storeCustomer('address', address);
       Get.to(() => const LandingPage());
     }
   }

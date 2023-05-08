@@ -15,6 +15,7 @@ var signUpController = Get.put(SignupScreenController());
 bool isEnabled = false;
 bool isNamelEnabled = false;
 bool isEmailEnabled = false;
+var checkboxValue = false;
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
@@ -116,7 +117,7 @@ class SignUpState extends State<SignUp> {
                     ),
                     const SizedBox(height: 20),
                     // PasswordTextFiled(),
-                    PrivacyCheckBox(),
+                    checkBox(),
                     const SizedBox(
                       height: 25,
                     ),
@@ -126,7 +127,8 @@ class SignUpState extends State<SignUp> {
                           margin: const EdgeInsets.all(15),
                           width: gWidth / 2,
                           height: gHeight / 12,
-                          child: getEnabledValue() == true
+                          child: getEnabledValue() == true &&
+                                  checkboxValue == true
                               ? SPSolidButton(
                                   backgroundColor: MaterialStateProperty.all(
                                       MyColors.btnColor),
@@ -321,67 +323,88 @@ class SignupButton extends StatelessWidget {
   }
 }
 
-// checkBox Privacy
-class PrivacyCheckBox extends StatelessWidget {
-  const PrivacyCheckBox({
-    super.key,
-  });
+class checkBox extends StatefulWidget {
+  checkBox({super.key});
 
+  @override
+  State<checkBox> createState() => _checkBoxState();
+}
+
+class _checkBoxState extends State<checkBox> {
   @override
   Widget build(BuildContext context) {
     return FadeInDown(
       delay: const Duration(milliseconds: 2300),
-      child: Obx(
-        () => Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Material(
-              child: Checkbox(
-                activeColor: MyColors.btnBorderColor,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5)),
-                value: signUpController.privacy.value,
-                onChanged: (value) {
-                  signUpController.privacy.value = value!;
-                },
+      child: FormField<bool>(
+        builder: (state) {
+          return Column(
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Checkbox(
+                      activeColor: MyColors.btnBorderColor,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5)),
+                      value: checkboxValue,
+                      onChanged: (value) {
+                        setState(() {
+                          //save checkbox value to variable that store terms and notify form that state changed
+                          checkboxValue = value!;
+                          state.didChange(value);
+                        });
+                      }),
+                  RichText(
+                      text: const TextSpan(
+                    children: [
+                      TextSpan(
+                          text: "BY continueing, I agree to the ",
+                          style: TextStyle(
+                            color: Colors.black54,
+                            fontSize: 12,
+                          )),
+                      TextSpan(
+                          text: " Terms of use ",
+                          style: TextStyle(
+                            color: MyColors.titleTextColor,
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          )),
+                      TextSpan(
+                          text: " & ",
+                          style: TextStyle(
+                            color: Colors.black54,
+                            fontSize: 12,
+                          )),
+                      TextSpan(
+                          text: " Privacy & Policy",
+                          style: TextStyle(
+                            color: MyColors.titleTextColor,
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          )),
+                    ],
+                  )),
+                ],
               ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            RichText(
-                text: const TextSpan(
-              children: [
-                TextSpan(
-                    text: "BY continueing, I agree to the ",
-                    style: TextStyle(
-                      color: Colors.black54,
-                      fontSize: 12,
-                    )),
-                TextSpan(
-                    text: " Terms of use ",
-                    style: TextStyle(
-                      color: MyColors.titleTextColor,
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                    )),
-                TextSpan(
-                    text: " & ",
-                    style: TextStyle(
-                      color: Colors.black54,
-                      fontSize: 12,
-                    )),
-                TextSpan(
-                    text: " Privacy & Policy",
-                    style: TextStyle(
-                      color: MyColors.titleTextColor,
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                    )),
-              ],
-            )),
-          ],
-        ),
+              //display error in matching theme
+              Text(
+                state.errorText ?? '',
+                style: TextStyle(
+                  color: Theme.of(context).errorColor,
+                ),
+              )
+            ],
+          );
+        },
+        //output from validation will be displayed in state.errorText (above)
+        validator: (value) {
+          if (!checkboxValue) {
+            return 'You need to accept terms';
+          } else {
+            return null;
+          }
+        },
       ),
     );
   }

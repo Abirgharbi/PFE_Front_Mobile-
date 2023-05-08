@@ -1,6 +1,10 @@
+import 'dart:ffi';
+
+import 'package:ARkea/Views/widgets/form_textfiled.dart';
 import 'package:ARkea/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 
 import '../../../../ViewModel/order_controller.dart';
 import '../../../../utils/sizes.dart';
@@ -40,32 +44,93 @@ class CheckoutCard extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Add Discount code
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  height: gHeight / 10,
-                  width: gWidth / 10,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFF5F6F9),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: const Icon(
-                    Icons.payments_outlined,
-                    color: MyColors.btnColor,
-                  ),
+                const Text(
+                  "Apply Promotion (Optional)",
+                  style: TextStyle(
+                      color: Colors.black, fontWeight: FontWeight.bold),
                 ),
-                const Spacer(),
-                const Text("Add voucher code"),
-                const SizedBox(width: 10),
-                const Icon(
-                  Icons.arrow_forward_ios,
-                  size: 12,
+                const SizedBox(
+                  height: 15,
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SizedBox(
+                      height: 40,
+                      width: 205,
+                      child: TextFormField(
+                        controller: orderController.promoCode,
+                        decoration: InputDecoration(
+                          suffixIcon: const Icon(
+                            LineAwesomeIcons.percent,
+                            color: MyColors.btnBorderColor,
+                          ),
+                          contentPadding: const EdgeInsets.symmetric(
+                              vertical: 10.0, horizontal: 10.0),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: const BorderSide(color: Colors.grey),
+                          ),
+                          focusedBorder: const OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: MyColors.btnBorderColor),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Obx(
+                      () => orderController.applyDisabled.value == false
+                          ? SizedBox(
+                              height: 40,
+                              child: OutlinedButton(
+                                style: OutlinedButton.styleFrom(
+                                  foregroundColor: MyColors.btnColor,
+                                  side: const BorderSide(
+                                    color: MyColors.btnBorderColor,
+                                  ),
+                                ),
+                                onPressed: () {
+                                  orderController.applyPromoCode();
+                                },
+                                child: const Text("Apply"),
+                              ))
+                          : SizedBox(
+                              height: 40,
+                              child: OutlinedButton(
+                                style: OutlinedButton.styleFrom(
+                                  foregroundColor: Colors.grey,
+                                  side: const BorderSide(
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                                onPressed: null,
+                                child: const Text("Apply "),
+                              )),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Obx(
+                  () => Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      // Icon(
+                      //   LineAwesomeIcons.times_circle,
+                      //   color: Colors.red,
+
+                      Text("${orderController.message}"),
+                    ],
+                  ),
                 )
               ],
             ),
-            SizedBox(height: gHeight / 50),
+            SizedBox(height: gHeight / 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -76,7 +141,8 @@ class CheckoutCard extends StatelessWidget {
                       children: [
                         TextSpan(
                           text: "\$ ${orderController.orderSum}",
-                          style: TextStyle(fontSize: 16, color: Colors.black),
+                          style: const TextStyle(
+                              fontSize: 16, color: Colors.black),
                         ),
                       ],
                     ),
@@ -93,7 +159,7 @@ class CheckoutCard extends StatelessWidget {
                         elevation: 0,
                       ),
                       onPressed: () {
-                        orderController.checkAvailability();
+                        // orderController.checkAvailability();
                         Get.to(() => const PaymentCardForm());
                       },
                       child: Center(

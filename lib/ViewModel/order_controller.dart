@@ -6,16 +6,23 @@ import 'package:ARkea/ViewModel/product_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../Model/promo_model.dart';
 import '../Model/service/network_handler.dart';
 
 var productController = Get.put(ProductController());
 
 class OrderController extends GetxController {
+  TextEditingController promoCode = TextEditingController();
   final RxList<Cart> demoCarts = RxList<Cart>([]);
   RxBool exist = false.obs;
+  RxBool applyDisabled = false.obs;
   late Cart foundProduct;
+  late Promo validPromo;
   RxDouble orderSum = 0.0.obs;
+  RxString message = "".obs;
   RxBool isAdded = false.obs;
+  RxBool isValidCode = false.obs;
+  List<Promo> validPromoList = [];
 
   RxInt productNbInCart = 0.obs;
   @override
@@ -70,21 +77,38 @@ class OrderController extends GetxController {
     }
   }
 
-  checkAvailability() async {
-    Map<String, int> products = <String, int>{};
-    for (var i = 0; i < demoCarts.length; i++) {
-      products
-          .addAll({demoCarts[i].product.id.toString(): demoCarts[i].quantity});
-    }
-    print(products);
-    var response =
-        await NetworkHandler.post(products, "product/check-availability");
-    ProductModel productModel = ProductModel.fromJson(jsonDecode(response));
-    List<Product> productsUnAvailable = productModel.products;
-    for (var i = 0; i < productsUnAvailable.length; i++) {
-      if (productsUnAvailable[i].quantity == 0) {
-        Get.snackbar("Error", "${productsUnAvailable[i].name} out of stock");
+  void applyPromoCode() async {
+    int i = 0;
+    var response = await NetworkHandler.get("order/promo/getValidPromos");
+
+    try {
+      //var data = await json.decode(json.encode(response));
+      //promoList = json.decode(json.encode(response));
+
+      PromoModel promoModel = PromoModel.fromJson(json.decode(response));
+
+      print(promoModel.promos.elementAt(0).code);
+      validPromoList = promoModel.promos;
+
+      if (validPromoList.isNotEmpty) {
+        do {
+          if (validPromoList.elementAt(i).code == promoCode.text) {
+            isValidCode.value = true;
+            validPromo = validPromoList.elementAt(i);
+          }
+          i++;
+        } while (i < validPromoList.length && isValidCode.isFalse);
       }
+
+      if (isValidCode.isTrue) {
+        orderSum.value = orderSum.value * (validPromo.discount / 100);
+        applyDisabled.value = true;
+        message.value = "promotion applied";
+      } else {
+        message.value = "Invalid promo code";
+      }
+    } catch (e) {
+      print(e);
     }
   }
 }
