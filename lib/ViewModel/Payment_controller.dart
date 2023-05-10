@@ -32,6 +32,7 @@ class PaymentController extends GetxController {
   OrderController orderController = Get.put(OrderController());
   Future<void> handlePayPress() async {
     // update product quantity
+    
     try {
       var billingDetails = BillingDetails(
         email: email,

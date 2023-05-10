@@ -10,6 +10,7 @@ import '../../../ViewModel/login_controller.dart';
 import '../../../ViewModel/signup_controller.dart';
 import '../../../utils/colors.dart';
 import '../../../utils/sizes.dart';
+import '../order_history.dart';
 import './edit_profile.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -41,8 +42,7 @@ class ProfileScreen extends StatelessWidget {
                       Stack(
                         children: [
                           FutureBuilder<String>(
-                            future: NetworkHandler.getItem(
-                                'customerImage'), 
+                            future: NetworkHandler.getItem('customerImage'),
                             builder: (BuildContext context,
                                 AsyncSnapshot<String> snapshot) {
                               List<Widget> children;
@@ -198,7 +198,12 @@ class ProfileScreen extends StatelessWidget {
                       ProfileMenuWidget(
                         title: "My orders",
                         icon: LineAwesomeIcons.dolly,
-                        onPress: () {},
+                        onPress: () {
+                          final id = NetworkHandler.getItem('customerId');
+                          Get.to(OrderHistoryScreen(
+                            customerId: '$id',
+                          ));
+                        },
                       ),
 
                       ProfileMenuWidget(
@@ -212,7 +217,9 @@ class ProfileScreen extends StatelessWidget {
                       ProfileMenuWidget(
                         title: "Help Center",
                         icon: LineAwesomeIcons.headset,
-                        onPress: () {},
+                        onPress: () {
+                          Get.toNamed('/help');
+                        },
                       ),
                       const Divider(
                         color: Colors.white,
@@ -223,7 +230,9 @@ class ProfileScreen extends StatelessWidget {
                       ProfileMenuWidget(
                         title: "About Us",
                         icon: LineAwesomeIcons.info_circle,
-                        onPress: () {},
+                        onPress: () {
+                          Get.toNamed('/about');
+                        },
                       ),
                       ProfileMenuWidget(
                         title: "Rate Us",

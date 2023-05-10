@@ -18,11 +18,15 @@ class ReviewController extends GetxController {
 
   addReview(String comment, double rating, String productId) async {
     isLoading(true);
+    final image = NetworkHandler.getItem('customerImage') as String;
+    final name = NetworkHandler.getItem('customerName') as String;
+
     var response = await NetworkHandler.post(
-        // i need to get customerimge and name from the current user
-        '{"comment": "$comment", "rating": "$rating" ,"customerImage": "https://res.cloudinary.com/dbkivxzek/image/upload/v1682574096/ARkea/wz2ey0i5bf72l4n7vaqp.jpg","customerName":"ilyes BHD","productId": "$productId"}',
+        '{"comment": "$comment", "rating": "$rating" ,"customerImage": "$image","customerName":"$name","productId": "$productId"}',
         "review/add");
-    // i need to update ratingsQuantity and ratingsAverage in product model
+    var res = await NetworkHandler.put(
+        '{"rating": $rating}', "product/update-rating/$productId");
+    print(res);
     isLoading(false);
   }
 

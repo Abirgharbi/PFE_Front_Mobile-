@@ -39,14 +39,16 @@ class SplashScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        "Welcome To",
-                        style: Theme.of(context).textTheme.displaySmall,
+                      Center(
+                        child: Text(
+                          "Welcome To ARkea",
+                          style: Theme.of(context).textTheme.displaySmall,
+                        ),
                       ),
-                      Text(
-                        "ARkea. \nHappy To Help",
-                        style: Theme.of(context).textTheme.displayMedium,
-                      )
+                      // Text(
+                      //   "ARkea. \nHappy To Help",
+                      //   style: Theme.of(context).textTheme.displayMedium,
+                      // )
                     ],
                   ),
                 ))),

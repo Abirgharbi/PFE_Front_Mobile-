@@ -327,7 +327,8 @@ class EditProfileScreenState extends State<EditProfileScreen> {
                     onPressed: () {
                       profileController
                           .updateProfile(cloudinaryResponses.secureUrl!);
-                      print(cloudinaryResponses.secureUrl);
+                      Get.toNamed('/profil');
+                      Get.snackbar('Success', 'Profile Updated Successfully');
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: MyColors.btnColor,

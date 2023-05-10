@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:ARkea/Model/cart_model.dart';
 import 'package:ARkea/Model/product_model.dart';
 import 'package:ARkea/ViewModel/product_controller.dart';
+import 'package:ARkea/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -34,10 +35,8 @@ class OrderController extends GetxController {
   void addToCart(Product product) {
     Cart cart = Cart(product: product);
     if (product.quantity! > 0) {
-      product.quantity = product.quantity! - 1;
-    } else {
-      Get.snackbar("Error", "Product out of stock");
-    }
+    product.quantity = product.quantity! - 1;
+
     verifyProductExistence(cart);
     if (exist.isTrue) {
       final index = demoCarts.indexOf(foundProduct);
@@ -50,6 +49,9 @@ class OrderController extends GetxController {
 
     for (var i = 0; i < demoCarts.length; i++) {
       orderSum.value = demoCarts[i].product.price * demoCarts[i].quantity;
+    }
+    } else {
+      Get.snackbar("Error", "Product out of stock");
     }
   }
 
@@ -82,9 +84,6 @@ class OrderController extends GetxController {
     var response = await NetworkHandler.get("order/promo/getValidPromos");
 
     try {
-      //var data = await json.decode(json.encode(response));
-      //promoList = json.decode(json.encode(response));
-
       PromoModel promoModel = PromoModel.fromJson(json.decode(response));
 
       print(promoModel.promos.elementAt(0).code);
@@ -109,6 +108,51 @@ class OrderController extends GetxController {
       }
     } catch (e) {
       print(e);
+    }
+  }
+
+  void showConfirmationDialog(Product product, Function(bool) onConfirmation) {
+    Get.defaultDialog(
+      title: 'Quantity Unavailable',
+      content: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Text(
+          'We have left only ${product.quantity} from the "${product.name}" currently in our of stock. '
+          'Would you like to add them anyway?',
+        ),
+      ),
+      textConfirm: 'Add',
+      textCancel: 'Cancel',
+      confirmTextColor: Colors.white,
+      cancelTextColor: MyColors.btnBorderColor,
+      onConfirm: () => onConfirmation(true),
+      onCancel: () => onConfirmation(false),
+      buttonColor: MyColors.btnBorderColor,
+      cancel: const Text('Cancel'),
+      confirm: const Text('Add'),
+    );
+  }
+
+  checkAvailability() async {
+    Map<String, int> products = <String, int>{};
+    for (var i = 0; i < demoCarts.length; i++) {
+      products
+          .addAll({demoCarts[i].product.id.toString(): demoCarts[i].quantity});
+    }
+
+    var response = await NetworkHandler.post(
+        jsonEncode(products), "product/check-availability");
+
+    ProductModel productModel = ProductModel.fromJson(jsonDecode(response));
+    List<Product> productsUnavailable = productModel.products;
+
+    for (var i = 0; i < productsUnavailable.length; i++) {
+      showConfirmationDialog(productsUnavailable[i], (confirmed) {
+        if (!confirmed) {
+          demoCarts.removeWhere(
+              (element) => element.product.id == productsUnavailable[i].id);
+        }
+      });
     }
   }
 }
