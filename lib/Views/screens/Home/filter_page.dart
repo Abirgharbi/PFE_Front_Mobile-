@@ -32,7 +32,7 @@ class _FilterPageState extends State<FilterPage> {
                 ),
                 IconButton(
                     onPressed: () {
-                      Get.back();
+                      Get.toNamed('/landing');
                     },
                     icon: const Icon(
                       Icons.clear,

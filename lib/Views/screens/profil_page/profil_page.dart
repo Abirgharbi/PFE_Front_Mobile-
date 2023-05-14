@@ -199,10 +199,7 @@ class ProfileScreen extends StatelessWidget {
                         title: "My orders",
                         icon: LineAwesomeIcons.dolly,
                         onPress: () {
-                          final id = NetworkHandler.getItem('customerId');
-                          Get.to(OrderHistoryScreen(
-                            customerId: '$id',
-                          ));
+                          Get.to(OrderHistoryScreen());
                         },
                       ),
 

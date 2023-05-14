@@ -16,7 +16,7 @@ class SplashScreenController extends GetxController {
     // TODO: implement onInit
     super.onInit();
     productController.getRecentProducts();
-    productController.getMostLikedProducts();
+    productController.getMostLikedProducts(0);
   }
 
   RxBool animate = false.obs;

@@ -35,40 +35,36 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void filterProducts(List<Product> productList) {
     setState(() {
-      print(productList);
       filteredProductList = productList;
-      print(filteredProductList);
-      productController.popularLength.value = filteredProductList.length;
+      print(filteredProductList.length);
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: SingleChildScrollView(
-            physics: const BouncingScrollPhysics(
-                parent: AlwaysScrollableScrollPhysics()),
-            padding: const EdgeInsets.all(16),
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              const SizedBox(
-                height: 50,
-              ),
-              SearchBar(
-                productList: filteredProductList,
-                onFilter: filterProducts,
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              const Categories(),
-              const SpecialOffers(),
-              const SizedBox(
-                height: 16,
-              ),
-              const NewArrivalSection(),
-              const PopularProductSection(),
-            ])));
+    return SingleChildScrollView(
+        physics: const BouncingScrollPhysics(
+            parent: AlwaysScrollableScrollPhysics()),
+        padding: const EdgeInsets.all(16),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          const SizedBox(
+            height: 50,
+          ),
+          SearchBar(
+            productList: filteredProductList,
+            onFilter: filterProducts,
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          const Categories(),
+          const SpecialOffers(),
+          const SizedBox(
+            height: 16,
+          ),
+          const NewArrivalSection(),
+          const PopularProductSection(),
+        ]));
   }
 }
 
@@ -83,12 +79,9 @@ class PopularProductSection extends StatelessWidget {
       children: [
         SectionTitle(
           title: "Popular",
-          pressSeeAll: () => Navigator.pushNamed(
-            context,
-            "/popularProducts",
-            arguments: PopularProductListArguments(
-                productList: productController.mostLikedProductList),
-          ),
+          pressSeeAll: () => Get.toNamed("/popularProducts", arguments: {
+            "mostLikedProducts": productController.mostLikedProductList,
+          }),
           text: "See All",
         ),
         SingleChildScrollView(
@@ -129,8 +122,9 @@ class NewArrivalSection extends StatelessWidget {
           pressSeeAll: () => Navigator.pushNamed(
             context,
             "/newProducts",
-            arguments: ProductListDetailsArguments(
-                productList: productController.recentProductsList),
+            arguments: {
+              "recentProducts": productController.recentProductsList,
+            },
           ),
         ),
         SingleChildScrollView(
@@ -176,17 +170,15 @@ class SpecialOffers extends StatelessWidget {
           child: Row(
             children: [
               SpecialOfferCard(
-                image: "assets/images/Image Banner 2.png",
-                category: "Tech",
+                title: 'Summer Sale',
                 discount: "Discount 20%",
                 press: () {
                   Get.toNamed('/discount', arguments: {"discount": 20});
                 },
               ),
               SpecialOfferCard(
-                image: "assets/images/Image Banner 2.png",
-                category: "Fashion",
-                discount: "Discount 50%%",
+                title: 'Stock Clearance',
+                discount: "Discount 50%",
                 press: () {
                   Get.toNamed('/discount', arguments: {"discount": 50});
                 },
@@ -202,14 +194,13 @@ class SpecialOffers extends StatelessWidget {
 class SpecialOfferCard extends StatelessWidget {
   const SpecialOfferCard({
     Key? key,
-    required this.category,
-    required this.image,
     required this.discount,
+    required this.title,
     required this.press,
   }) : super(key: key);
 
-  final String category, image;
-  final String discount;
+  final String discount, title;
+
   final GestureTapCallback press;
 
   @override
@@ -221,45 +212,49 @@ class SpecialOfferCard extends StatelessWidget {
         child: SizedBox(
           width: gWidth / 1.5,
           height: gHeight / 4,
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(20),
+          child: Card(
+            elevation: 4, // Add elevation to create a shadow effect
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
             child: Stack(
               children: [
-                Image.asset(
-                  image,
-                  fit: BoxFit.cover,
-                ),
                 Container(
                   decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
                     gradient: LinearGradient(
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
                       colors: [
-                        Color(0xFF343434).withOpacity(0.4),
-                        Color(0xFF343434).withOpacity(0.15),
+                        Color.fromARGB(255, 108, 14, 175).withOpacity(0.8),
+                        Color.fromARGB(255, 81, 3, 171).withOpacity(0.4),
                       ],
                     ),
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: gWidth / 20,
-                    vertical: gHeight / 50,
-                  ),
-                  child: Text.rich(
-                    TextSpan(
-                      style: const TextStyle(color: Colors.white),
-                      children: [
-                        TextSpan(
-                          text: "$category\n",
-                          style: TextStyle(
-                            fontSize: gHeight / 20,
-                            fontWeight: FontWeight.bold,
-                          ),
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
                         ),
-                        TextSpan(text: "$discount")
-                      ],
-                    ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        discount,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],

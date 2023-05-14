@@ -11,7 +11,7 @@ import 'ViewModel/bindings.dart';
 import 'Views/screens/Home/home_page.dart';
 import 'Views/screens/ProductDetails/details_screen.dart';
 import 'Views/screens/ProductDetails/newArrival_screen.dart';
-import 'Views/screens/ProductDetails/productsPerCategorie_screen.dart';
+import 'Views/screens/ProductDetails/products_by_categories.dart';
 import 'Views/screens/about_us.dart';
 import 'Views/screens/auth/login_page.dart';
 import 'Views/screens/auth/signup.dart';
@@ -81,12 +81,12 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/profil', page: () => ProfileScreen()),
         GetPage(name: '/detail', page: () => DetailsScreen()),
         GetPage(name: '/SideMenu', page: () => const SideMenu()),
-        GetPage(name: '/newProducts', page: () => NewArrivalScreen()),
+        GetPage(name: '/newProducts', page: () => const NewArrivalScreen()),
         GetPage(
             name: '/popularProducts', page: () => const PopularProductScreen()),
         GetPage(
             name: '/productsPerCategorie',
-            page: () => productsPerCategorieScreen()),
+            page: () => const ProductsByCategory()),
         GetPage(
             name: '/noLoggedInprofil',
             page: () => const noLoggedIn_profilPage()),
@@ -96,9 +96,9 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/filtredProducts', page: () => FiltredProductScreen()),
         GetPage(name: '/address', page: () => const AddressScreen()),
         GetPage(name: '/discount', page: () => const DiscountScreen()),
-        GetPage(name: '/splash', page: () =>  SplashScreen()),
-        GetPage(name: '/about', page: () =>  const AboutUsScreen()),
-        GetPage(name: '/help', page: () =>  const HelpCenterScreen()),
+        GetPage(name: '/splash', page: () => SplashScreen()),
+        GetPage(name: '/about', page: () => const AboutUsScreen()),
+        GetPage(name: '/help', page: () => const HelpCenterScreen()),
       ],
       home: SplashScreen(),
     );

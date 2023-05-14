@@ -12,7 +12,6 @@ class ProductController extends GetxController {
   RxInt count = 0.obs;
   RxInt countRecent = 0.obs;
   RxInt length = 5.obs;
-  RxInt popularLength = 5.obs;
   RxInt productNumber = 0.obs;
   RxInt popularProductNumber = 0.obs;
   RxInt recentProductNumber = 0.obs;
@@ -31,7 +30,7 @@ class ProductController extends GetxController {
     super.onInit();
     getRecentProducts();
     getProductDetails();
-    getMostLikedProducts();
+    getMostLikedProducts(0);
   }
 
   getRecentProducts() async {
@@ -54,25 +53,16 @@ class ProductController extends GetxController {
     length.value = list.length;
   }
 
-  getMostLikedProducts() async {
-    isLoading(true);
-    var response = await NetworkHandler.get("product/most-liked?page=0");
+  getMostLikedProducts(int page) async {
+    // isLoading(true);
+    countPopular.value = countPopular.value + 1;
+    var response = await NetworkHandler.get("product/most-liked?page=$page");
     ProductModel productModel = ProductModel.fromJson(json.decode(response));
     mostLikedProductList = productModel.products;
     popularProductNumber.value = productModel.count;
-    isLoading(false);
+    // isLoading(false);
 
     return mostLikedProductList;
-  }
-
-  getMoreMostLikedProducts(List<Product> list) async {
-    countPopular.value = countPopular.value + 1;
-
-    var response =
-        await NetworkHandler.get("product/most-liked?page=$countPopular");
-    ProductModel productModel = ProductModel.fromJson(json.decode(response));
-    list.addAll(productModel.products);
-    popularLength.value = list.length;
   }
 
   getProductDetails() async {

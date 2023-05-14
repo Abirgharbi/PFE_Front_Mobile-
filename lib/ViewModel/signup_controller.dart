@@ -85,24 +85,9 @@ class SignupScreenController extends GetxController {
   void onInit() async {
     super.onInit();
     await NetworkHandler.storage.deleteAll();
-    checkIfisLoggedIn();
   }
 
-  Future checkIfisLoggedIn() async {
-    var accessToken = await FacebookAuth.instance.accessToken;
-
-    checking.value = false;
-
-    if (accessToken != null) {
-      final userData = await FacebookAuth.instance.getUserData();
-      accessToken = accessToken;
-      userDataf = userData;
-    } else {
-      loginfacebook();
-    }
-  }
-
-  Future loginfacebook() async {
+  Future<void> signupFacebook() async {
     final LoginResult result = await FacebookAuth.instance
         .login(permissions: ['public_profile', 'email']);
     // isSigned.value = true;
@@ -111,7 +96,6 @@ class SignupScreenController extends GetxController {
       accessToken = result.accessToken;
       final userData = await FacebookAuth.instance.getUserData();
       userDataf = userData;
-      //print(userDataf);
 
       NetworkHandler.storeCustomer('customerName', userDataf!['name']);
       NetworkHandler.storeCustomer('customerEmail', userDataf!['email']);

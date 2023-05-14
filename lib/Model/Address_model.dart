@@ -6,6 +6,7 @@ AddressModel addressModelFromJson(String str) =>
 String addressModelToJson(AddressModel data) => json.encode(data.toJson());
 
 class AddressModel {
+  String? id;
   String? city;
   String? country;
   String? state;
@@ -14,7 +15,9 @@ class AddressModel {
   String? line2;
   String? customerEmail;
   AddressModel(
-      {this.city,
+      {
+        this.id,
+      this.city,
       this.country,
       this.state,
       this.zipCode,
@@ -23,6 +26,7 @@ class AddressModel {
       this.customerEmail});
 
   factory AddressModel.fromJson(Map<String, dynamic> json) => AddressModel(
+        id: json["_id"],
         city: json["city"],
         country: json["country"],
         state: json["state"],
@@ -33,6 +37,7 @@ class AddressModel {
       );
 
   Map<String, dynamic> toJson() => {
+        "_id": id,
         "city": city,
         "country": country,
         "state": state,

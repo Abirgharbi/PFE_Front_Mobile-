@@ -23,6 +23,7 @@ class AddressController extends GetxController {
     zipCode.text = await NetworkHandler.getItem('zipCode');
     line1.text = await NetworkHandler.getItem('line1');
     line2.text = await NetworkHandler.getItem('line2');
+    Address();
   }
 
   // add address
@@ -44,7 +45,7 @@ class AddressController extends GetxController {
     print(addressModelToJson(addressModel));
     var response = await NetworkHandler.post(
         addressModelToJson(addressModel), "user/customer/address");
-    // var data = json.decode(response);
-    print(response);
+    addressModel = AddressModel.fromJson(json.decode(response));
+    NetworkHandler.storeCustomer('addressId', addressModel.id!);
   }
 }

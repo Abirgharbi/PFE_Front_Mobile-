@@ -158,7 +158,7 @@ class SignUpState extends State<SignUp> {
                               imagePath: "assets/images/FacebookLogo.png",
                               size: 30,
                               onPress: () {
-                                signUpController.loginfacebook();
+                                signUpController.signupFacebook();
                               },
                             ),
                             const SizedBox(

@@ -1,12 +1,14 @@
 import 'dart:convert';
 
 import 'package:ARkea/Model/cart_model.dart';
+import 'package:ARkea/Model/product_card_model.dart';
 import 'package:ARkea/Model/product_model.dart';
 import 'package:ARkea/ViewModel/product_controller.dart';
 import 'package:ARkea/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../Model/order_model.dart';
 import '../Model/promo_model.dart';
 import '../Model/service/network_handler.dart';
 
@@ -20,6 +22,7 @@ class OrderController extends GetxController {
   late Cart foundProduct;
   late Promo validPromo;
   RxDouble orderSum = 0.0.obs;
+  double orderCost = 0.0;
   RxString message = "".obs;
   RxBool isAdded = false.obs;
   RxBool isValidCode = false.obs;
@@ -35,21 +38,22 @@ class OrderController extends GetxController {
   void addToCart(Product product) {
     Cart cart = Cart(product: product);
     if (product.quantity! > 0) {
-    product.quantity = product.quantity! - 1;
+      product.quantity = product.quantity! - 1;
 
-    verifyProductExistence(cart);
-    if (exist.isTrue) {
-      final index = demoCarts.indexOf(foundProduct);
+      verifyProductExistence(cart);
+      if (exist.isTrue) {
+        final index = demoCarts.indexOf(foundProduct);
 
-      demoCarts[index].quantity = demoCarts[index].quantity + 1;
-    } else {
-      demoCarts.add(cart);
-      productNbInCart.value = demoCarts.length;
-    }
+        demoCarts[index].quantity = demoCarts[index].quantity + 1;
+      } else {
+        demoCarts.add(cart);
+        productNbInCart.value = demoCarts.length;
+      }
 
-    for (var i = 0; i < demoCarts.length; i++) {
-      orderSum.value = demoCarts[i].product.price * demoCarts[i].quantity;
-    }
+      for (var i = 0; i < demoCarts.length; i++) {
+        orderSum.value = demoCarts[i].product.price * demoCarts[i].quantity;
+        orderCost = (demoCarts[i].product.productCost! * demoCarts[i].quantity);
+      }
     } else {
       Get.snackbar("Error", "Product out of stock");
     }
@@ -63,6 +67,7 @@ class OrderController extends GetxController {
     demoCarts[index].quantity = demoCarts[index].quantity - 1;
 
     orderSum.value = orderSum.value - product.price;
+    orderCost = orderCost - product.productCost!;
   }
 
   void verifyProductExistence(Cart cart) {
@@ -154,5 +159,53 @@ class OrderController extends GetxController {
         }
       });
     }
+  }
+
+  addOrder() async {
+    Order order = Order();
+    List<ProductCard> productCard = <ProductCard>[];
+
+    for (var i = 0; i < demoCarts.length; i++) {
+      productCard.add(
+        ProductCard(
+          id: demoCarts[i].product.id,
+          quantity: demoCarts[i].quantity,
+          price: demoCarts[i].product.price,
+          name: demoCarts[i].product.name,
+        ),
+      );
+    }
+    var revenue = orderSum.value - orderCost;
+    final customerId =
+        await NetworkHandler.getItem("customerId"); // Await the future
+    final addressId = await NetworkHandler.getItem("addressId");
+    order.productCard = productCard.cast<ProductCard>();
+    order.amount = orderSum.value;
+    order.revenue = revenue;
+    order.addressId = addressId;
+    order.customerId = customerId;
+
+    var response =
+        await NetworkHandler.post(json.encode(order.toJson()), "order/add");
+
+    for (var i = 0; i < demoCarts.length; i++) {
+      await NetworkHandler.put(
+          "product/update-after-sell/${demoCarts[i].product.id}",
+          '{"quantity": ${demoCarts[i].product.quantity}}');
+    }
+
+    var spends = await NetworkHandler.put(
+        '{"spend":${orderSum.value}}', "user/customer/spending/$customerId");
+
+    demoCarts.clear();
+  }
+
+  Future<List<Order>> fetchOrders(String customerId) async {
+    var response =
+        await NetworkHandler.get("order/getCustomerOrders/$customerId");
+    final data = jsonDecode(response);
+    List<Order> fetchedOrders =
+        List.from(data).map((json) => Order.fromJson(json)).toList();
+    return fetchedOrders;
   }
 }

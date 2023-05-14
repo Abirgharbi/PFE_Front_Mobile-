@@ -37,6 +37,7 @@ class Product {
   String name;
   double price;
   double? compareAtPrice;
+  double? productCost;
   String description;
   String? category;
   List<dynamic> images;
@@ -55,6 +56,7 @@ class Product {
     required this.name,
     required this.price,
     this.compareAtPrice,
+    this.productCost,
     required this.description,
     this.category,
     required this.images,
@@ -74,6 +76,7 @@ class Product {
         name: json["name"],
         price: json["price"].toDouble(),
         compareAtPrice: json["compare_at_price"].toDouble(),
+        productCost: json["productCost"].toDouble(),
         description: json["description"],
         category: json["category"],
         images: List<dynamic>.from(json["images"].map((x) => x)),
@@ -93,6 +96,7 @@ class Product {
         "name": name,
         "price": price,
         "compare_at_price": compareAtPrice,
+        "productCost": productCost,
         "description": description,
         "category": category,
         "images": List<dynamic>.from(images.map((x) => x)),

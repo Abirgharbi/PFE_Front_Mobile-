@@ -40,6 +40,7 @@ dependencies:
   flutter_stripe: ^9.1.1
   badges: ^3.1.1
   convert: ^3.1.1
+  timeago: ^3.3.0
 
 dev_dependencies:
   flutter_lints: ^2.0.0

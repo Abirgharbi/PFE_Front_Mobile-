@@ -105,7 +105,7 @@ class LoginController extends GetxController {
     Get.offAll(const LandingPage());
   }
 
-  Map<String, dynamic>? userDataf = Map<String, dynamic>().obs;
+  Map<String, dynamic>? userDataf = <String, dynamic>{}.obs;
 
   AccessToken? accessToken;
   RxBool checking = true.obs;
@@ -114,25 +114,9 @@ class LoginController extends GetxController {
   void onInit() async {
     super.onInit();
     await NetworkHandler.storage.deleteAll();
-    checkIfisLoggedIn();
   }
 
-  Future checkIfisLoggedIn() async {
-    var accessToken = await FacebookAuth.instance.accessToken;
-
-    checking.value = false;
-
-    if (accessToken != null) {
-      isNameEnabled.value = false;
-      final userData = await FacebookAuth.instance.getUserData();
-      accessToken = accessToken;
-      userDataf = userData;
-    } else {
-      loginfacebook();
-    }
-  }
-
-  Future loginfacebook() async {
+  Future<void> loginfacebook() async {
     final LoginResult result = await FacebookAuth.instance
         .login(permissions: ['public_profile', 'email']);
     //isLogged.value = true;
