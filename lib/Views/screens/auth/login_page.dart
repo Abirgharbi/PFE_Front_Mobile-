@@ -128,7 +128,7 @@ class LoginPageState extends State<LoginPage> {
                                 imagePath: "assets/images/google.png",
                                 size: 30,
                                 onPress: () {
-                                  loginController.loginWithGoogle();
+                                  loginController.signUpWithGoogle();
                                 },
                               ),
                             ],

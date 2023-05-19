@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:intl/intl.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import 'package:ARkea/utils/shared_preferences.dart';
 
 import '../../Model/order_model.dart';
 import '../../Model/service/network_handler.dart';
@@ -26,7 +27,7 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
   }
 
   getCustomerOrders() async {
-    String customerId = await NetworkHandler.getItem("customerId");
+    String customerId = await sharedPrefs.getPref("customerId");
     orders = await orderController.fetchOrders(customerId);
     setState(() {
       orders = orders;

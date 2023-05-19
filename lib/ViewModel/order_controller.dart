@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:ARkea/utils/shared_preferences.dart';
 
 import 'package:ARkea/Model/cart_model.dart';
 import 'package:ARkea/Model/product_card_model.dart';
@@ -177,8 +178,8 @@ class OrderController extends GetxController {
     }
     var revenue = orderSum.value - orderCost;
     final customerId =
-        await NetworkHandler.getItem("customerId"); // Await the future
-    final addressId = await NetworkHandler.getItem("addressId");
+        await sharedPrefs.getPref("customerId"); // Await the future
+    final addressId = await sharedPrefs.getPref("addressId");
     order.productCard = productCard.cast<ProductCard>();
     order.amount = orderSum.value;
     order.revenue = revenue;

@@ -1,8 +1,10 @@
 import 'dart:convert';
+import 'package:ARkea/utils/shared_preferences.dart';
 
 import 'package:ARkea/Model/Address_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Model/service/network_handler.dart';
 
@@ -16,19 +18,25 @@ class AddressController extends GetxController {
 
   @override
   void onInit() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
     super.onInit();
-    city.text = await NetworkHandler.getItem('city');
-    country.text = await NetworkHandler.getItem('country');
-    state.text = await NetworkHandler.getItem('state');
-    zipCode.text = await NetworkHandler.getItem('zipCode');
-    line1.text = await NetworkHandler.getItem('line1');
-    line2.text = await NetworkHandler.getItem('line2');
+    city.text = prefs.getString('city')!;
+    country.text = prefs.getString('country')!;
+    state.text = prefs.getString('state')!;
+    zipCode.text = prefs.getString('zipCode')!;
+    line1.text = prefs.getString('line1')!;
+    line2.text = prefs.getString('line2')!;
+
     Address();
   }
 
   // add address
   void Address() async {
-    var email = await NetworkHandler.getItem('customerEmail');
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    final String? email = prefs.getString('customerEmail');
+
     AddressModel addressModel = AddressModel(
       city: city.text,
       country: country.text,
@@ -40,12 +48,11 @@ class AddressController extends GetxController {
     );
 
     String address = "${line1.text}, ${city.text}, ${country.text}";
-    NetworkHandler.storeCustomer('address', address);
+    sharedPrefs.setPref('address', address);
 
-    print(addressModelToJson(addressModel));
     var response = await NetworkHandler.post(
         addressModelToJson(addressModel), "user/customer/address");
     addressModel = AddressModel.fromJson(json.decode(response));
-    NetworkHandler.storeCustomer('addressId', addressModel.id!);
+    sharedPrefs.setPref('addressId', addressModel.id!);
   }
 }

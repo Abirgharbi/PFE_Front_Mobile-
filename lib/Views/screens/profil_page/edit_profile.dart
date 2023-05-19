@@ -7,6 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
+import 'package:ARkea/utils/shared_preferences.dart';
 
 import '../../../Model/service/network_handler.dart';
 import '../../../ViewModel/login_controller.dart';
@@ -97,7 +98,7 @@ class EditProfileScreenState extends State<EditProfileScreen> {
               padding: const EdgeInsets.all(tDefaultSize),
               child: Column(children: [
                 FutureBuilder<String>(
-                  future: NetworkHandler.getItem(
+                  future: sharedPrefs.getPref(
                       'customerImage'), // a previously-obtained Future<String> or null
                   builder:
                       (BuildContext context, AsyncSnapshot<String> snapshot) {
@@ -180,7 +181,7 @@ class EditProfileScreenState extends State<EditProfileScreen> {
                     child: Column(
                   children: [
                     FutureBuilder<String>(
-                      future: NetworkHandler.getItem(
+                      future: sharedPrefs.getPref(
                           'customerName'), // a previously-obtained Future<String> or null
                       builder: (BuildContext context,
                           AsyncSnapshot<String> snapshot) {
@@ -234,7 +235,7 @@ class EditProfileScreenState extends State<EditProfileScreen> {
                     ),
                     const SizedBox(height: 20),
                     FutureBuilder<String>(
-                      future: NetworkHandler.getItem(
+                      future: sharedPrefs.getPref(
                           'customerEmail'), // a previously-obtained Future<String> or null
                       builder: (BuildContext context,
                           AsyncSnapshot<String> snapshot) {
@@ -276,7 +277,7 @@ class EditProfileScreenState extends State<EditProfileScreen> {
                     ),
                     const SizedBox(height: 20),
                     FutureBuilder<String>(
-                      future: NetworkHandler.getItem(
+                      future: sharedPrefs.getPref(
                           'customerPhoneNumber'), // a previously-obtained Future<String> or null
                       builder: (BuildContext context,
                           AsyncSnapshot<String> snapshot) {
@@ -408,42 +409,6 @@ class EditProfileScreenState extends State<EditProfileScreen> {
       }
     }
   }
-
-  // Future<void> doSingleUpload() async {
-  //   try {
-  //     final data = dataImages;
-  //     List<int>? fileBytes;
-
-  //     if (fileSource == FileSource.bytes) {
-  //       fileBytes = await getFileBytes(data.path!);
-  //     }
-
-  //     CloudinaryResponse response = await cloudinary.unsignedUpload(
-  //       file: data.path,
-  //       fileBytes: fileBytes,
-  //       resourceType: CloudinaryResourceType.image,
-  //       folder: folder,
-  //       progressCallback: data.progressCallback,
-  //       uploadPreset: uploadPreset,
-  //     );
-
-  //     if (response.isSuccessful && response.secureUrl!.isNotEmpty) {
-  //       setState(() {
-  //         cloudinaryResponses = response;
-  //       });
-  //       print('${cloudinaryResponses}hello');
-  //     } else {
-  //       setState(() {
-  //         errorMessage = response.error;
-  //       });
-  //       print('${cloudinaryResponses}helloErr');
-  //     }
-  //   } catch (e) {
-  //     setState(() {
-  //       errorMessage = e.toString();
-  //     });
-  //   }
-  // }
 
   void onClick() async {
     errorMessage = null;

@@ -1,4 +1,5 @@
 import 'package:ARkea/Views/screens/splash_screen.dart';
+import 'package:ARkea/utils/shared_preferences.dart';
 
 import 'Views/screens/ProductDetails/popular_products_screen.dart';
 import 'package:flutter/material.dart';
@@ -30,6 +31,9 @@ import '.env.dart';
 import 'Views/screens/profil_page/AddressScreen.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await sharedPrefs.init();
   await GetStorage.init();
   WidgetsFlutterBinding.ensureInitialized();
   Stripe.publishableKey = stripePublishableKey;

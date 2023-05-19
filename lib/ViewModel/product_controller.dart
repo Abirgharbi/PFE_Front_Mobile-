@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:ARkea/utils/shared_preferences.dart';
 import 'package:flutter/material.dart';
 
 import '../Model/product_model.dart';
@@ -56,7 +57,7 @@ class ProductController extends GetxController {
   getMostLikedProducts(int page) async {
     // isLoading(true);
     countPopular.value = countPopular.value + 1;
-    var response = await NetworkHandler.get("product/most-liked?page=$page");
+    var response = await NetworkHandler.get("product/popular?page=$page");
     ProductModel productModel = ProductModel.fromJson(json.decode(response));
     mostLikedProductList = productModel.products;
     popularProductNumber.value = productModel.count;
@@ -99,17 +100,17 @@ class ProductController extends GetxController {
   void addToWishlist(Product product) {
     product.liked = true;
     _wishlist.add(product);
+    sharedPrefs.setStringList(
+        "wishlist", _wishlist.map((e) => jsonEncode(e)).toList());
     updateLikedStatus(product);
-    // var response = NetworkHandler.post(
-    //     {"productId": product.id}, "user/customer/add-liked-product");
   }
 
   void removeFromWishlist(Product product) {
     product.liked = false;
     _wishlist.remove(product);
+    sharedPrefs.setStringList(
+        "wishlist", _wishlist.map((e) => jsonEncode(e)).toList());
     updateLikedStatus(product);
-    // var response = NetworkHandler.delete(
-    //     {"productId": product.id}, "user/customer/remove-liked-product");
   }
 
   void updateLikedStatus(Product product) {

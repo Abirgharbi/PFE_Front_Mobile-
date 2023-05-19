@@ -12,11 +12,6 @@ import '../../widgets/sp_solid_button.dart';
 
 var signUpController = Get.put(SignupScreenController());
 
-bool isEnabled = false;
-bool isNamelEnabled = false;
-bool isEmailEnabled = false;
-var checkboxValue = false;
-
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
 
@@ -25,31 +20,6 @@ class SignUp extends StatefulWidget {
 }
 
 class SignUpState extends State<SignUp> {
-  // String? validateValue(String? value) {
-  //   if (value == null || value.isEmpty) {
-  //     isEnabled = false;
-  //     return "Field could not be Empty";
-  //   } else if (!GetUtils.isEmail(value)) {
-  //     isEnabled = false;
-  //     return "Please Enter a Valid Email";
-  //   } else {
-  //     isEnabled = true;
-
-  //     return null;
-  //   }
-  // }
-
-  bool getEnabledValue() {
-    if (isNamelEnabled == true && isEmailEnabled == true) {
-      isEnabled = true;
-    } else if (isNamelEnabled == false && isEmailEnabled == false) {
-      isEnabled = false;
-    } else {
-      isEnabled = false;
-    }
-    return isEnabled;
-  }
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -72,11 +42,10 @@ class SignUpState extends State<SignUp> {
                       child: FormTextFiled(
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              isEnabled = false;
+                              signUpController.validName.value = false;
                               return "Field could not be Empty";
                             } else {
-                              isNamelEnabled = true;
-
+                              signUpController.validName.value = true;
                               return null;
                             }
                           },
@@ -95,13 +64,12 @@ class SignUpState extends State<SignUp> {
                       child: FormTextFiled(
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              isEnabled = false;
                               return "Field could not be Empty";
                             } else if (!GetUtils.isEmail(value)) {
-                              isEnabled = false;
+                              signUpController.validEmail.value = false;
                               return "Please Enter a Valid Email";
                             } else {
-                              isEmailEnabled = true;
+                              signUpController.validEmail.value = true;
 
                               return null;
                             }
@@ -117,33 +85,37 @@ class SignUpState extends State<SignUp> {
                     ),
                     const SizedBox(height: 20),
                     // PasswordTextFiled(),
-                    checkBox(),
+                    const checkBox(),
+
                     const SizedBox(
                       height: 25,
                     ),
                     FadeInDown(
-                        delay: const Duration(milliseconds: 1400),
-                        child: Container(
+                      delay: const Duration(milliseconds: 1400),
+                      child: Container(
                           margin: const EdgeInsets.all(15),
                           width: gWidth / 2,
                           height: gHeight / 12,
-                          child: getEnabledValue() == true &&
-                                  checkboxValue == true
-                              ? SPSolidButton(
-                                  backgroundColor: MaterialStateProperty.all(
-                                      MyColors.btnColor),
-                                  text: "Sign Up",
-                                  minWidth: 0,
-                                  onPressed: () {
-                                    signUpController.signUp();
-                                  })
-                              : SPSolidButton(
-                                  backgroundColor: MaterialStateProperty.all(
-                                      MyColors.btnColor.withOpacity(0.7)),
-                                  text: "Sign Up",
-                                  minWidth: 0,
-                                  onPressed: null),
-                        )),
+                          child: Obx(
+                            () => signUpController.checkboxValue.value &&
+                                    signUpController.validName.value &&
+                                    signUpController.validEmail.value
+                                ? SPSolidButton(
+                                    backgroundColor: MaterialStateProperty.all(
+                                        MyColors.btnColor),
+                                    text: "Sign Up",
+                                    minWidth: 0,
+                                    onPressed: () {
+                                      signUpController.signUp();
+                                    })
+                                : SPSolidButton(
+                                    backgroundColor: MaterialStateProperty.all(
+                                        MyColors.btnColor.withOpacity(0.7)),
+                                    text: "Sign Up",
+                                    minWidth: 0,
+                                    onPressed: null),
+                          )),
+                    ),
                     const OrText(),
                     const SizedBox(
                       height: 10,
@@ -158,7 +130,7 @@ class SignUpState extends State<SignUp> {
                               imagePath: "assets/images/FacebookLogo.png",
                               size: 30,
                               onPress: () {
-                                signUpController.signupFacebook();
+                                signUpController.signUpWithFacebook();
                               },
                             ),
                             const SizedBox(
@@ -168,7 +140,7 @@ class SignUpState extends State<SignUp> {
                               imagePath: "assets/images/google.png",
                               size: 30,
                               onPress: () {
-                                signUpController.loginWithGoogle();
+                                signUpController.signUpWithGoogle();
                               },
                             ),
                           ],
@@ -214,6 +186,7 @@ class LoginText extends StatelessWidget {
 }
 
 // Register Text
+// ignore: camel_case_types
 class signinText extends StatelessWidget {
   const signinText({
     Key? key,
@@ -240,7 +213,7 @@ class signinText extends StatelessWidget {
                 style: TextStyle(color: MyColors.subTitleTextColor),
                 children: [
                   TextSpan(
-                    text: "  Log In",
+                    text: " Log In",
                     style: TextStyle(
                       color: MyColors.btnBorderColor,
                       fontWeight: FontWeight.w500,
@@ -313,8 +286,6 @@ class SignupButton extends StatelessWidget {
           text: "Sign Up",
           minWidth: 0,
           onPressed: () {
-            print(signUpController.isEnabled.value);
-
             signUpController.signUp();
           },
         ),
@@ -323,13 +294,15 @@ class SignupButton extends StatelessWidget {
   }
 }
 
+// ignore: camel_case_types
 class checkBox extends StatefulWidget {
-  checkBox({super.key});
+  const checkBox({super.key});
 
   @override
   State<checkBox> createState() => _checkBoxState();
 }
 
+// ignore: camel_case_types
 class _checkBoxState extends State<checkBox> {
   @override
   Widget build(BuildContext context) {
@@ -346,13 +319,10 @@ class _checkBoxState extends State<checkBox> {
                       activeColor: MyColors.btnBorderColor,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(5)),
-                      value: checkboxValue,
+                      value: signUpController.checkboxValue.value,
                       onChanged: (value) {
-                        setState(() {
-                          //save checkbox value to variable that store terms and notify form that state changed
-                          checkboxValue = value!;
-                          state.didChange(value);
-                        });
+                        signUpController.checkboxValue.value = value!;
+                        state.didChange(value);
                       }),
                   RichText(
                       text: const TextSpan(
@@ -387,19 +357,12 @@ class _checkBoxState extends State<checkBox> {
                   )),
                 ],
               ),
-              //display error in matching theme
-              Text(
-                state.errorText ?? '',
-                style: TextStyle(
-                  color: Theme.of(context).errorColor,
-                ),
-              )
             ],
           );
         },
         //output from validation will be displayed in state.errorText (above)
         validator: (value) {
-          if (!checkboxValue) {
+          if (!signUpController.checkboxValue.value) {
             return 'You need to accept terms';
           } else {
             return null;

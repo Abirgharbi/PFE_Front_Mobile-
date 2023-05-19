@@ -5,7 +5,7 @@ import '../../ViewModel/signup_controller.dart';
 import '../../utils/colors.dart';
 import '../../utils/sizes.dart';
 
-class FormTextFiled extends StatelessWidget {
+class FormTextFiled extends StatefulWidget {
   final Widget? sufIcon;
   final Widget? prefIcon;
   final TextInputType? typeInput;
@@ -29,6 +29,11 @@ class FormTextFiled extends StatelessWidget {
       this.validator});
 
   @override
+  State<FormTextFiled> createState() => _FormTextFiledState();
+}
+
+class _FormTextFiledState extends State<FormTextFiled> {
+  @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
@@ -43,15 +48,15 @@ class FormTextFiled extends StatelessWidget {
             //height: 50,
             width: gWidth / 1.3,
             child: TextFormField(
-                enabled: enabled,
-                initialValue: initialValue,
+                enabled: widget.enabled,
+                initialValue: widget.initialValue,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
-                controller: controller,
-                keyboardType: typeInput,
+                controller: widget.controller,
+                keyboardType: widget.typeInput,
                 style: const TextStyle(color: Colors.black54, fontSize: 15),
                 decoration: InputDecoration(
                   isDense: true,
-                  hintText: hintText,
+                  hintText: widget.hintText,
                   contentPadding: const EdgeInsets.symmetric(
                       vertical: 10.0, horizontal: 10.0),
                   border: OutlineInputBorder(
@@ -64,16 +69,16 @@ class FormTextFiled extends StatelessWidget {
                   focusedErrorBorder: const OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.red, width: 2),
                   ),
-                  prefixIcon: prefIcon,
-                  suffixIcon: sufIcon,
+                  prefixIcon: widget.prefIcon,
+                  suffixIcon: widget.sufIcon,
                   hintStyle: const TextStyle(color: Colors.grey, fontSize: 15),
-                  labelText: label,
+                  labelText: widget.label,
                   labelStyle: const TextStyle(
                       color: Colors.grey,
                       fontSize: 15,
                       fontWeight: FontWeight.w400),
                 ),
-                validator: validator),
+                validator: widget.validator),
           ),
         ],
       ),

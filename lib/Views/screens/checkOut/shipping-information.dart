@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../../Model/service/network_handler.dart';
+import 'package:ARkea/utils/shared_preferences.dart';
 
 class ShippingInfo extends StatelessWidget {
   const ShippingInfo({Key? key}) : super(key: key);
@@ -19,7 +20,7 @@ class ShippingInfo extends StatelessWidget {
       child: Column(
         children: [
           FutureBuilder<String>(
-            future: NetworkHandler.getItem('customerName'),
+            future: sharedPrefs.getPref('customerName'),
             builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
               List<Widget> children;
               if (snapshot.hasData) {
@@ -58,7 +59,7 @@ class ShippingInfo extends StatelessWidget {
             },
           ),
           FutureBuilder<String>(
-            future: NetworkHandler.getItem('address'),
+            future: sharedPrefs.getPref('address'),
             builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
               List<Widget> children;
               if (snapshot.hasData) {
