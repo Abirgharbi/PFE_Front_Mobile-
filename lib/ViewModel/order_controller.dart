@@ -35,21 +35,21 @@ class OrderController extends GetxController {
   void addToCart(Product product) {
     Cart cart = Cart(product: product);
     if (product.quantity! > 0) {
-    product.quantity = product.quantity! - 1;
+      product.quantity = product.quantity! - 1;
 
-    verifyProductExistence(cart);
-    if (exist.isTrue) {
-      final index = demoCarts.indexOf(foundProduct);
+      verifyProductExistence(cart);
+      if (exist.isTrue) {
+        final index = demoCarts.indexOf(foundProduct);
 
-      demoCarts[index].quantity = demoCarts[index].quantity + 1;
-    } else {
-      demoCarts.add(cart);
-      productNbInCart.value = demoCarts.length;
-    }
+        demoCarts[index].quantity = demoCarts[index].quantity + 1;
+      } else {
+        demoCarts.add(cart);
+        productNbInCart.value = demoCarts.length;
+      }
 
-    for (var i = 0; i < demoCarts.length; i++) {
-      orderSum.value = demoCarts[i].product.price * demoCarts[i].quantity;
-    }
+      for (var i = 0; i < demoCarts.length; i++) {
+        orderSum.value = demoCarts[i].product.price * demoCarts[i].quantity;
+      }
     } else {
       Get.snackbar("Error", "Product out of stock");
     }

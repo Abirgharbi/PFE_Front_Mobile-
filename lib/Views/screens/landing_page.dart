@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 
 import '../../ViewModel/login_controller.dart';
+import '../../ViewModel/product_controller.dart';
 import '../../utils/colors.dart';
 import 'Home/home_page.dart';
 import 'package:badges/badges.dart' as badges;
@@ -17,6 +18,7 @@ import 'favorite_screen.dart';
 final loginController = Get.put(LoginController());
 final signUpController = Get.put(SignupScreenController());
 final orderController = Get.put(OrderController());
+var productController = Get.put(ProductController());
 
 class LandingPage extends StatefulWidget {
   const LandingPage({super.key, this.yes});
@@ -79,9 +81,30 @@ class _LandingPageState extends State<LandingPage> {
                               color: MyColors.btnBorderColor),
                         ),
                 )),
-            const GButton(
+            GButton(
               icon: Icons.favorite_border_outlined,
               text: "Favorites",
+              leading: Obx(
+                () => productController.wishlist.isEmpty
+                    ? const Icon(Icons.favorite_border_outlined,
+                        color: MyColors.btnBorderColor)
+                    : badges.Badge(
+                        position:
+                            badges.BadgePosition.topStart(top: -12, start: -10),
+                        badgeContent: Text(
+                          productController.wishlist.length.toString(),
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                        badgeStyle: badges.BadgeStyle(
+                          shape: badges.BadgeShape.circle,
+                          badgeColor: Colors.red,
+                          padding: const EdgeInsets.all(5),
+                          borderRadius: BorderRadius.circular(100),
+                        ),
+                        child: const Icon(Icons.favorite_border_outlined,
+                            color: MyColors.btnBorderColor),
+                      ),
+              ),
             ),
             const GButton(icon: Icons.person_outline, text: "Profile")
           ],

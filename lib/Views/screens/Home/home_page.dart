@@ -186,7 +186,7 @@ class SpecialOffers extends StatelessWidget {
               SpecialOfferCard(
                 image: "assets/images/Image Banner 2.png",
                 category: "Fashion",
-                discount: "Discount 50%%",
+                discount: "Discount 50%",
                 press: () {
                   Get.toNamed('/discount', arguments: {"discount": 50});
                 },
@@ -225,17 +225,13 @@ class SpecialOfferCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(20),
             child: Stack(
               children: [
-                Image.asset(
-                  image,
-                  fit: BoxFit.cover,
-                ),
                 Container(
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
                       colors: [
-                        Color(0xFF343434).withOpacity(0.4),
+                        MyColors.btnBorderColor.withOpacity(0.4),
                         Color(0xFF343434).withOpacity(0.15),
                       ],
                     ),
@@ -246,19 +242,21 @@ class SpecialOfferCard extends StatelessWidget {
                     horizontal: gWidth / 20,
                     vertical: gHeight / 50,
                   ),
-                  child: Text.rich(
-                    TextSpan(
-                      style: const TextStyle(color: Colors.white),
-                      children: [
-                        TextSpan(
-                          text: "$category\n",
-                          style: TextStyle(
-                            fontSize: gHeight / 20,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        TextSpan(text: "$discount")
-                      ],
+                  child: Padding(
+                    padding: const EdgeInsets.all(35.0),
+                    child: Text.rich(
+                      TextSpan(
+                        style: const TextStyle(color: Colors.white),
+                        children: [
+                          TextSpan(
+                            text: "$discount",
+                            style: TextStyle(
+                              fontSize: gHeight / 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 ),

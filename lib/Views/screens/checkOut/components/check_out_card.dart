@@ -130,7 +130,7 @@ class CheckoutCard extends StatelessWidget {
                 )
               ],
             ),
-            SizedBox(height: gHeight / 10),
+            SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
