@@ -31,7 +31,6 @@ class _favoriteState extends State<favorite> {
     wishlisted = wishlist.map((e) => Product.fromJson(jsonDecode(e))).toList();
     setState(() {
       wishlisted = wishlisted;
-      print(wishlisted);
     });
   }
 

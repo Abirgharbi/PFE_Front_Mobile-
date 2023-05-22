@@ -63,7 +63,8 @@ class NetworkHandler {
   }
 
   static Uri buildUrl(String endpoint) {
-    String host = "https://arkea.up.railway.app/";
+    // String host = "http://34.221.165.107/";
+    String host = "http://10.0.2.2:8080/";
 
     final apiPath = host + endpoint;
     return Uri.parse(apiPath);

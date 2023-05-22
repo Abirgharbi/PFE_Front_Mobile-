@@ -1,3 +1,4 @@
+import 'package:ARkea/Model/product_model.dart';
 import 'package:ARkea/utils/colors.dart';
 import 'package:ARkea/utils/sizes.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +13,7 @@ import '../../../widgets/rounded_icon_btn.dart';
 var orderController = Get.put(OrderController());
 
 class CartCard extends StatefulWidget {
-  final Cart cart;
+  final Product cart;
 
   CartCard({
     Key? key,
@@ -26,13 +27,13 @@ class CartCard extends StatefulWidget {
 class _CartCardState extends State<CartCard> {
   @override
   Widget build(BuildContext context) {
-    int quantity = widget.cart.quantity;
+    int? quantity = widget.cart.quantity;
     return ColoredBox(
       color: Colors.white,
       child: Padding(
-        padding: EdgeInsets.only(right: 10, left: 10, top: 20, bottom: 20),
-        child: Container(
-            child: Row(
+        padding:
+            const EdgeInsets.only(right: 10, left: 10, top: 20, bottom: 20),
+        child: Row(
           children: [
             SizedBox(
               width: 88,
@@ -44,7 +45,7 @@ class _CartCardState extends State<CartCard> {
                     color: const Color(0xFFF5F6F9),
                     borderRadius: BorderRadius.circular(15),
                   ),
-                  child: Image.network(widget.cart.product.thumbnail),
+                  child: Image.network(widget.cart.thumbnail),
                 ),
               ),
             ),
@@ -53,14 +54,14 @@ class _CartCardState extends State<CartCard> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  widget.cart.product.name,
+                  widget.cart.name,
                   style: const TextStyle(color: Colors.black, fontSize: 16),
                   maxLines: 2,
                 ),
                 const SizedBox(height: 10),
                 Text.rich(
                   TextSpan(
-                    text: "\$${widget.cart.product.price}",
+                    text: "\$${widget.cart.price}",
                     style: const TextStyle(
                         fontWeight: FontWeight.w600, color: MyColors.btnColor),
                     children: [
@@ -87,7 +88,7 @@ class _CartCardState extends State<CartCard> {
                         showShadow: true,
                         press: () {
                           print('${widget.cart.quantity}');
-                          orderController.addToCart(widget.cart.product);
+                          orderController.addToCart(widget.cart);
                           setState(() {
                             quantity = widget.cart.quantity;
                           });
@@ -100,7 +101,7 @@ class _CartCardState extends State<CartCard> {
                       RoundedIconBtn(
                         icon: Icons.remove,
                         press: () {
-                          orderController.decreaseQuantity(widget.cart.product);
+                          orderController.decreaseQuantity(widget.cart);
                           setState(() {
                             quantity = widget.cart.quantity;
                           });
@@ -117,7 +118,7 @@ class _CartCardState extends State<CartCard> {
                         showShadow: true,
                         press: () {
                           print('${widget.cart.quantity}');
-                          orderController.addToCart(widget.cart.product);
+                          orderController.addToCart(widget.cart);
                           setState(() {
                             quantity = widget.cart.quantity;
                           });
@@ -126,7 +127,7 @@ class _CartCardState extends State<CartCard> {
                     ],
                   ),
           ],
-        )),
+        ),
       ),
     );
   }

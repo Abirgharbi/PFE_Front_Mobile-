@@ -24,12 +24,10 @@ class LoginController extends GetxController {
   RxString customerEmail = "userMail".obs;
   RxString customerImage = "".obs;
   var isNameEnabled = true.obs;
-  RxBool isLogged = false.obs;
 
   void login() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    isLogged.value = true;
     isNameEnabled.value = true;
     CustomerModel customerModel =
         CustomerModel(email: emailEditingController.text);
@@ -96,8 +94,6 @@ class LoginController extends GetxController {
 
   void logOut() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    isLogged.value = false;
-    signupController.isSigned.value = false;
     await prefs.remove('token');
 
     await FacebookAuth.instance.logOut();
@@ -125,7 +121,6 @@ class LoginController extends GetxController {
   Future<void> loginfacebook() async {
     final LoginResult result = await FacebookAuth.instance
         .login(permissions: ['public_profile', 'email']);
-    isLogged.value = true;
     isNameEnabled.value = false;
     if (result.status == LoginStatus.success) {
       accessToken = result.accessToken;
@@ -136,14 +131,10 @@ class LoginController extends GetxController {
       sharedPrefs.setPref('customerEmail', userDataf!['email']);
       sharedPrefs.setPref(
           'customerImage', userDataf!['picture']['data']['url']);
-
-      CustomerModel customerModel = CustomerModel(
-        email: userDataf!['email'],
-      );
       var response = await NetworkHandler.post(
-          customerModelToJson(customerModel), "user/oauth/login");
-      var data = await json.decode(json.encode(response));
-      sharedPrefs.setPref('token', data[0]['Token']);
+          '{"email": "${userDataf!["email"]}"}', "user/oauth/login");
+      var data = await json.decode(response);
+      sharedPrefs.setPref('token', data['token']);
 
       Get.to(() => const LandingPage());
     }
@@ -160,7 +151,6 @@ class LoginController extends GetxController {
   Future<GoogleSignInAccount?> signUpWithGoogle() async {
     try {
       var user = await _googleSignIn.signIn();
-      isLogged.value = true;
       isNameEnabled.value = false;
 
       userDataf!.addAll({
@@ -172,13 +162,10 @@ class LoginController extends GetxController {
       sharedPrefs.setPref('customerEmail', user.email);
       sharedPrefs.setPref('customerImage', user.photoUrl.toString());
 
-      CustomerModel customerModel = CustomerModel(
-        email: user.email,
-      );
       var response = await NetworkHandler.post(
-          customerModelToJson(customerModel), "user/oauth/login");
+          '{"email": "${user.email}"}', "user/oauth/login");
       var data = await json.decode(response);
-      sharedPrefs.setPref('token', data['Token']);
+      sharedPrefs.setPref('token', data['token']);
 
       Get.to(() => const LandingPage());
     } catch (error) {

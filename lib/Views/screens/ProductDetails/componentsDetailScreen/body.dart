@@ -1,6 +1,4 @@
 import 'package:ARkea/Views/screens/ProductDetails/componentsDetailScreen/ArView.dart';
-import 'package:ARkea/Views/screens/checkOut/cart_screen.dart';
-import 'package:ARkea/Views/screens/checkOut/checkout.dart';
 import 'package:ARkea/utils/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -81,8 +79,9 @@ class Body extends StatelessWidget {
                                       orderController.addToCart(product);
                                       Get.snackbar(
                                           "Success", "product added to cart",
-                                          colorText: Colors.black,
-                                          backgroundColor: Colors.white);
+                                          // colorText: Colors.black,
+                                          // backgroundColor: Colors.white
+                                          );
                                     },
                                     splashColor: MyColors.btnBorderColor,
                                     child: const Center(

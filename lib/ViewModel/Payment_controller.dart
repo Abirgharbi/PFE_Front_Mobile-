@@ -32,8 +32,6 @@ class PaymentController extends GetxController {
 
   OrderController orderController = Get.put(OrderController());
   Future<void> handlePayPress() async {
-    orderController.addOrder();
-
     try {
       var billingDetails = BillingDetails(
         email: email,
@@ -70,6 +68,8 @@ class PaymentController extends GetxController {
 
       if (paymentIntentResult['clientSecret'] != null &&
           paymentIntentResult['requiresAction'] == null) {
+        orderController.addOrder();
+
         Get.snackbar("Success", "Payment succeeded");
         Get.toNamed('/landing');
 

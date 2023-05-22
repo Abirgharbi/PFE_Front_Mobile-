@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:ARkea/ViewModel/order_controller.dart';
 import 'package:ARkea/ViewModel/signup_controller.dart';
 import 'package:ARkea/Views/screens/checkOut/cart_screen.dart';
@@ -7,8 +9,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 
+import '../../Model/product_model.dart';
 import '../../ViewModel/login_controller.dart';
 import '../../utils/colors.dart';
+import '../../utils/shared_preferences.dart';
 import 'Home/home_page.dart';
 import 'package:badges/badges.dart' as badges;
 
@@ -27,6 +31,23 @@ class LandingPage extends StatefulWidget {
 }
 
 class _LandingPageState extends State<LandingPage> {
+  List<Product> addedProducts = [];
+  List<String> productsCart = [];
+  @override
+  void initState() {
+    super.initState();
+    getWhishlist();
+  }
+
+  getWhishlist() async {
+    productsCart = await sharedPrefs.getStringList("cart");
+    addedProducts =
+        productsCart.map((e) => Product.fromJson(jsonDecode(e))).toList();
+    setState(() {
+      addedProducts = addedProducts;
+    });
+  }
+
   int currentIndex = 0;
 
   static List<Widget> pages = [
@@ -59,14 +80,14 @@ class _LandingPageState extends State<LandingPage> {
                 icon: Icons.shopping_cart_outlined,
                 text: "Cart",
                 leading: Obx(
-                  () => orderController.productNbInCart == 0
+                  () => orderController.productNbInCart.value == 0
                       ? const Icon(Icons.shopping_cart_outlined,
                           color: MyColors.btnBorderColor)
                       : badges.Badge(
                           position: badges.BadgePosition.topStart(
                               top: -12, start: -10),
                           badgeContent: Text(
-                            orderController.demoCarts.length.toString(),
+                            addedProducts.length.toString(),
                             style: const TextStyle(color: Colors.white),
                           ),
                           badgeStyle: badges.BadgeStyle(
