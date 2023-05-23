@@ -17,7 +17,7 @@ var productController = Get.put(ProductController());
 
 class OrderController extends GetxController {
   TextEditingController promoCode = TextEditingController();
-  final RxList<Cart> demoCarts = RxList<Cart>([]);
+  List<Cart> productCarts = [];
   RxBool exist = false.obs;
   RxBool applyDisabled = false.obs;
   late Cart foundProduct;
@@ -43,17 +43,23 @@ class OrderController extends GetxController {
 
       verifyProductExistence(cart);
       if (exist.isTrue) {
-        final index = demoCarts.indexOf(foundProduct);
+        final index = productCarts.indexOf(foundProduct);
 
-        demoCarts[index].quantity = demoCarts[index].quantity + 1;
+        productCarts[index].quantity = productCarts[index].quantity + 1;
       } else {
-        demoCarts.add(cart);
-        productNbInCart.value = demoCarts.length;
+        productCarts.add(cart);
+        sharedPrefs.setStringList(
+          "cart",
+          productCarts.map((e) => jsonEncode(e.toJson())).toList(),
+        );
+        productNbInCart.value = productCarts.length;
       }
 
-      for (var i = 0; i < demoCarts.length; i++) {
-        orderSum.value = demoCarts[i].product.price * demoCarts[i].quantity;
-        orderCost = (demoCarts[i].product.productCost! * demoCarts[i].quantity);
+      for (var i = 0; i < productCarts.length; i++) {
+        orderSum.value =
+            productCarts[i].product.price * productCarts[i].quantity;
+        orderCost =
+            (productCarts[i].product.productCost! * productCarts[i].quantity);
       }
     } else {
       Get.snackbar("Error", "Product out of stock");
@@ -64,8 +70,8 @@ class OrderController extends GetxController {
     Cart cart = Cart(product: product);
     product.quantity = product.quantity! + 1;
 
-    final index = demoCarts.indexOf(foundProduct);
-    demoCarts[index].quantity = demoCarts[index].quantity - 1;
+    final index = productCarts.indexOf(foundProduct);
+    productCarts[index].quantity = productCarts[index].quantity - 1;
 
     orderSum.value = orderSum.value - product.price;
     orderCost = orderCost - product.productCost!;
@@ -74,14 +80,14 @@ class OrderController extends GetxController {
   void verifyProductExistence(Cart cart) {
     int i = 0;
 
-    if (demoCarts.isNotEmpty) {
+    if (productCarts.isNotEmpty) {
       do {
-        if (demoCarts.elementAt(i).product.id == cart.product.id) {
+        if (productCarts.elementAt(i).product.id == cart.product.id) {
           exist.value = true;
-          foundProduct = demoCarts.elementAt(i);
+          foundProduct = productCarts.elementAt(i);
         }
         i++;
-      } while (i < demoCarts.length && exist.isFalse);
+      } while (i < productCarts.length && exist.isFalse);
     }
   }
 
@@ -92,7 +98,6 @@ class OrderController extends GetxController {
     try {
       PromoModel promoModel = PromoModel.fromJson(json.decode(response));
 
-      print(promoModel.promos.elementAt(0).code);
       validPromoList = promoModel.promos;
 
       if (validPromoList.isNotEmpty) {
@@ -106,7 +111,9 @@ class OrderController extends GetxController {
       }
 
       if (isValidCode.isTrue) {
-        orderSum.value = orderSum.value * (validPromo.discount / 100);
+        double discount = validPromo.discount.toDouble();
+        double calculatedValue = orderSum.value * (discount / 100);
+        orderSum.value = double.parse(calculatedValue.toStringAsFixed(2));
         applyDisabled.value = true;
         message.value = "promotion applied";
       } else {
@@ -141,9 +148,9 @@ class OrderController extends GetxController {
 
   checkAvailability() async {
     Map<String, int> products = <String, int>{};
-    for (var i = 0; i < demoCarts.length; i++) {
-      products
-          .addAll({demoCarts[i].product.id.toString(): demoCarts[i].quantity});
+    for (var i = 0; i < productCarts.length; i++) {
+      products.addAll(
+          {productCarts[i].product.id.toString(): productCarts[i].quantity});
     }
 
     var response = await NetworkHandler.post(
@@ -155,8 +162,10 @@ class OrderController extends GetxController {
     for (var i = 0; i < productsUnavailable.length; i++) {
       showConfirmationDialog(productsUnavailable[i], (confirmed) {
         if (!confirmed) {
-          demoCarts.removeWhere(
+          productCarts.removeWhere(
               (element) => element.product.id == productsUnavailable[i].id);
+          sharedPrefs.setStringList(
+              "cart", productCarts.map((e) => jsonEncode(e)).toList());
         }
       });
     }
@@ -166,13 +175,13 @@ class OrderController extends GetxController {
     Order order = Order();
     List<ProductCard> productCard = <ProductCard>[];
 
-    for (var i = 0; i < demoCarts.length; i++) {
+    for (var i = 0; i < productCarts.length; i++) {
       productCard.add(
         ProductCard(
-          id: demoCarts[i].product.id,
-          quantity: demoCarts[i].quantity,
-          price: demoCarts[i].product.price,
-          name: demoCarts[i].product.name,
+          id: productCarts[i].product.id,
+          quantity: productCarts[i].quantity,
+          price: productCarts[i].product.price,
+          name: productCarts[i].product.name,
         ),
       );
     }
@@ -189,16 +198,18 @@ class OrderController extends GetxController {
     var response =
         await NetworkHandler.post(json.encode(order.toJson()), "order/add");
 
-    for (var i = 0; i < demoCarts.length; i++) {
+    for (var i = 0; i < productCarts.length; i++) {
       await NetworkHandler.put(
-          "product/update-after-sell/${demoCarts[i].product.id}",
-          '{"quantity": ${demoCarts[i].product.quantity}}');
+          "product/update-after-sell/${productCarts[i].product.id}",
+          '{"quantity": ${productCarts[i].product.quantity}}');
     }
 
-    var spends = await NetworkHandler.put(
+    await NetworkHandler.put(
         '{"spend":${orderSum.value}}', "user/customer/spending/$customerId");
 
-    demoCarts.clear();
+    productCarts = [];
+    orderSum = 0.0.obs;
+    print(productCarts.length);
   }
 
   Future<List<Order>> fetchOrders(String customerId) async {

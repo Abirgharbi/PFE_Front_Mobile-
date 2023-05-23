@@ -65,8 +65,6 @@ class MyApp extends StatelessWidget {
           textTheme: TTtextTheme.lightTextTheme,
           brightness: Brightness.light,
           fontFamily: "Gordita"),
-      darkTheme: ThemeData(
-          brightness: Brightness.dark, textTheme: TTtextTheme.darkTextTheme),
       themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
       defaultTransition: Transition.fade,

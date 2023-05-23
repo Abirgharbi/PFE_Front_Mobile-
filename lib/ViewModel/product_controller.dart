@@ -93,30 +93,29 @@ class ProductController extends GetxController {
     return productByCategoryList;
   }
 
-  final RxList<Product> _wishlist = RxList<Product>([]);
   RxBool isLiked = false.obs;
-  List<Product> get wishlist => _wishlist;
+  List<Product> whishlist = [];
 
   void addToWishlist(Product product) {
     product.liked = true;
-    _wishlist.add(product);
-    sharedPrefs.setStringList(
-        "wishlist", _wishlist.map((e) => jsonEncode(e)).toList());
+    whishlist.add(product);
+      sharedPrefs.setStringList(
+          "wishlist", whishlist.map((e) => jsonEncode(e)).toList());
     updateLikedStatus(product);
   }
 
   void removeFromWishlist(Product product) {
     product.liked = false;
-    _wishlist.remove(product);
+    whishlist.remove(product);
     sharedPrefs.setStringList(
-        "wishlist", _wishlist.map((e) => jsonEncode(e)).toList());
+        "wishlist", whishlist.map((e) => jsonEncode(e)).toList());
     updateLikedStatus(product);
   }
 
   void updateLikedStatus(Product product) {
     final index = productList.indexOf(product);
     if (index >= 0) {
-      productList[index].liked = _wishlist.contains(product);
+      productList[index].liked = whishlist.contains(product);
     }
   }
 

@@ -89,7 +89,8 @@ class LoginPageState extends State<LoginPage> {
                             width: gWidth / 2,
                             height: gHeight / 12,
                             child: isEnabled == true
-                                ? SPSolidButton(
+                                ?
+                                 SPSolidButton(
                                     backgroundColor: MaterialStateProperty.all(
                                         MyColors.btnColor),
                                     text: "LogIn",
@@ -97,6 +98,7 @@ class LoginPageState extends State<LoginPage> {
                                     onPressed: () {
                                       loginController.login();
                                     })
+                                    
                                 : SPSolidButton(
                                     backgroundColor: MaterialStateProperty.all(
                                         MyColors.btnColor.withOpacity(0.7)),

@@ -33,13 +33,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
       String updatedToken = await sharedPrefs.getPref('token');
     setState(()  {
       token = updatedToken;
-      print(token);
     });
   }
 
   final loginController = Get.put(LoginController());
-
-  final signupController = Get.put(SignupScreenController());
 
   @override
   Widget build(BuildContext context) {

@@ -1,19 +1,41 @@
-import 'package:ARkea/Views/screens/Home/home_page.dart';
+import 'dart:convert';
+
 import 'package:ARkea/Views/screens/landing_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
-import '../../../Model/cart_model.dart';
+import '../../../Model/product_model.dart';
 import '../../../ViewModel/order_controller.dart';
 import '../../../utils/colors.dart';
+import '../../../utils/shared_preferences.dart';
 import '../../../utils/sizes.dart';
 import 'components/body.dart';
-import 'components/check_out_card.dart';
 
 var orderController = Get.put(OrderController());
 
-class CartScreen extends StatelessWidget {
+class CartScreen extends StatefulWidget {
+  @override
+  State<CartScreen> createState() => _CartScreenState();
+}
+
+class _CartScreenState extends State<CartScreen> {
+  List<Product> addedProducts = [];
+  List<String> productsCart = [];
+  @override
+  void initState() {
+    super.initState();
+    getWhishlist();
+  }
+
+  getWhishlist() async {
+    productsCart = await sharedPrefs.getStringList("cart");
+    addedProducts =
+        productsCart.map((e) => Product.fromJson(jsonDecode(e))).toList();
+    setState(() {
+      addedProducts = addedProducts;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,7 +44,7 @@ class CartScreen extends StatelessWidget {
         backgroundColor: Colors.transparent,
         leading: IconButton(
           onPressed: () {
-            Get.back();
+            Get.toNamed('landing');
           },
           icon: const Icon(Icons.arrow_back, color: Colors.black),
         ),
@@ -34,14 +56,14 @@ class CartScreen extends StatelessWidget {
               style: TextStyle(color: Colors.black),
             ),
             Text(
-              "${orderController.demoCarts.length} items",
+              "${addedProducts.length} items",
               style: Theme.of(context).textTheme.bodySmall,
             ),
           ],
         ),
       ),
       body: Obx(
-        () => orderController.productNbInCart == 0
+        () => orderController.productNbInCart.value == 0
             ? Center(
                 child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -66,12 +88,12 @@ class CartScreen extends StatelessWidget {
                   Padding(
                     padding:
                         const EdgeInsets.only(left: 60, right: 60, bottom: 30),
-                    child: Container(
+                    child: SizedBox(
                       width: double.infinity,
                       height: 50,
                       child: OutlinedButton(
                         style: OutlinedButton.styleFrom(
-                          primary: MyColors.btnColor,
+                          foregroundColor: MyColors.btnColor,
                           side: const BorderSide(
                             color: MyColors.btnBorderColor,
                           ),

@@ -21,7 +21,6 @@ class SignupScreenController extends GetxController {
   RxBool privacy = false.obs;
   RxBool isEnabled = false.obs;
   var isEnabledName = true.obs;
-  RxBool isSigned = false.obs;
   RxBool checkboxValue = false.obs;
   RxBool validName = false.obs;
   RxBool validEmail = false.obs;
@@ -31,7 +30,6 @@ class SignupScreenController extends GetxController {
 
     isEnabledName.value = true;
     privacy.value = true;
-    isSigned.value = true;
     CustomerModel customerModel = CustomerModel(
         email: emailEditingController.text, name: nameEditingController.text);
     var response = await NetworkHandler.post(
@@ -58,7 +56,7 @@ class SignupScreenController extends GetxController {
       String address =
           "${adressData['address'][0]['line1']}, ${adressData['address'][0]['city']}, ${adressData['address'][0]['country']}";
 
-      sharedPrefs.setPref('token', data['Token']);
+      sharedPrefs.setPref('token', data['token']);
       sharedPrefs.setPref('customerName', data['customer']['name']);
       sharedPrefs.setPref('customerEmail', data['customer']['email']);
       sharedPrefs.setPref('customerId', data['customer']['_id']);
@@ -91,11 +89,11 @@ class SignupScreenController extends GetxController {
 
     final LoginResult result = await FacebookAuth.instance
         .login(permissions: ['public_profile', 'email']);
-    isSigned.value = true;
     isEnabledName.value = false;
     if (result.status == LoginStatus.success) {
       accessToken = result.accessToken;
       final userData = await FacebookAuth.instance.getUserData();
+      print(userData);
       userDataf = userData;
 
       sharedPrefs.setPref('customerName', userDataf!['name']);
@@ -103,20 +101,30 @@ class SignupScreenController extends GetxController {
       sharedPrefs.setPref('customerEmail', userDataf!['email']);
       sharedPrefs.setPref(
           'customerImage', userDataf!['picture']['data']['url']);
-
-      Get.to(() => const LandingPage());
     }
 
-    CustomerModel customerModel = CustomerModel(
-      email: userDataf!['email'],
-      name: userDataf!['name'],
-      image: userDataf!['picture']['data']['url'],
-    );
+    var jsonObject = {
+      "email": userDataf!['email'],
+      "name": userDataf!['name'],
+      "image": userDataf!['picture']['data']['url'],
+    };
 
+    print(jsonObject);
     var response = await NetworkHandler.post(
-        customerModelToJson(customerModel), "user/oauth/register");
+        json.encode(jsonObject), "user/oauth/register");
     var data = await json.decode(response);
-    sharedPrefs.setPref('token', data['Token']);
+    print(data);
+
+    if (data["message"] == "Email already exists") {
+      QuickAlert.show(
+        context: context!,
+        type: QuickAlertType.warning,
+        text: "you already have an account with this email that you are using with your facebook account",
+      );
+    } else {
+      sharedPrefs.setPref('token', data['token']);
+      Get.to(() => const LandingPage());
+    }
 
     checking.value = false;
   }
@@ -133,7 +141,6 @@ class SignupScreenController extends GetxController {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
 
       var user = await googleSignIn.signIn();
-      isSigned.value = true;
       isEnabledName.value = false;
 
       userDataf!.addAll({
@@ -150,7 +157,7 @@ class SignupScreenController extends GetxController {
           customerModelToJson(customerModel), "user/oauth/register");
       var data = await json.decode(response);
 
-      sharedPrefs.setPref('token', data['Token']);
+      sharedPrefs.setPref('token', data['token']);
       sharedPrefs.setPref('customerName', user.displayName.toString());
       sharedPrefs.setPref('customerEmail', user.email);
       sharedPrefs.setPref('customerImage', user.photoUrl.toString());

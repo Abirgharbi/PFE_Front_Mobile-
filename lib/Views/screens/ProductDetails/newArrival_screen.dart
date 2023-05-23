@@ -127,9 +127,6 @@ class _NewArrivalScreenState extends State<NewArrivalScreen> {
                                                 productController.length.value =
                                                     filteredNewArrivalProductList
                                                         .length;
-                                                print(
-                                                    filteredNewArrivalProductList
-                                                        .length);
                                                 setState(() {
                                                   page++;
                                                   filteredNewArrivalProductList

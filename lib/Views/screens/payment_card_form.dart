@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 import '../../ViewModel/Payment_controller.dart';
 import '../../ViewModel/login_controller.dart';
 import '../../ViewModel/signup_controller.dart';
+import '../../utils/shared_preferences.dart';
 import '../widgets/app_bar.dart';
 import '../widgets/card_form.dart';
 import '../widgets/loading_button.dart';
@@ -26,10 +27,13 @@ class PaymentCardForm extends StatefulWidget {
 class PaymentCardFormState extends State<PaymentCardForm> {
   final controller = CardFormEditController();
   PaymentController paymentController = Get.put(PaymentController());
+  String token = '';
+
   @override
   void initState() {
     controller.addListener(update);
     super.initState();
+    checkToken();
   }
 
   void update() => setState(() {});
@@ -40,44 +44,48 @@ class PaymentCardFormState extends State<PaymentCardForm> {
     super.dispose();
   }
 
+  checkToken() async {
+    String updatedToken = await sharedPrefs.getPref('token');
+    setState(() {
+      token = updatedToken;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const CustomAppBar(title: 'Checkout'),
-      body: Obx(
-        () => loginController.isLogged.value == false &&
-                signupController.isSigned.value == false
-            ? const noLoggedIn_profilPage()
-            : SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Checkout(),
-                    CardForm(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      children: [
-                        CardFormField(
-                          controller: controller,
-                          countryCode: 'CH',
-                          style: CardFormStyle(
-                            backgroundColor: Colors.white,
-                            borderColor: Colors.blueGrey,
-                            textColor: Colors.black,
-                            fontSize: 24,
-                            placeholderColor: Colors.black,
-                          ),
+      body: token.isEmpty
+          ? const noLoggedIn_profilPage()
+          : SingleChildScrollView(
+              child: Column(
+                children: [
+                  Checkout(),
+                  CardForm(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    children: [
+                      CardFormField(
+                        controller: controller,
+                        countryCode: 'CH',
+                        style: CardFormStyle(
+                          backgroundColor: Colors.white,
+                          borderColor: Colors.blueGrey,
+                          textColor: Colors.black,
+                          fontSize: 24,
+                          placeholderColor: Colors.black,
                         ),
-                        LoadingButton(
-                          onPressed: controller.details.complete == true
-                              ? paymentController.handlePayPress
-                              : null,
-                          text: 'Pay',
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+                      ),
+                      LoadingButton(
+                        onPressed: controller.details.complete == true
+                            ? paymentController.handlePayPress
+                            : null,
+                        text: 'Pay',
+                      ),
+                    ],
+                  ),
+                ],
               ),
-      ),
+            ),
     );
   }
 }
