@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:ARkea/ViewModel/order_controller.dart';
+import 'package:ARkea/ViewModel/product_controller.dart';
 import 'package:ARkea/ViewModel/signup_controller.dart';
 import 'package:ARkea/Views/screens/checkOut/cart_screen.dart';
 
@@ -11,7 +12,6 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 
 import '../../Model/product_model.dart';
 import '../../ViewModel/login_controller.dart';
-import '../../ViewModel/product_controller.dart';
 import '../../utils/colors.dart';
 import '../../utils/shared_preferences.dart';
 import 'Home/home_page.dart';
@@ -22,7 +22,7 @@ import 'favorite_screen.dart';
 final loginController = Get.put(LoginController());
 final signUpController = Get.put(SignupScreenController());
 final orderController = Get.put(OrderController());
-var productController = Get.put(ProductController());
+final productController = Get.put(ProductController());
 
 class LandingPage extends StatefulWidget {
   const LandingPage({super.key, this.yes});
