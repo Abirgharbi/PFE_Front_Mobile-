@@ -44,7 +44,7 @@ class _CartScreenState extends State<CartScreen> {
         backgroundColor: Colors.transparent,
         leading: IconButton(
           onPressed: () {
-            Get.toNamed('landing');
+            Get.toNamed('/landing');
           },
           icon: const Icon(Icons.arrow_back, color: Colors.black),
         ),

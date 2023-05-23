@@ -106,14 +106,14 @@ class _LandingPageState extends State<LandingPage> {
               icon: Icons.favorite_border_outlined,
               text: "Favorites",
               leading: Obx(
-                () => productController.wishlist.isEmpty
+                () => productController.whishlist.length == 0
                     ? const Icon(Icons.favorite_border_outlined,
                         color: MyColors.btnBorderColor)
                     : badges.Badge(
                         position:
                             badges.BadgePosition.topStart(top: -12, start: -10),
                         badgeContent: Text(
-                          productController.wishlist.length.toString(),
+                          productController.whishlist.length.toString(),
                           style: const TextStyle(color: Colors.white),
                         ),
                         badgeStyle: badges.BadgeStyle(
