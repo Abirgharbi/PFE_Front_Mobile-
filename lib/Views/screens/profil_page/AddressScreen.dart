@@ -3,6 +3,7 @@ import 'package:ARkea/utils/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
+import 'package:ARkea/utils/shared_preferences.dart';
 
 import '../../../Model/service/network_handler.dart';
 import '../../../ViewModel/Address_controller.dart';
@@ -29,7 +30,7 @@ class _AddressState extends State<AddressScreen> {
             children: [
               const SizedBox(height: 40),
               FutureBuilder<String>(
-                future: NetworkHandler.getItem(
+                future: sharedPrefs.getPref(
                     'city'), // a previously-obtained Future<String> or null
                 builder:
                     (BuildContext context, AsyncSnapshot<String> snapshot) {
@@ -73,7 +74,7 @@ class _AddressState extends State<AddressScreen> {
                 height: 20,
               ),
               FutureBuilder<String>(
-                future: NetworkHandler.getItem(
+                future: sharedPrefs.getPref(
                     'state'), // a previously-obtained Future<String> or null
                 builder:
                     (BuildContext context, AsyncSnapshot<String> snapshot) {
@@ -115,7 +116,7 @@ class _AddressState extends State<AddressScreen> {
               ),
               const SizedBox(height: 20),
               FutureBuilder<String>(
-                future: NetworkHandler.getItem(
+                future: sharedPrefs.getPref(
                     'country'), // a previously-obtained Future<String> or null
                 builder:
                     (BuildContext context, AsyncSnapshot<String> snapshot) {
@@ -157,7 +158,7 @@ class _AddressState extends State<AddressScreen> {
               ),
               const SizedBox(height: 20),
               FutureBuilder<String>(
-                future: NetworkHandler.getItem(
+                future: sharedPrefs.getPref(
                     'zipCode'), // a previously-obtained Future<String> or null
                 builder:
                     (BuildContext context, AsyncSnapshot<String> snapshot) {
@@ -199,7 +200,7 @@ class _AddressState extends State<AddressScreen> {
               ),
               const SizedBox(height: 20),
               FutureBuilder<String>(
-                future: NetworkHandler.getItem(
+                future: sharedPrefs.getPref(
                     'line1'), // a previously-obtained Future<String> or null
                 builder:
                     (BuildContext context, AsyncSnapshot<String> snapshot) {
@@ -241,7 +242,7 @@ class _AddressState extends State<AddressScreen> {
               ),
               const SizedBox(height: 20),
               FutureBuilder<String>(
-                future: NetworkHandler.getItem(
+                future: sharedPrefs.getPref(
                     'line2'), // a previously-obtained Future<String> or null
                 builder:
                     (BuildContext context, AsyncSnapshot<String> snapshot) {

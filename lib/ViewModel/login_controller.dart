@@ -1,5 +1,6 @@
 import 'dart:convert';
-
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ARkea/utils/shared_preferences.dart';
 import 'package:ARkea/Views/screens/landing_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
@@ -26,12 +27,21 @@ class LoginController extends GetxController {
   RxBool isLogged = false.obs;
 
   void login() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
     isLogged.value = true;
     isNameEnabled.value = true;
     CustomerModel customerModel =
         CustomerModel(email: emailEditingController.text);
+
     var response = await NetworkHandler.post(
         customerModelToJson(customerModel), "user/login");
+    print(response);
+    var data = json.decode(response);
+
+    sharedPrefs.setPref('token', data['token']);
+
+    print(await sharedPrefs.getPref('token'));
 
     var message = json.decode(response)["message"];
     if (message == "Please create an account.") {
@@ -48,7 +58,6 @@ class LoginController extends GetxController {
         text: message,
       );
     } else {
-      var data = json.decode(response);
       if (data['token'].toString().isNotEmpty) {
         QuickAlert.show(
           context: context!,
@@ -56,46 +65,41 @@ class LoginController extends GetxController {
           text: "verify your magic link in your inbox",
         );
       }
-      print(data);
 
       var customerAdress = await NetworkHandler.get(
           "user/customer/address/${data['customer']['email']}");
       var adressData = json.decode(customerAdress);
       print(adressData);
-
-      NetworkHandler.storeToken(data['token']);
-      NetworkHandler.storeCustomer('customerName', data['customer']['name']);
-      NetworkHandler.storeCustomer('customerEmail', data['customer']['email']);
-      NetworkHandler.storeCustomer('customerId', data['customer']['_id']);
-      NetworkHandler.storeCustomer('customerImage', data['customer']['image']);
-      NetworkHandler.storeCustomer(
-          'customerPhoneNumber', data['customer']['phone']!);
-
-      var dateTime = DateTime.parse(data['customer']['createdAt']);
-      var JoinedDate = DateFormat.yMMMd("en-US").format(dateTime);
-
-      NetworkHandler.storeCustomer('customerJoinedDate', JoinedDate);
-      NetworkHandler.storeCustomer('city', adressData['address'][0]['city']);
-      NetworkHandler.storeCustomer(
-          'country', adressData['address'][0]['country']);
-      NetworkHandler.storeCustomer('line1', adressData['address'][0]['line1']);
-      NetworkHandler.storeCustomer('line2', adressData['address'][0]['line2']);
-      NetworkHandler.storeCustomer('state', adressData['address'][0]['state']);
-      NetworkHandler.storeCustomer(
-          'zipCode', adressData['address'][0]['zipCode'].toString());
-
       String address =
           "${adressData['address'][0]['line1']}, ${adressData['address'][0]['city']}, ${adressData['address'][0]['country']}";
-      NetworkHandler.storeCustomer('address', address);
+      sharedPrefs.setPref('city', address);
+      sharedPrefs.setPref('customerName', data['customer']['name']);
+      var token = await sharedPrefs.getPref('customerName');
 
-      Get.to(() => LandingPage());
+      sharedPrefs.setPref('customerName', data['customer']['name']);
+      sharedPrefs.setPref('customerEmail', data['customer']['email']);
+      sharedPrefs.setPref('customerId', data['customer']['_id']);
+      sharedPrefs.setPref('customerImage', data['customer']['image']);
+
+      sharedPrefs.setPref(
+          'customerPhoneNumber', data['customer']['phone'] ?? '');
+
+      sharedPrefs.setPref('city', adressData['address'][0]['city']);
+      sharedPrefs.setPref('country', adressData['address'][0]['country']);
+      sharedPrefs.setPref('line1', adressData['address'][0]['line1']);
+      sharedPrefs.setPref('line2', adressData['address'][0]['line2']);
+      sharedPrefs.setPref('state', adressData['address'][0]['state']);
+      sharedPrefs.setPref(
+          'zipCode', adressData['address'][0]['zipCode'].toString());
     }
   }
 
   void logOut() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
     isLogged.value = false;
     signupController.isSigned.value = false;
-    NetworkHandler.storage.deleteAll();
+    await prefs.remove('token');
+
     await FacebookAuth.instance.logOut();
     await signupController.googleSignIn.signOut();
     await _googleSignIn.signOut();
@@ -105,7 +109,7 @@ class LoginController extends GetxController {
     Get.offAll(const LandingPage());
   }
 
-  Map<String, dynamic>? userDataf = Map<String, dynamic>().obs;
+  Map<String, dynamic>? userDataf = <String, dynamic>{}.obs;
 
   AccessToken? accessToken;
   RxBool checking = true.obs;
@@ -113,43 +117,35 @@ class LoginController extends GetxController {
   @override
   void onInit() async {
     super.onInit();
-    await NetworkHandler.storage.deleteAll();
-    checkIfisLoggedIn();
+
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.remove('token');
   }
 
-  Future checkIfisLoggedIn() async {
-    var accessToken = await FacebookAuth.instance.accessToken;
-
-    checking.value = false;
-
-    if (accessToken != null) {
-      isNameEnabled.value = false;
-      final userData = await FacebookAuth.instance.getUserData();
-      accessToken = accessToken;
-      userDataf = userData;
-    } else {
-      loginfacebook();
-    }
-  }
-
-  Future loginfacebook() async {
+  Future<void> loginfacebook() async {
     final LoginResult result = await FacebookAuth.instance
         .login(permissions: ['public_profile', 'email']);
-    //isLogged.value = true;
+    isLogged.value = true;
     isNameEnabled.value = false;
     if (result.status == LoginStatus.success) {
       accessToken = result.accessToken;
       final userData = await FacebookAuth.instance.getUserData();
       userDataf = userData;
-      print(userDataf);
 
-      NetworkHandler.storeCustomer('customerName', userDataf!['name']);
-      NetworkHandler.storeCustomer('customerEmail', userDataf!['email']);
-      NetworkHandler.storeCustomer(
+      sharedPrefs.setPref('customerName', userDataf!['name']);
+      sharedPrefs.setPref('customerEmail', userDataf!['email']);
+      sharedPrefs.setPref(
           'customerImage', userDataf!['picture']['data']['url']);
+
+      CustomerModel customerModel = CustomerModel(
+        email: userDataf!['email'],
+      );
+      var response = await NetworkHandler.post(
+          customerModelToJson(customerModel), "user/oauth/login");
+      var data = await json.decode(json.encode(response));
+      sharedPrefs.setPref('token', data[0]['Token']);
+
       Get.to(() => const LandingPage());
-    } else {
-      // essai.value = "gharbi";
     }
     checking.value = false;
   }
@@ -161,7 +157,7 @@ class LoginController extends GetxController {
     ],
   );
 
-  Future<GoogleSignInAccount?> loginWithGoogle() async {
+  Future<GoogleSignInAccount?> signUpWithGoogle() async {
     try {
       var user = await _googleSignIn.signIn();
       isLogged.value = true;
@@ -172,9 +168,18 @@ class LoginController extends GetxController {
         "name": user.displayName.toString(),
         "photoUrl": user.photoUrl.toString(),
       });
-      NetworkHandler.storeCustomer('customerName', user.displayName.toString());
-      NetworkHandler.storeCustomer('customerEmail', user.email);
-      NetworkHandler.storeCustomer('customerImage', user.photoUrl.toString());
+      sharedPrefs.setPref('customerName', user.displayName.toString());
+      sharedPrefs.setPref('customerEmail', user.email);
+      sharedPrefs.setPref('customerImage', user.photoUrl.toString());
+
+      CustomerModel customerModel = CustomerModel(
+        email: user.email,
+      );
+      var response = await NetworkHandler.post(
+          customerModelToJson(customerModel), "user/oauth/login");
+      var data = await json.decode(response);
+      sharedPrefs.setPref('token', data['Token']);
+
       Get.to(() => const LandingPage());
     } catch (error) {
       print(error);

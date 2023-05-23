@@ -80,7 +80,9 @@ class Body extends StatelessWidget {
                                     onTap: () {
                                       orderController.addToCart(product);
                                       Get.snackbar(
-                                          "Success", "product added to cart");
+                                          "Success", "product added to cart",
+                                          colorText: Colors.black,
+                                          backgroundColor: Colors.white);
                                     },
                                     splashColor: MyColors.btnBorderColor,
                                     child: const Center(

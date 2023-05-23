@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:ARkea/Views/screens/Home/filter_page.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../../Model/product_model.dart';
-import '../../ViewModel/product_controller.dart';
 import '../../utils/colors.dart';
-import '../screens/Home/filter_page.dart';
 import '../screens/Home/home_page.dart';
 
 class SearchBar extends StatefulWidget {
@@ -26,9 +24,6 @@ class SearchBar extends StatefulWidget {
 class _SearchBarState extends State<SearchBar> {
   final TextEditingController _searchController = TextEditingController();
   List<Product> _filteredProductList = [];
-  double _rating = 4;
-  final ProductController _productController = Get.put(ProductController());
-  RangeValues rangeValue = const RangeValues(0.0, 300);
 
   @override
   void initState() {
@@ -60,7 +55,6 @@ class _SearchBarState extends State<SearchBar> {
                       shape: const RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(12)))),
                   onPressed: () {
-                    // Get.to(() => FilterPage());
                     showModalBottomSheet(
                       context: context,
                       isDismissible: false,

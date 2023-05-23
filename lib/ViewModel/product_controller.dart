@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:ARkea/utils/shared_preferences.dart';
 import 'package:flutter/material.dart';
 
 import '../Model/product_model.dart';
@@ -12,7 +13,6 @@ class ProductController extends GetxController {
   RxInt count = 0.obs;
   RxInt countRecent = 0.obs;
   RxInt length = 5.obs;
-  RxInt popularLength = 5.obs;
   RxInt productNumber = 0.obs;
   RxInt popularProductNumber = 0.obs;
   RxInt recentProductNumber = 0.obs;
@@ -31,7 +31,7 @@ class ProductController extends GetxController {
     super.onInit();
     getRecentProducts();
     getProductDetails();
-    getMostLikedProducts();
+    getMostLikedProducts(0);
   }
 
   getRecentProducts() async {
@@ -54,25 +54,16 @@ class ProductController extends GetxController {
     length.value = list.length;
   }
 
-  getMostLikedProducts() async {
-    isLoading(true);
-    var response = await NetworkHandler.get("product/most-liked?page=0");
+  getMostLikedProducts(int page) async {
+    // isLoading(true);
+    countPopular.value = countPopular.value + 1;
+    var response = await NetworkHandler.get("product/popular?page=$page");
     ProductModel productModel = ProductModel.fromJson(json.decode(response));
     mostLikedProductList = productModel.products;
     popularProductNumber.value = productModel.count;
-    isLoading(false);
+    // isLoading(false);
 
     return mostLikedProductList;
-  }
-
-  getMoreMostLikedProducts(List<Product> list) async {
-    countPopular.value = countPopular.value + 1;
-
-    var response =
-        await NetworkHandler.get("product/most-liked?page=$countPopular");
-    ProductModel productModel = ProductModel.fromJson(json.decode(response));
-    list.addAll(productModel.products);
-    popularLength.value = list.length;
   }
 
   getProductDetails() async {
@@ -109,17 +100,17 @@ class ProductController extends GetxController {
   void addToWishlist(Product product) {
     product.liked = true;
     _wishlist.add(product);
+    sharedPrefs.setStringList(
+        "wishlist", _wishlist.map((e) => jsonEncode(e)).toList());
     updateLikedStatus(product);
-    // var response = NetworkHandler.post(
-    //     {"productId": product.id}, "user/customer/add-liked-product");
   }
 
   void removeFromWishlist(Product product) {
     product.liked = false;
     _wishlist.remove(product);
+    sharedPrefs.setStringList(
+        "wishlist", _wishlist.map((e) => jsonEncode(e)).toList());
     updateLikedStatus(product);
-    // var response = NetworkHandler.delete(
-    //     {"productId": product.id}, "user/customer/remove-liked-product");
   }
 
   void updateLikedStatus(Product product) {

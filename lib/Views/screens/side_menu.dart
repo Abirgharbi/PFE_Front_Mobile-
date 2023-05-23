@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../Model/service/network_handler.dart';
 import '../../utils/sizes.dart';
+import 'package:ARkea/utils/shared_preferences.dart';
 
 class SideMenu extends StatefulWidget {
   const SideMenu({super.key});
@@ -13,7 +14,7 @@ class SideMenu extends StatefulWidget {
 class _SideMenuState extends State<SideMenu> {
   @override
   Widget build(BuildContext context) {
-    final image = NetworkHandler.getItem('customerImage') as String;
+    final image = sharedPrefs.getPref('customerImage') as String;
     // image.length > 0 ? Image(image: image) : 'default image path here';
     return Scaffold(
         body: SafeArea(

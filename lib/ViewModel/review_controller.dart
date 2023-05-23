@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:ARkea/Model/review_model.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:ARkea/utils/shared_preferences.dart';
 
 import '../Model/service/network_handler.dart';
 
@@ -18,8 +19,8 @@ class ReviewController extends GetxController {
 
   addReview(String comment, double rating, String productId) async {
     isLoading(true);
-    final image = NetworkHandler.getItem('customerImage') as String;
-    final name = NetworkHandler.getItem('customerName') as String;
+    final image = await sharedPrefs.getPref('customerImage');
+    final name = await sharedPrefs.getPref('customerName');
 
     var response = await NetworkHandler.post(
         '{"comment": "$comment", "rating": "$rating" ,"customerImage": "$image","customerName":"$name","productId": "$productId"}',

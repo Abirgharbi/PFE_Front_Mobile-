@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:ARkea/ViewModel/order_controller.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:get/get.dart';
+import 'package:ARkea/utils/shared_preferences.dart';
 
 import '../Model/service/network_handler.dart';
 
@@ -19,20 +20,20 @@ class PaymentController extends GetxController {
   @override
   void onInit() async {
     super.onInit();
-    email = await NetworkHandler.getItem('customerEmail');
-    phone = await NetworkHandler.getItem('customerPhoneNumber');
-    city = await NetworkHandler.getItem('city');
-    country = await NetworkHandler.getItem('country');
-    state = await NetworkHandler.getItem('state');
-    zipCode = await NetworkHandler.getItem('zipCode');
-    line1 = await NetworkHandler.getItem('line1');
-    line2 = await NetworkHandler.getItem('line2');
+    email = await sharedPrefs.getPref('customerEmail');
+    phone = await sharedPrefs.getPref('customerPhoneNumber');
+    city = await sharedPrefs.getPref('city');
+    country = await sharedPrefs.getPref('country');
+    state = await sharedPrefs.getPref('state');
+    zipCode = await sharedPrefs.getPref('zipCode');
+    line1 = await sharedPrefs.getPref('line1');
+    line2 = await sharedPrefs.getPref('line2');
   }
 
   OrderController orderController = Get.put(OrderController());
   Future<void> handlePayPress() async {
-    // update product quantity
-    
+    orderController.addOrder();
+
     try {
       var billingDetails = BillingDetails(
         email: email,
@@ -70,6 +71,8 @@ class PaymentController extends GetxController {
       if (paymentIntentResult['clientSecret'] != null &&
           paymentIntentResult['requiresAction'] == null) {
         Get.snackbar("Success", "Payment succeeded");
+        Get.toNamed('/landing');
+
         return;
       }
 
@@ -94,7 +97,6 @@ class PaymentController extends GetxController {
       'useStripeSdk': useStripeSdk,
       'paymentMethodId': paymentMethodId,
       'currency': currency,
-      'items': items,
       'amount': orderController.orderSum.value * 100,
     });
 

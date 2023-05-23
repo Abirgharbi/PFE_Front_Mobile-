@@ -6,6 +6,7 @@ import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 
 import '../../../Model/service/network_handler.dart';
 import '../../../ViewModel/login_controller.dart';
+import 'package:ARkea/utils/shared_preferences.dart';
 
 import '../../../ViewModel/signup_controller.dart';
 import '../../../utils/colors.dart';
@@ -13,9 +14,31 @@ import '../../../utils/sizes.dart';
 import '../order_history.dart';
 import './edit_profile.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   ProfileScreen({super.key});
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  String token = '';
+  @override
+  void initState() {
+    super.initState();
+    checkToken();
+  }
+
+  checkToken() async {
+      String updatedToken = await sharedPrefs.getPref('token');
+    setState(()  {
+      token = updatedToken;
+      print(token);
+    });
+  }
+
   final loginController = Get.put(LoginController());
+
   final signupController = Get.put(SignupScreenController());
 
   @override
@@ -30,229 +53,222 @@ class ProfileScreen extends StatelessWidget {
           style: Theme.of(context).textTheme.displayMedium,
         ),
       ),
-      body: Obx(
-        () => loginController.isLogged.value == false &&
-                signupController.isSigned.value == false
-            ? const noLoggedIn_profilPage()
-            : SingleChildScrollView(
-                child: Container(
-                  padding: const EdgeInsets.all(tDefaultSize),
-                  child: Column(
-                    children: [
-                      Stack(
-                        children: [
-                          FutureBuilder<String>(
-                            future: NetworkHandler.getItem('customerImage'),
-                            builder: (BuildContext context,
-                                AsyncSnapshot<String> snapshot) {
-                              List<Widget> children;
-                              if (snapshot.hasData) {
-                                children = <Widget>[
-                                  SizedBox(
-                                    height: 120,
-                                    width: 120,
-                                    child: ClipOval(
-                                      child: SizedBox.fromSize(
-                                        size: const Size.fromRadius(
-                                            100), // Image radius
-                                        child: Image.network(
-                                          '${snapshot.data}',
-                                          fit: BoxFit.cover,
-                                        ),
+      body: token.isEmpty
+          ? const noLoggedIn_profilPage()
+          : SingleChildScrollView(
+              child: Container(
+                padding: const EdgeInsets.all(tDefaultSize),
+                child: Column(
+                  children: [
+                    Stack(
+                      children: [
+                        FutureBuilder<String>(
+                          future: sharedPrefs.getPref('customerImage'),
+                          builder: (BuildContext context,
+                              AsyncSnapshot<String> snapshot) {
+                            List<Widget> children;
+                            if (snapshot.hasData) {
+                              children = <Widget>[
+                                SizedBox(
+                                  height: 120,
+                                  width: 120,
+                                  child: ClipOval(
+                                    child: SizedBox.fromSize(
+                                      size: const Size.fromRadius(
+                                          100), // Image radius
+                                      child: Image.network(
+                                        '${snapshot.data}',
+                                        fit: BoxFit.cover,
                                       ),
                                     ),
-                                  )
-                                ];
-                              } else if (snapshot.hasError) {
-                                children = <Widget>[Text('${snapshot.error}')];
-                              } else {
-                                children = const <Widget>[
-                                  SizedBox(
-                                    width: 60,
-                                    height: 60,
-                                    child: CircularProgressIndicator(),
                                   ),
-                                  Padding(
-                                    padding: EdgeInsets.only(top: 16),
-                                    child: Text('Awaiting result...'),
-                                  ),
-                                ];
-                              }
-                              return Center(
-                                child: Column(
-                                  children: children,
+                                )
+                              ];
+                            } else if (snapshot.hasError) {
+                              children = <Widget>[Text('${snapshot.error}')];
+                            } else {
+                              children = const <Widget>[
+                                SizedBox(
+                                  width: 60,
+                                  height: 60,
+                                  child: CircularProgressIndicator(),
                                 ),
-                              );
-                            },
-                          ),
-                        ],
-                      ),
-
-                      const SizedBox(
-                        height: 10,
-                      ),
-
-                      FutureBuilder<String>(
-                        future: NetworkHandler.getItem(
-                            'customerName'), // a previously-obtained Future<String> or null
-                        builder: (BuildContext context,
-                            AsyncSnapshot<String> snapshot) {
-                          List<Widget> children;
-                          if (snapshot.hasData) {
-                            children = <Widget>[
-                              Padding(
-                                padding: const EdgeInsets.only(top: 16),
-                                child: Text(
-                                  '${snapshot.data}',
-                                  style:
-                                      Theme.of(context).textTheme.displayMedium,
+                                Padding(
+                                  padding: EdgeInsets.only(top: 16),
+                                  child: Text('Awaiting result...'),
                                 ),
+                              ];
+                            }
+                            return Center(
+                              child: Column(
+                                children: children,
                               ),
-                            ];
-                          } else if (snapshot.hasError) {
-                            children = <Widget>[Text('${snapshot.error}')];
-                          } else {
-                            children = const <Widget>[
-                              SizedBox(
-                                width: 60,
-                                height: 60,
-                                child: CircularProgressIndicator(),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(top: 16),
-                                child: Text('Awaiting result...'),
-                              ),
-                            ];
-                          }
-                          return Center(
-                            child: Column(
-                              children: children,
-                            ),
-                          );
-                        },
-                      ),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
 
-                      FutureBuilder<String>(
-                        future: NetworkHandler.getItem(
-                            'customerEmail'), // a previously-obtained Future<String> or null
-                        builder: (BuildContext context,
-                            AsyncSnapshot<String> snapshot) {
-                          List<Widget> children;
-                          if (snapshot.hasData) {
-                            children = <Widget>[
-                              Text(
+                    const SizedBox(
+                      height: 10,
+                    ),
+
+                    FutureBuilder<String>(
+                      future: sharedPrefs.getPref(
+                          'customerName'), // a previously-obtained Future<String> or null
+                      builder: (BuildContext context,
+                          AsyncSnapshot<String> snapshot) {
+                        List<Widget> children;
+                        if (snapshot.hasData) {
+                          children = <Widget>[
+                            Padding(
+                              padding: const EdgeInsets.only(top: 16),
+                              child: Text(
                                 '${snapshot.data}',
                                 style:
-                                    Theme.of(context).textTheme.headlineMedium,
+                                    Theme.of(context).textTheme.displayMedium,
                               ),
-                            ];
-                          } else if (snapshot.hasError) {
-                            children = <Widget>[Text('${snapshot.error}')];
-                          } else {
-                            children = const <Widget>[
-                              SizedBox(
-                                width: 60,
-                                height: 60,
-                                child: CircularProgressIndicator(),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(top: 16),
-                                child: Text('Awaiting result...'),
-                              ),
-                            ];
-                          }
-                          return Center(
-                            child: Column(
-                              children: children,
                             ),
-                          );
+                          ];
+                        } else if (snapshot.hasError) {
+                          children = <Widget>[Text('${snapshot.error}')];
+                        } else {
+                          children = const <Widget>[
+                            SizedBox(
+                              width: 60,
+                              height: 60,
+                              child: CircularProgressIndicator(),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(top: 16),
+                              child: Text('Awaiting result...'),
+                            ),
+                          ];
+                        }
+                        return Center(
+                          child: Column(
+                            children: children,
+                          ),
+                        );
+                      },
+                    ),
+
+                    FutureBuilder<String>(
+                      future: sharedPrefs.getPref(
+                          'customerEmail'), // a previously-obtained Future<String> or null
+                      builder: (BuildContext context,
+                          AsyncSnapshot<String> snapshot) {
+                        List<Widget> children;
+                        if (snapshot.hasData) {
+                          children = <Widget>[
+                            Text(
+                              '${snapshot.data}',
+                              style: Theme.of(context).textTheme.headlineMedium,
+                            ),
+                          ];
+                        } else if (snapshot.hasError) {
+                          children = <Widget>[Text('${snapshot.error}')];
+                        } else {
+                          children = const <Widget>[
+                            SizedBox(
+                              width: 60,
+                              height: 60,
+                              child: CircularProgressIndicator(),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(top: 16),
+                              child: Text('Awaiting result...'),
+                            ),
+                          ];
+                        }
+                        return Center(
+                          child: Column(
+                            children: children,
+                          ),
+                        );
+                      },
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    SizedBox(
+                      width: 200,
+                      height: 45,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Get.to(() => EditProfileScreen());
                         },
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      SizedBox(
-                        width: 200,
-                        height: 45,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            Get.to(() => EditProfileScreen());
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: MyColors.btnColor,
-                            side: BorderSide.none,
-                            shape: const StadiumBorder(),
-                          ),
-                          child: const Text(
-                            "Edit Profile",
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: MyColors.btnColor,
+                          side: BorderSide.none,
+                          shape: const StadiumBorder(),
+                        ),
+                        child: const Text(
+                          "Edit Profile",
+                          style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                       ),
+                    ),
 
-                      const SizedBox(
-                        height: 60,
-                      ),
+                    const SizedBox(
+                      height: 60,
+                    ),
 
-                      ///Menu
-                      ProfileMenuWidget(
-                        title: "My orders",
-                        icon: LineAwesomeIcons.dolly,
-                        onPress: () {
-                          final id = NetworkHandler.getItem('customerId');
-                          Get.to(OrderHistoryScreen(
-                            customerId: '$id',
-                          ));
-                        },
-                      ),
+                    ///Menu
+                    ProfileMenuWidget(
+                      title: "My orders",
+                      icon: LineAwesomeIcons.dolly,
+                      onPress: () {
+                        Get.to(OrderHistoryScreen());
+                      },
+                    ),
 
-                      ProfileMenuWidget(
-                        title: "Address",
-                        icon: LineAwesomeIcons.map_marker,
-                        onPress: () {
-                          Get.toNamed('/address');
-                        },
-                      ),
+                    ProfileMenuWidget(
+                      title: "Address",
+                      icon: LineAwesomeIcons.map_marker,
+                      onPress: () {
+                        Get.toNamed('/address');
+                      },
+                    ),
 
-                      ProfileMenuWidget(
-                        title: "Help Center",
-                        icon: LineAwesomeIcons.headset,
-                        onPress: () {
-                          Get.toNamed('/help');
-                        },
-                      ),
-                      const Divider(
-                        color: Colors.white,
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      ProfileMenuWidget(
-                        title: "About Us",
-                        icon: LineAwesomeIcons.info_circle,
-                        onPress: () {
-                          Get.toNamed('/about');
-                        },
-                      ),
-                      ProfileMenuWidget(
-                        title: "Rate Us",
-                        icon: LineAwesomeIcons.star,
-                        onPress: () {},
-                      ),
-                      ProfileMenuWidget(
-                        title: "Logout ",
-                        textColor: Colors.red,
-                        endIcon: false,
-                        icon: LineAwesomeIcons.alternate_sign_out,
-                        onPress: () {
-                          loginController.logOut();
-                        },
-                      ),
-                    ],
-                  ),
+                    ProfileMenuWidget(
+                      title: "Help Center",
+                      icon: LineAwesomeIcons.headset,
+                      onPress: () {
+                        Get.toNamed('/help');
+                      },
+                    ),
+                    const Divider(
+                      color: Colors.white,
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    ProfileMenuWidget(
+                      title: "About Us",
+                      icon: LineAwesomeIcons.info_circle,
+                      onPress: () {
+                        Get.toNamed('/about');
+                      },
+                    ),
+                    ProfileMenuWidget(
+                      title: "Rate Us",
+                      icon: LineAwesomeIcons.star,
+                      onPress: () {},
+                    ),
+                    ProfileMenuWidget(
+                      title: "Logout ",
+                      textColor: Colors.red,
+                      endIcon: false,
+                      icon: LineAwesomeIcons.alternate_sign_out,
+                      onPress: () {
+                        loginController.logOut();
+                      },
+                    ),
+                  ],
                 ),
               ),
-      ),
+            ),
     );
   }
 }

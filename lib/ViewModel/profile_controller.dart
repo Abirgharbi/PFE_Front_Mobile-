@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:ARkea/utils/shared_preferences.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
@@ -17,12 +18,12 @@ class ProfileController extends GetxController {
     // TODO: implement onInit
 
     super.onInit();
-    name.text = await NetworkHandler.getItem('customerName');
-    phoneNumber.text = await NetworkHandler.getItem('customerPhoneNumber');
+    name.text = await sharedPrefs.getPref('customerName');
+    phoneNumber.text = await sharedPrefs.getPref('customerPhoneNumber');
   }
 
   void updateProfile(String? imageUrl) async {
-    final customerEmail = (await NetworkHandler.getItem('customerEmail'));
+    final customerEmail = (await sharedPrefs.getPref('customerEmail'));
     CustomerModel customerModel = CustomerModel(
         name: name.text,
         email: customerEmail,
@@ -30,15 +31,15 @@ class ProfileController extends GetxController {
         phone: phoneNumber.text);
     print(customerModel);
 
-    final id = (await NetworkHandler.getItem('customerId'));
+    final id = (await sharedPrefs.getPref('customerId'));
 
     print(id);
 
     var response = NetworkHandler.put(
         customerModelToJson(customerModel), "user/customer/update/$id");
-    NetworkHandler.storeCustomer('customerName', name.text);
-    NetworkHandler.storeCustomer('customerImage', imageUrl!);
-    NetworkHandler.storeCustomer('customerPhoneNumber', phoneNumber.text);
+    sharedPrefs.setPref('customerName', name.text);
+    sharedPrefs.setPref('customerImage', imageUrl!);
+    sharedPrefs.setPref('customerPhoneNumber', phoneNumber.text);
     //var data = json.decode(response);
     // Get.to(() => ProfileScreen());
   }

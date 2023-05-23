@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 
 import '../../../ViewModel/category_controller.dart';
 import '../../../utils/sizes.dart';
-import '../ProductDetails/productsPerCategorie_screen.dart';
 
 var categorieController = Get.put(CategoryController());
 
@@ -50,11 +49,11 @@ class CategoryCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: GestureDetector(
-        onTap: () => Navigator.pushNamed(
-          context,
-          "/productsPerCategorie",
-          arguments: CategorieDetailsArguments(category: category),
-        ),
+        onTap: () => {
+          print(category.name),
+          Get.toNamed('/productsPerCategorie',
+              arguments: {"category": category}),
+        },
         child: SizedBox(
           // width: gWidth,
           child: Column(

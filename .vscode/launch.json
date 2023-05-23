@@ -10,11 +10,7 @@
             "name": "ARkea",
             "request": "launch",
             "type": "dart",
-<<<<<<< HEAD
-          // "args": ["-d", "chrome","--web-port", "5000"],
-=======
             // "args": ["-d", "chrome","--web-port", "5000"],
->>>>>>> ec5aceea30c8dd872cb194ec10ee03369fb5649c
         
         },
         {

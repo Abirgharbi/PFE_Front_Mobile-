@@ -28,12 +28,12 @@ class _ReviewScreenState extends State<ReviewScreen> {
         children: [
           Image.network(thumbnail),
           Obx(
-            () => _reviewController.count.value == 0
-                ? const Center(
-                    child: Text("No Reviews Yet"),
-                  )
-                : _reviewController.isLoading.value
-                    ? const Center(child: CircularProgressIndicator())
+            () => _reviewController.isLoading.value
+                ? const Center(child: CircularProgressIndicator())
+                : _reviewController.count.value == 0
+                    ? const Center(
+                        child: Text("No Reviews Yet"),
+                      )
                     : Expanded(
                         child: ListView.builder(
                           itemCount: _reviewController.count.value,

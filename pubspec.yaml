@@ -14,7 +14,6 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_facebook_auth: ^5.0.7
-  flutter_secure_storage: ^7.0.1
   flutter_svg: ^2.0.2
   uni_links: ^0.5.1
   get: ^4.6.5
@@ -40,6 +39,7 @@ dependencies:
   flutter_stripe: ^9.1.1
   badges: ^3.1.1
   convert: ^3.1.1
+  timeago: ^3.3.0
 
 dev_dependencies:
   flutter_lints: ^2.0.0

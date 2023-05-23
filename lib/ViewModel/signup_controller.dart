@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ARkea/utils/shared_preferences.dart';
 
 import 'package:ARkea/Views/screens/landing_page.dart';
 import 'package:flutter/material.dart';
@@ -20,8 +22,13 @@ class SignupScreenController extends GetxController {
   RxBool isEnabled = false.obs;
   var isEnabledName = true.obs;
   RxBool isSigned = false.obs;
+  RxBool checkboxValue = false.obs;
+  RxBool validName = false.obs;
+  RxBool validEmail = false.obs;
 
   void signUp() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
     isEnabledName.value = true;
     privacy.value = true;
     isSigned.value = true;
@@ -38,7 +45,6 @@ class SignupScreenController extends GetxController {
         text: data["message"],
       );
     } else {
-      var data = json.decode(response);
       QuickAlert.show(
         context: context!,
         type: QuickAlertType.success,
@@ -47,36 +53,30 @@ class SignupScreenController extends GetxController {
 
       var customerAdress = await NetworkHandler.get(
           "user/customer/address/${data['customer']['email']}");
+
       var adressData = json.decode(customerAdress);
-      print(adressData);
-      NetworkHandler.storeToken(data['Token']);
-      NetworkHandler.storeCustomer('customerName', data['customer']['name']);
-      NetworkHandler.storeCustomer('customerEmail', data['customer']['email']);
-      NetworkHandler.storeCustomer('customerId', data['customer']['_id']);
-      NetworkHandler.storeCustomer('customerImage', data['customer']['image']);
-
-      var dateTime = DateTime.parse(data['customer']['createdAt']);
-      var joinedDate = DateFormat.yMMMd("en-US").format(dateTime);
-
-      NetworkHandler.storeCustomer('customerJoinedDate', joinedDate);
-
-      NetworkHandler.storeCustomer('city', adressData['address'][0]['city']);
-      NetworkHandler.storeCustomer(
-          'country', adressData['address'][0]['country']);
-      NetworkHandler.storeCustomer('line1', adressData['address'][0]['line1']);
-      NetworkHandler.storeCustomer('line2', adressData['address'][0]['line2']);
-      NetworkHandler.storeCustomer('state', adressData['address'][0]['state']);
-      NetworkHandler.storeCustomer(
-          'zipCode', adressData['address'][0]['zipCode'].toString());
-
       String address =
           "${adressData['address'][0]['line1']}, ${adressData['address'][0]['city']}, ${adressData['address'][0]['country']}";
-      NetworkHandler.storeCustomer('address', address);
+
+      sharedPrefs.setPref('token', data['Token']);
+      sharedPrefs.setPref('customerName', data['customer']['name']);
+      sharedPrefs.setPref('customerEmail', data['customer']['email']);
+      sharedPrefs.setPref('customerId', data['customer']['_id']);
+      sharedPrefs.setPref('customerImage', data['customer']['image']);
+      sharedPrefs.setPref('city', adressData['address'][0]['city']);
+      sharedPrefs.setPref('country', adressData['address'][0]['country']);
+      sharedPrefs.setPref('line1', adressData['address'][0]['line1']);
+      sharedPrefs.setPref('line2', adressData['address'][0]['line2']);
+      sharedPrefs.setPref('state', adressData['address'][0]['state']);
+      sharedPrefs.setPref(
+          'zipCode', adressData['address'][0]['zipCode'].toString());
+      sharedPrefs.setPref('address', address);
+
       Get.to(() => const LandingPage());
     }
   }
 
-  Map<String, dynamic>? userDataf = Map<String, dynamic>().obs;
+  Map<String, dynamic>? userDataf = <String, dynamic>{}.obs;
 
   AccessToken? accessToken;
   RxBool checking = true.obs;
@@ -84,43 +84,40 @@ class SignupScreenController extends GetxController {
   @override
   void onInit() async {
     super.onInit();
-    await NetworkHandler.storage.deleteAll();
-    checkIfisLoggedIn();
   }
 
-  Future checkIfisLoggedIn() async {
-    var accessToken = await FacebookAuth.instance.accessToken;
+  signUpWithFacebook() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    checking.value = false;
-
-    if (accessToken != null) {
-      final userData = await FacebookAuth.instance.getUserData();
-      accessToken = accessToken;
-      userDataf = userData;
-    } else {
-      loginfacebook();
-    }
-  }
-
-  Future loginfacebook() async {
     final LoginResult result = await FacebookAuth.instance
         .login(permissions: ['public_profile', 'email']);
-    // isSigned.value = true;
+    isSigned.value = true;
     isEnabledName.value = false;
     if (result.status == LoginStatus.success) {
       accessToken = result.accessToken;
       final userData = await FacebookAuth.instance.getUserData();
       userDataf = userData;
-      //print(userDataf);
 
-      NetworkHandler.storeCustomer('customerName', userDataf!['name']);
-      NetworkHandler.storeCustomer('customerEmail', userDataf!['email']);
-      NetworkHandler.storeCustomer(
+      sharedPrefs.setPref('customerName', userDataf!['name']);
+      await sharedPrefs.getPref('customerEmail');
+      sharedPrefs.setPref('customerEmail', userDataf!['email']);
+      sharedPrefs.setPref(
           'customerImage', userDataf!['picture']['data']['url']);
+
       Get.to(() => const LandingPage());
-    } else {
-      // essai.value = "gharbi";
     }
+
+    CustomerModel customerModel = CustomerModel(
+      email: userDataf!['email'],
+      name: userDataf!['name'],
+      image: userDataf!['picture']['data']['url'],
+    );
+
+    var response = await NetworkHandler.post(
+        customerModelToJson(customerModel), "user/oauth/register");
+    var data = await json.decode(response);
+    sharedPrefs.setPref('token', data['Token']);
+
     checking.value = false;
   }
 
@@ -131,10 +128,12 @@ class SignupScreenController extends GetxController {
     ],
   );
 
-  Future<GoogleSignInAccount?> loginWithGoogle() async {
+  signUpWithGoogle() async {
     try {
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+
       var user = await googleSignIn.signIn();
-      // isSigned.value = true;
+      isSigned.value = true;
       isEnabledName.value = false;
 
       userDataf!.addAll({
@@ -142,17 +141,23 @@ class SignupScreenController extends GetxController {
         "name": user.displayName.toString(),
         "photoUrl": user.photoUrl.toString(),
       });
-      NetworkHandler.storeCustomer('customerName', user.displayName.toString());
-      NetworkHandler.storeCustomer('customerEmail', user.email);
-      NetworkHandler.storeCustomer('customerImage', user.photoUrl.toString());
+      CustomerModel customerModel = CustomerModel(
+        email: user.email,
+        name: user.displayName.toString(),
+        image: user.photoUrl.toString(),
+      );
+      var response = await NetworkHandler.post(
+          customerModelToJson(customerModel), "user/oauth/register");
+      var data = await json.decode(response);
+
+      sharedPrefs.setPref('token', data['Token']);
+      sharedPrefs.setPref('customerName', user.displayName.toString());
+      sharedPrefs.setPref('customerEmail', user.email);
+      sharedPrefs.setPref('customerImage', user.photoUrl.toString());
+
+      Get.to(() => const LandingPage());
     } catch (error) {
       print(error);
     }
   }
-
-  // _logout() async {
-  //   await FacebookAuth.instance.logOut();
-  //   accessToken = null;
-  //   userData = null;
-  // }
 }
