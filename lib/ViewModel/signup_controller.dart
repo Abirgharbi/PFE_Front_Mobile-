@@ -34,7 +34,7 @@ class SignupScreenController extends GetxController {
         email: emailEditingController.text, name: nameEditingController.text);
     var response = await NetworkHandler.post(
         customerModelToJson(customerModel), "user/register");
-
+    print(response);
     var data = await json.decode(response);
     if (data["message"] == "Email already exists") {
       QuickAlert.show(
