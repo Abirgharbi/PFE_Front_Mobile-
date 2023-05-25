@@ -24,6 +24,7 @@ class CategoryController extends GetxController {
         CategoryModel.fromJson(json.decode(response));
     CategorieList = categorieModel.categories;
     isLoading(false);
+    print(CategorieList);
     return CategorieList;
   }
 }

@@ -1,6 +1,3 @@
-import 'dart:ffi';
-
-import 'package:ARkea/Views/widgets/form_textfiled.dart';
 import 'package:ARkea/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -130,7 +127,7 @@ class CheckoutCard extends StatelessWidget {
                 )
               ],
             ),
-            SizedBox(height: gHeight / 10),
+            SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [

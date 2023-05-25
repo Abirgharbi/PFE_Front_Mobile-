@@ -25,7 +25,11 @@ class SharedPrefs {
     final SharedPreferences? prefs = _sharedPrefs;
     return prefs?.getStringList(key) ?? [];
   }
-  
+
+  removePref(String key) async {
+    final SharedPreferences? prefs = _sharedPrefs;
+    prefs?.remove(key);
+  }
 }
 
 final sharedPrefs = SharedPrefs();

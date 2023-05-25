@@ -5,6 +5,7 @@ import 'package:ARkea/utils/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../../Model/cart_model.dart';
 import '../../../../Model/product_model.dart';
 import '../../../../utils/shared_preferences.dart';
 import 'cart_card.dart';
@@ -21,19 +22,22 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
-  List<Product> addedProducts = [];
-  List<String> productsCart = [];
+  List<Cart> addedProducts = [];
+
   @override
   void initState() {
     super.initState();
-    getWhishlist();
+    getCartlist();
   }
 
-  getWhishlist() async {
-    productsCart = await sharedPrefs.getStringList("cart");
+  getCartlist() async {
+    List<String> productsCart = await sharedPrefs.getStringList("cart");
+    //
+
     addedProducts =
-        productsCart.map((e) => Product.fromJson(jsonDecode(e))).toList();
+        productsCart.map((e) => Cart.fromJson(jsonDecode(e))).toList();
     setState(() {
+      print(addedProducts);
       addedProducts = addedProducts;
     });
   }
@@ -56,8 +60,13 @@ class _BodyState extends State<Body> {
                   orderController.productNbInCart.value = addedProducts.length;
                   orderController.orderSum.value =
                       orderController.orderSum.value -
-                          (addedProducts[index].price *
-                              addedProducts[index].quantity!.toDouble());
+                          (addedProducts[index].product.price *
+                              addedProducts[index].quantity.toDouble());
+                  sharedPrefs.setStringList(
+                      "cart",
+                      addedProducts
+                          .map((e) => jsonEncode(e.toJson()))
+                          .toList());
                 });
               },
               background: Container(

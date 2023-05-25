@@ -95,21 +95,26 @@ class ProductController extends GetxController {
 
   RxBool isLiked = false.obs;
   List<Product> whishlist = [];
+  RxInt productNbInWishList = 0.obs;
 
   void addToWishlist(Product product) {
     product.liked = true;
     whishlist.add(product);
-      sharedPrefs.setStringList(
-          "wishlist", whishlist.map((e) => jsonEncode(e)).toList());
+    sharedPrefs.removePref("wishlist");
+    sharedPrefs.setStringList(
+        "wishlist", whishlist.map((e) => jsonEncode(e)).toList());
     updateLikedStatus(product);
+    productNbInWishList.value = whishlist.length;
   }
 
   void removeFromWishlist(Product product) {
     product.liked = false;
     whishlist.remove(product);
+    sharedPrefs.removePref("wishlist");
     sharedPrefs.setStringList(
         "wishlist", whishlist.map((e) => jsonEncode(e)).toList());
     updateLikedStatus(product);
+    productNbInWishList.value = whishlist.length;
   }
 
   void updateLikedStatus(Product product) {

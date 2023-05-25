@@ -33,22 +33,22 @@ class LandingPage extends StatefulWidget {
 }
 
 class _LandingPageState extends State<LandingPage> {
-  List<Product> addedProducts = [];
-  List<String> productsCart = [];
-  @override
-  void initState() {
-    super.initState();
-    getWhishlist();
-  }
+  // List<Product> addedProducts = [];
+  // List<String> productsCart = [];
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   getWhishlist();
+  // }
 
-  getWhishlist() async {
-    productsCart = await sharedPrefs.getStringList("cart");
-    addedProducts =
-        productsCart.map((e) => Product.fromJson(jsonDecode(e))).toList();
-    setState(() {
-      addedProducts = addedProducts;
-    });
-  }
+  // getWhishlist() async {
+  //   productsCart = await sharedPrefs.getStringList("cart");
+  //   addedProducts =
+  //       productsCart.map((e) => Product.fromJson(jsonDecode(e))).toList();
+  //   setState(() {
+  //     addedProducts = addedProducts;
+  //   });
+  // }
 
   int currentIndex = 0;
 
@@ -89,7 +89,7 @@ class _LandingPageState extends State<LandingPage> {
                           position: badges.BadgePosition.topStart(
                               top: -12, start: -10),
                           badgeContent: Text(
-                            addedProducts.length.toString(),
+                            orderController.productNbInCart.value.toString(),
                             style: const TextStyle(color: Colors.white),
                           ),
                           badgeStyle: badges.BadgeStyle(
@@ -103,30 +103,30 @@ class _LandingPageState extends State<LandingPage> {
                         ),
                 )),
             GButton(
-              icon: Icons.favorite_border_outlined,
-              text: "Favorites",
-              leading: Obx(
-                () => productController.whishlist.length == 0
-                    ? const Icon(Icons.favorite_border_outlined,
-                        color: MyColors.btnBorderColor)
-                    : badges.Badge(
-                        position:
-                            badges.BadgePosition.topStart(top: -12, start: -10),
-                        badgeContent: Text(
-                          productController.whishlist.length.toString(),
-                          style: const TextStyle(color: Colors.white),
+                icon: Icons.favorite_border_outlined,
+                text: "Favorites",
+                leading: Obx(
+                  () => productController.productNbInWishList.value == 0
+                      ? const Icon(Icons.favorite_border_outlined,
+                          color: MyColors.btnBorderColor)
+                      : badges.Badge(
+                          position: badges.BadgePosition.topStart(
+                              top: -12, start: -10),
+                          badgeContent: Text(
+                            productController.productNbInWishList.value
+                                .toString(),
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                          badgeStyle: badges.BadgeStyle(
+                            shape: badges.BadgeShape.circle,
+                            badgeColor: Colors.red,
+                            padding: const EdgeInsets.all(5),
+                            borderRadius: BorderRadius.circular(100),
+                          ),
+                          child: const Icon(Icons.favorite_border_outlined,
+                              color: MyColors.btnBorderColor),
                         ),
-                        badgeStyle: badges.BadgeStyle(
-                          shape: badges.BadgeShape.circle,
-                          badgeColor: Colors.red,
-                          padding: const EdgeInsets.all(5),
-                          borderRadius: BorderRadius.circular(100),
-                        ),
-                        child: const Icon(Icons.favorite_border_outlined,
-                            color: MyColors.btnBorderColor),
-                      ),
-              ),
-            ),
+                )),
             const GButton(icon: Icons.person_outline, text: "Profile")
           ],
         ),

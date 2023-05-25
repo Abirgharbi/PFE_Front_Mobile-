@@ -48,16 +48,18 @@ class OrderController extends GetxController {
         productCarts[index].quantity = productCarts[index].quantity + 1;
       } else {
         productCarts.add(cart);
+
+        productNbInCart.value = productCarts.length;
         sharedPrefs.setStringList(
           "cart",
           productCarts.map((e) => jsonEncode(e.toJson())).toList(),
         );
-        productNbInCart.value = productCarts.length;
       }
 
       for (var i = 0; i < productCarts.length; i++) {
         orderSum.value =
             productCarts[i].product.price * productCarts[i].quantity;
+        print(orderSum.value);
         orderCost =
             (productCarts[i].product.productCost! * productCarts[i].quantity);
       }

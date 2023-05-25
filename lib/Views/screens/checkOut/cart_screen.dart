@@ -4,6 +4,7 @@ import 'package:ARkea/Views/screens/landing_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../Model/cart_model.dart';
 import '../../../Model/product_model.dart';
 import '../../../ViewModel/order_controller.dart';
 import '../../../utils/colors.dart';
@@ -19,18 +20,19 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
-  List<Product> addedProducts = [];
-  List<String> productsCart = [];
+  List<Cart> addedProducts = [];
+
   @override
   void initState() {
     super.initState();
-    getWhishlist();
+    getCartlist();
   }
 
-  getWhishlist() async {
-    productsCart = await sharedPrefs.getStringList("cart");
+  getCartlist() async {
+    List<String> productsCart = await sharedPrefs.getStringList("cart");
+
     addedProducts =
-        productsCart.map((e) => Product.fromJson(jsonDecode(e))).toList();
+        productsCart.map((e) => Cart.fromJson(jsonDecode(e))).toList();
     setState(() {
       addedProducts = addedProducts;
     });

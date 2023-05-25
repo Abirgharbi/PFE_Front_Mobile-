@@ -119,7 +119,8 @@ class SignupScreenController extends GetxController {
       QuickAlert.show(
         context: context!,
         type: QuickAlertType.warning,
-        text: "you already have an account with this email that you are using with your facebook account",
+        text:
+            "you already have an account with this email that you are using with your facebook account",
       );
     } else {
       sharedPrefs.setPref('token', data['token']);

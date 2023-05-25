@@ -13,7 +13,7 @@ import '../../../widgets/rounded_icon_btn.dart';
 var orderController = Get.put(OrderController());
 
 class CartCard extends StatefulWidget {
-  final Product cart;
+  final Cart cart;
 
   CartCard({
     Key? key,
@@ -27,7 +27,7 @@ class CartCard extends StatefulWidget {
 class _CartCardState extends State<CartCard> {
   @override
   Widget build(BuildContext context) {
-    int? quantity = widget.cart.quantity;
+    //int? quantity = widget.cart.quantity;
     return ColoredBox(
       color: Colors.white,
       child: Padding(
@@ -45,7 +45,7 @@ class _CartCardState extends State<CartCard> {
                     color: const Color(0xFFF5F6F9),
                     borderRadius: BorderRadius.circular(15),
                   ),
-                  child: Image.network(widget.cart.thumbnail),
+                  child: Image.network(widget.cart.product.thumbnail),
                 ),
               ),
             ),
@@ -54,14 +54,14 @@ class _CartCardState extends State<CartCard> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  widget.cart.name,
+                  widget.cart.product.name,
                   style: const TextStyle(color: Colors.black, fontSize: 16),
                   maxLines: 2,
                 ),
                 const SizedBox(height: 10),
                 Text.rich(
                   TextSpan(
-                    text: "\$${widget.cart.price}",
+                    text: "\$${widget.cart.product.price}",
                     style: const TextStyle(
                         fontWeight: FontWeight.w600, color: MyColors.btnColor),
                     children: [
@@ -88,9 +88,9 @@ class _CartCardState extends State<CartCard> {
                         showShadow: true,
                         press: () {
                           print('${widget.cart.quantity}');
-                          orderController.addToCart(widget.cart);
+                          orderController.addToCart(widget.cart.product);
                           setState(() {
-                            quantity = widget.cart.quantity;
+                            widget.cart.quantity = (widget.cart.quantity + 1);
                           });
                         },
                       ),
@@ -101,15 +101,15 @@ class _CartCardState extends State<CartCard> {
                       RoundedIconBtn(
                         icon: Icons.remove,
                         press: () {
-                          orderController.decreaseQuantity(widget.cart);
+                          orderController.decreaseQuantity(widget.cart.product);
                           setState(() {
-                            quantity = widget.cart.quantity;
+                            widget.cart.quantity = (widget.cart.quantity - 1);
                           });
                         },
                       ),
                       SizedBox(width: getProportionateScreenWidth(8)),
                       Text(
-                        '${quantity}',
+                        '${widget.cart.quantity}',
                         style: const TextStyle(fontWeight: FontWeight.w600),
                       ),
                       SizedBox(width: getProportionateScreenWidth(8)),
@@ -118,9 +118,9 @@ class _CartCardState extends State<CartCard> {
                         showShadow: true,
                         press: () {
                           print('${widget.cart.quantity}');
-                          orderController.addToCart(widget.cart);
+                          orderController.addToCart(widget.cart.product);
                           setState(() {
-                            quantity = widget.cart.quantity;
+                            widget.cart.quantity = (widget.cart.quantity + 1);
                           });
                         },
                       ),

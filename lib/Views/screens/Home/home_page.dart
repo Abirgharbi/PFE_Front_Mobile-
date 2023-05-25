@@ -219,10 +219,6 @@ class SpecialOfferCard extends StatelessWidget {
             ),
             child: Stack(
               children: [
-                Image.asset(
-                  image,
-                  fit: BoxFit.cover,
-                ),
                 Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
@@ -230,19 +226,13 @@ class SpecialOfferCard extends StatelessWidget {
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
                       colors: [
-<<<<<<< HEAD
                         Color.fromARGB(255, 108, 14, 175).withOpacity(0.8),
                         Color.fromARGB(255, 81, 3, 171).withOpacity(0.4),
-=======
-                        Color(0xFF343434).withOpacity(0.4),
-                        Color(0xFF343434).withOpacity(0.15),
->>>>>>> parent of 85fed96 (badge favorite screen)
                       ],
                     ),
                   ),
                 ),
                 Padding(
-<<<<<<< HEAD
                   padding: const EdgeInsets.all(16),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -265,26 +255,6 @@ class SpecialOfferCard extends StatelessWidget {
                         ),
                       ),
                     ],
-=======
-                  padding: EdgeInsets.symmetric(
-                    horizontal: gWidth / 20,
-                    vertical: gHeight / 50,
-                  ),
-                  child: Text.rich(
-                    TextSpan(
-                      style: const TextStyle(color: Colors.white),
-                      children: [
-                        TextSpan(
-                          text: "$category\n",
-                          style: TextStyle(
-                            fontSize: gHeight / 20,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        TextSpan(text: "$discount")
-                      ],
-                    ),
->>>>>>> parent of 85fed96 (badge favorite screen)
                   ),
                 ),
               ],
