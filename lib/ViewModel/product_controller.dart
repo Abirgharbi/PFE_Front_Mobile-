@@ -1,11 +1,9 @@
 import 'dart:convert';
-
-import 'package:ARkea/utils/shared_preferences.dart';
 import 'package:flutter/material.dart';
-
+import 'package:get/get.dart';
 import '../Model/product_model.dart';
 import '../Model/service/network_handler.dart';
-import 'package:get/get.dart';
+import '../utils/shared_preferences.dart';
 
 class ProductController extends GetxController {
   RxBool isLoading = false.obs;
@@ -17,8 +15,6 @@ class ProductController extends GetxController {
   RxInt popularProductNumber = 0.obs;
   RxInt recentProductNumber = 0.obs;
 
-  var product = 0.obs;
-
   List<Product> productList = [];
   List<Product> productByCategoryList = [];
   List<Product> mostLikedProductList = [];
@@ -26,12 +22,15 @@ class ProductController extends GetxController {
   List<Product> filtredProductsList = [];
   List<Product> discountedProductsList = [];
 
+  RxList<Product> wishlist = <Product>[].obs;
+
   @override
   void onInit() {
     super.onInit();
     getRecentProducts();
     getProductDetails();
     getMostLikedProducts(0);
+    loadWishlist();
   }
 
   getRecentProducts() async {
@@ -55,13 +54,11 @@ class ProductController extends GetxController {
   }
 
   getMostLikedProducts(int page) async {
-    // isLoading(true);
     countPopular.value = countPopular.value + 1;
     var response = await NetworkHandler.get("product/popular?page=$page");
     ProductModel productModel = ProductModel.fromJson(json.decode(response));
     mostLikedProductList = productModel.products;
     popularProductNumber.value = productModel.count;
-    // isLoading(false);
 
     return mostLikedProductList;
   }
@@ -93,35 +90,37 @@ class ProductController extends GetxController {
     return productByCategoryList;
   }
 
-  RxBool isLiked = false.obs;
-  List<Product> whishlist = [];
-  RxInt productNbInWishList = 0.obs;
+  void loadWishlist() {
+    sharedPrefs.getStringList("wishlist").then((savedWishlist) {
+      if (savedWishlist != null) {
+        wishlist.addAll(
+          savedWishlist.map((e) => Product.fromJson(json.decode(e))),
+        );
+        updateLikedStatus();
+      }
+    });
+  }
 
   void addToWishlist(Product product) {
     product.liked = true;
-    whishlist.add(product);
-    sharedPrefs.removePref("wishlist");
+    wishlist.add(product);
     sharedPrefs.setStringList(
-        "wishlist", whishlist.map((e) => jsonEncode(e)).toList());
-    updateLikedStatus(product);
-    productNbInWishList.value = whishlist.length;
+        "wishlist", wishlist.map((e) => jsonEncode(e.toJson())).toList());
+    updateLikedStatus();
   }
 
   void removeFromWishlist(Product product) {
     product.liked = false;
-    whishlist.remove(product);
-    sharedPrefs.removePref("wishlist");
+    wishlist.remove(product);
     sharedPrefs.setStringList(
-        "wishlist", whishlist.map((e) => jsonEncode(e)).toList());
-    updateLikedStatus(product);
-    productNbInWishList.value = whishlist.length;
+        "wishlist", wishlist.map((e) => jsonEncode(e.toJson())).toList());
+    updateLikedStatus();
   }
 
-  void updateLikedStatus(Product product) {
-    final index = productList.indexOf(product);
-    if (index >= 0) {
-      productList[index].liked = whishlist.contains(product);
-    }
+  void updateLikedStatus() {
+    productList.forEach((product) {
+      product.liked = wishlist.contains(product);
+    });
   }
 
   getFiltredProducts(RangeValues rangeValue, double rating) async {
@@ -129,7 +128,6 @@ class ProductController extends GetxController {
     var response = await NetworkHandler.get(
         "product/filter?rating=$rating&min=${rangeValue.start}&max=${rangeValue.end}");
     ProductModel productModel = ProductModel.fromJson(json.decode(response));
-    print(productModel.products);
     filtredProductsList = productModel.products;
     isLoading(false);
     return productModel;

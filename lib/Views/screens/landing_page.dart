@@ -82,14 +82,14 @@ class _LandingPageState extends State<LandingPage> {
                 icon: Icons.shopping_cart_outlined,
                 text: "Cart",
                 leading: Obx(
-                  () => orderController.productNbInCart.value == 0
+                  () => orderController.productCarts.isEmpty
                       ? const Icon(Icons.shopping_cart_outlined,
                           color: MyColors.btnBorderColor)
                       : badges.Badge(
                           position: badges.BadgePosition.topStart(
                               top: -12, start: -10),
                           badgeContent: Text(
-                            orderController.productNbInCart.value.toString(),
+                            orderController.productCarts.length.toString(),
                             style: const TextStyle(color: Colors.white),
                           ),
                           badgeStyle: badges.BadgeStyle(
@@ -106,15 +106,14 @@ class _LandingPageState extends State<LandingPage> {
                 icon: Icons.favorite_border_outlined,
                 text: "Favorites",
                 leading: Obx(
-                  () => productController.productNbInWishList.value == 0
+                  () => productController.wishlist.isEmpty
                       ? const Icon(Icons.favorite_border_outlined,
                           color: MyColors.btnBorderColor)
                       : badges.Badge(
                           position: badges.BadgePosition.topStart(
                               top: -12, start: -10),
                           badgeContent: Text(
-                            productController.productNbInWishList.value
-                                .toString(),
+                            productController.wishlist.length.toString(),
                             style: const TextStyle(color: Colors.white),
                           ),
                           badgeStyle: badges.BadgeStyle(

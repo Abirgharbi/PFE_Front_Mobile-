@@ -1,9 +1,7 @@
-import 'package:ARkea/Model/product_model.dart';
 import 'package:ARkea/utils/colors.dart';
 import 'package:ARkea/utils/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 
 import '../../../../Model/cart_model.dart';
 
@@ -14,6 +12,7 @@ var orderController = Get.put(OrderController());
 
 class CartCard extends StatefulWidget {
   final Cart cart;
+  OrderController orderController = Get.put(OrderController());
 
   CartCard({
     Key? key,
@@ -87,10 +86,9 @@ class _CartCardState extends State<CartCard> {
                         icon: Icons.add,
                         showShadow: true,
                         press: () {
-                          print('${widget.cart.quantity}');
                           orderController.addToCart(widget.cart.product);
                           setState(() {
-                            widget.cart.quantity = (widget.cart.quantity + 1);
+                            widget.cart.quantity = widget.cart.quantity;
                           });
                         },
                       ),
@@ -103,7 +101,7 @@ class _CartCardState extends State<CartCard> {
                         press: () {
                           orderController.decreaseQuantity(widget.cart.product);
                           setState(() {
-                            widget.cart.quantity = (widget.cart.quantity - 1);
+                            widget.cart.quantity = widget.cart.quantity;
                           });
                         },
                       ),
@@ -117,10 +115,9 @@ class _CartCardState extends State<CartCard> {
                         icon: Icons.add,
                         showShadow: true,
                         press: () {
-                          print('${widget.cart.quantity}');
                           orderController.addToCart(widget.cart.product);
                           setState(() {
-                            widget.cart.quantity = (widget.cart.quantity + 1);
+                            widget.cart.quantity = widget.cart.quantity;
                           });
                         },
                       ),

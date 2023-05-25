@@ -131,7 +131,7 @@ class NewArrivalSection extends StatelessWidget {
           scrollDirection: Axis.horizontal,
           child: Obx(
             () => productController.isLoading.value
-                ? CircularProgressIndicator()
+                ? const CircularProgressIndicator()
                 : Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: List.generate(

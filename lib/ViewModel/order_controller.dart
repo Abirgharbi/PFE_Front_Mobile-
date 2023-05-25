@@ -17,7 +17,6 @@ var productController = Get.put(ProductController());
 
 class OrderController extends GetxController {
   TextEditingController promoCode = TextEditingController();
-  List<Cart> productCarts = [];
   RxBool exist = false.obs;
   RxBool applyDisabled = false.obs;
   late Cart foundProduct;
@@ -28,12 +27,10 @@ class OrderController extends GetxController {
   RxBool isAdded = false.obs;
   RxBool isValidCode = false.obs;
   List<Promo> validPromoList = [];
-
-  RxInt productNbInCart = 0.obs;
+  RxList productCarts = [].obs;
   @override
   void onInit() {
     super.onInit();
-    // getOrderSum();
   }
 
   void addToCart(Product product) {
@@ -44,24 +41,26 @@ class OrderController extends GetxController {
       verifyProductExistence(cart);
       if (exist.isTrue) {
         final index = productCarts.indexOf(foundProduct);
-
         productCarts[index].quantity = productCarts[index].quantity + 1;
+        exist.value = false;
       } else {
         productCarts.add(cart);
-
-        productNbInCart.value = productCarts.length;
         sharedPrefs.setStringList(
           "cart",
           productCarts.map((e) => jsonEncode(e.toJson())).toList(),
         );
       }
 
+      orderSum.value = 0.0; // Initialize orderSum to 0
+      orderCost = 0.0; // Initialize orderCost to 0
+
       for (var i = 0; i < productCarts.length; i++) {
-        orderSum.value =
+        orderSum.value +=
             productCarts[i].product.price * productCarts[i].quantity;
-        print(orderSum.value);
-        orderCost =
-            (productCarts[i].product.productCost! * productCarts[i].quantity);
+        sharedPrefs.setPref('orderSum', orderSum.value.toString());
+
+        orderCost +=
+            productCarts[i].product.productCost! * productCarts[i].quantity;
       }
     } else {
       Get.snackbar("Error", "Product out of stock");
@@ -70,26 +69,28 @@ class OrderController extends GetxController {
 
   void decreaseQuantity(Product product) {
     Cart cart = Cart(product: product);
+
     product.quantity = product.quantity! + 1;
 
     final index = productCarts.indexOf(foundProduct);
-    productCarts[index].quantity = productCarts[index].quantity - 1;
 
-    orderSum.value = orderSum.value - product.price;
-    orderCost = orderCost - product.productCost!;
+    productCarts[index].quantity -= 1;
+
+    orderSum.value -= product.price;
+    sharedPrefs.setPref('orderSum', orderSum.value.toString());
+
+    orderCost -= product.productCost!;
   }
 
   void verifyProductExistence(Cart cart) {
-    int i = 0;
+    exist.value = false;
 
-    if (productCarts.isNotEmpty) {
-      do {
-        if (productCarts.elementAt(i).product.id == cart.product.id) {
-          exist.value = true;
-          foundProduct = productCarts.elementAt(i);
-        }
-        i++;
-      } while (i < productCarts.length && exist.isFalse);
+    for (var i = 0; i < productCarts.length; i++) {
+      if (productCarts[i].product.id == cart.product.id) {
+        exist.value = true;
+        foundProduct = productCarts[i];
+        break;
+      }
     }
   }
 
@@ -116,6 +117,8 @@ class OrderController extends GetxController {
         double discount = validPromo.discount.toDouble();
         double calculatedValue = orderSum.value * (discount / 100);
         orderSum.value = double.parse(calculatedValue.toStringAsFixed(2));
+        sharedPrefs.setPref('orderSum', orderSum.value.toString());
+
         applyDisabled.value = true;
         message.value = "promotion applied";
       } else {
@@ -174,44 +177,45 @@ class OrderController extends GetxController {
   }
 
   addOrder() async {
-    Order order = Order();
-    List<ProductCard> productCard = <ProductCard>[];
+    List<ProductCard> productCard = productCarts
+        .map((cart) => ProductCard(
+              id: cart.product.id,
+              quantity: cart.quantity,
+              price: cart.product.price,
+              name: cart.product.name,
+            ))
+        .toList();
 
-    for (var i = 0; i < productCarts.length; i++) {
-      productCard.add(
-        ProductCard(
-          id: productCarts[i].product.id,
-          quantity: productCarts[i].quantity,
-          price: productCarts[i].product.price,
-          name: productCarts[i].product.name,
-        ),
-      );
-    }
-    var revenue = orderSum.value - orderCost;
-    final customerId =
-        await sharedPrefs.getPref("customerId"); // Await the future
+    final customerId = await sharedPrefs.getPref("customerId");
     final addressId = await sharedPrefs.getPref("addressId");
-    order.productCard = productCard.cast<ProductCard>();
-    order.amount = orderSum.value;
-    order.revenue = revenue;
-    order.addressId = addressId;
-    order.customerId = customerId;
 
-    var response =
-        await NetworkHandler.post(json.encode(order.toJson()), "order/add");
+    Order order = Order()
+      ..productCard = productCard.cast<ProductCard>()
+      ..amount = orderSum.value
+      ..revenue = orderSum.value - orderCost
+      ..addressId = addressId
+      ..customerId = customerId;
 
-    for (var i = 0; i < productCarts.length; i++) {
-      await NetworkHandler.put(
-          "product/update-after-sell/${productCarts[i].product.id}",
-          '{"quantity": ${productCarts[i].product.quantity}}');
-    }
+    var response = await NetworkHandler.post(order, "order/add");
+
+    Map<String, dynamic> payload = {
+      'spend': orderSum.value,
+      'products': productCarts.map((cart) {
+        return {
+          'id': cart.product.id,
+          'quantity': cart.product.quantity,
+        };
+      }).toList(),
+    };
+
+    await NetworkHandler.put(json.encode(payload), "product/update-after-sell");
 
     await NetworkHandler.put(
-        '{"spend":${orderSum.value}}', "user/customer/spending/$customerId");
+        '{"spend": ${orderSum.value}}', "user/customer/spending/$customerId");
 
-    productCarts = [];
-    orderSum = 0.0.obs;
-    print(productCarts.length);
+    productCarts.clear();
+    orderSum.value = 0.0;
+    sharedPrefs.setPref('orderSum', orderSum.value.toString());
   }
 
   Future<List<Order>> fetchOrders(String customerId) async {

@@ -30,7 +30,8 @@ class _CartScreenState extends State<CartScreen> {
 
   getCartlist() async {
     List<String> productsCart = await sharedPrefs.getStringList("cart");
-
+    print("productsCart ======");
+    print(productsCart);
     addedProducts =
         productsCart.map((e) => Cart.fromJson(jsonDecode(e))).toList();
     setState(() {
@@ -64,62 +65,60 @@ class _CartScreenState extends State<CartScreen> {
           ],
         ),
       ),
-      body: Obx(
-        () => orderController.productNbInCart.value == 0
-            ? Center(
-                child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset(
-                    'assets/images/empty-cart.png',
-                    width: gWidth,
-                    height: gHeight / 2,
+      body: addedProducts.isEmpty
+          ? Center(
+              child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  'assets/images/empty-cart.png',
+                  width: gWidth,
+                  height: gHeight / 2,
+                ),
+                const SizedBox(height: 16),
+                const Text(
+                  'Your shopping basket is empty',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
                   ),
-                  const SizedBox(height: 16),
-                  const Text(
-                    'Your shopping basket is empty',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(left: 60, right: 60, bottom: 30),
-                    child: SizedBox(
-                      width: double.infinity,
-                      height: 50,
-                      child: OutlinedButton(
-                        style: OutlinedButton.styleFrom(
-                          foregroundColor: MyColors.btnColor,
-                          side: const BorderSide(
-                            color: MyColors.btnBorderColor,
-                          ),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10)),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Padding(
+                  padding:
+                      const EdgeInsets.only(left: 60, right: 60, bottom: 30),
+                  child: SizedBox(
+                    width: double.infinity,
+                    height: 50,
+                    child: OutlinedButton(
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: MyColors.btnColor,
+                        side: const BorderSide(
+                          color: MyColors.btnBorderColor,
                         ),
-                        onPressed: () {
-                          Get.to(const LandingPage());
-                        },
-                        child: Center(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: const [
-                              Text("back to home"),
-                            ],
-                          ),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)),
+                      ),
+                      onPressed: () {
+                        Get.to(const LandingPage());
+                      },
+                      child: Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: const [
+                            Text("back to home"),
+                          ],
                         ),
                       ),
                     ),
                   ),
-                ],
-              ))
-            : const Body(),
-      ),
+                ),
+              ],
+            ))
+          : const Body(),
       // bottomNavigationBar: CheckoutCard(),
     );
   }

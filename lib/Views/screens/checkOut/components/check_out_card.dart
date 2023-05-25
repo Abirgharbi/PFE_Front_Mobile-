@@ -137,7 +137,8 @@ class CheckoutCard extends StatelessWidget {
                       text: "Total:\n",
                       children: [
                         TextSpan(
-                          text: "\$ ${orderController.orderSum}",
+                          text:
+                              "\$ ${orderController.orderSum.toStringAsFixed(2)}",
                           style: const TextStyle(
                               fontSize: 16, color: Colors.black),
                         ),

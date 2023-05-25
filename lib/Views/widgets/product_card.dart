@@ -58,6 +58,8 @@ class _ProductCardState extends State<ProductCard> {
                   right: 0,
                   child: InkWell(
                     onTap: () {
+                      print("tapped");
+                      print(widget.product.liked);
                       widget.product.liked == true
                           ? productController.removeFromWishlist(widget.product)
                           : productController.addToWishlist(widget.product);
@@ -133,7 +135,7 @@ class _ProductCardState extends State<ProductCard> {
                       TextSpan(
                         text: '\$${widget.product.price}',
                         style: const TextStyle(
-                          color: Colors.red, 
+                          color: Colors.red,
                           fontWeight: FontWeight.bold,
                           fontSize: 15,
                         ),

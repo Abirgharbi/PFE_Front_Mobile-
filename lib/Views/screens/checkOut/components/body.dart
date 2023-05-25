@@ -11,34 +11,46 @@ import '../../../../utils/shared_preferences.dart';
 import 'cart_card.dart';
 import 'check_out_card.dart';
 
-var orderController = Get.put(OrderController());
-
 class Body extends StatefulWidget {
   const Body({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
   _BodyState createState() => _BodyState();
 }
 
 class _BodyState extends State<Body> {
-  List<Cart> addedProducts = [];
+  OrderController orderController = Get.put(OrderController());
 
   @override
   void initState() {
     super.initState();
-    getCartlist();
+    getCartList();
   }
 
-  getCartlist() async {
+  Future<void> getCartList() async {
     List<String> productsCart = await sharedPrefs.getStringList("cart");
-    //
-
-    addedProducts =
-        productsCart.map((e) => Cart.fromJson(jsonDecode(e))).toList();
     setState(() {
-      print(addedProducts);
-      addedProducts = addedProducts;
+      List<Cart> addedProducts =
+          productsCart.map((e) => Cart.fromJson(jsonDecode(e))).toList();
+      orderController.productCarts.value =
+          productsCart.map((e) => Cart.fromJson(jsonDecode(e))).toList();
+    });
+  }
+
+  void removeProductFromCart(int index) {
+    setState(() {
+      final removedProduct = orderController.productCarts[index];
+      orderController.productCarts
+          .removeWhere((cart) => cart.product.id == removedProduct.product.id);
+      final removedProductCost =
+          removedProduct.product.price * removedProduct.quantity;
+      orderController.orderSum.value -= removedProductCost;
+      sharedPrefs.setStringList(
+        "cart",
+        orderController.productCarts
+            .map((e) => jsonEncode(e.toJson()))
+            .toList(),
+      );
     });
   }
 
@@ -48,26 +60,14 @@ class _BodyState extends State<Body> {
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: gWidth / 20),
         child: ListView.builder(
-          itemCount: addedProducts.length,
+          itemCount: orderController.productCarts.length,
           itemBuilder: (context, index) => Padding(
             padding: const EdgeInsets.symmetric(vertical: 10),
             child: Dismissible(
               key: UniqueKey(),
               direction: DismissDirection.endToStart,
               onDismissed: (direction) {
-                setState(() {
-                  addedProducts.removeAt(index);
-                  orderController.productNbInCart.value = addedProducts.length;
-                  orderController.orderSum.value =
-                      orderController.orderSum.value -
-                          (addedProducts[index].product.price *
-                              addedProducts[index].quantity.toDouble());
-                  sharedPrefs.setStringList(
-                      "cart",
-                      addedProducts
-                          .map((e) => jsonEncode(e.toJson()))
-                          .toList());
-                });
+                removeProductFromCart(index);
               },
               background: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -85,7 +85,7 @@ class _BodyState extends State<Body> {
                   ],
                 ),
               ),
-              child: CartCard(cart: addedProducts[index]),
+              child: CartCard(cart: orderController.productCarts[index]),
             ),
           ),
         ),

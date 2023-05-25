@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../ViewModel/order_controller.dart';
+import '../../../utils/shared_preferences.dart';
 
 // Carrito de compras
 class Checkout extends StatefulWidget {
@@ -17,6 +18,20 @@ class Checkout extends StatefulWidget {
 var orderController = Get.put(OrderController());
 
 class _CheckoutState extends State<Checkout> {
+  var orderSum = "0.00";
+  @override
+  void initState() {
+    super.initState();
+    getTotal();
+  }
+
+  getTotal() async {
+    var total = await sharedPrefs.getPref('orderSum');
+    setState(() {
+      orderSum = total;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -65,14 +80,12 @@ class _CheckoutState extends State<Checkout> {
                   fontSize: 17,
                 ),
               ),
-              Obx(
-                () => Text(
-                  "\$ ${orderController.orderSum}",
-                  style: const TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                      color: MyColors.btnBorderColor),
-                ),
+              Text(
+                "\$ $orderSum",
+                style: const TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    color: MyColors.btnBorderColor),
               )
             ],
           ),
