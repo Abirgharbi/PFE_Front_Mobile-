@@ -60,6 +60,7 @@ class _ProductCardState extends State<ProductCard> {
                     onTap: () {
                       print("tapped");
                       print(widget.product.liked);
+                      print(widget.product);
                       widget.product.liked == true
                           ? productController.removeFromWishlist(widget.product)
                           : productController.addToWishlist(widget.product);

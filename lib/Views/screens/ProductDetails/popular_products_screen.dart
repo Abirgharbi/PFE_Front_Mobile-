@@ -21,6 +21,8 @@ class _PopularProductScreenState extends State<PopularProductScreen> {
   var productController = Get.put(ProductController());
   List<Product> filteredPopularProductList = [];
   bool fetching = false;
+  bool isLoading = false;
+
   int page = 0;
 
   @override
@@ -119,6 +121,9 @@ class _PopularProductScreenState extends State<PopularProductScreen> {
                                             padding: const EdgeInsets.all(10),
                                             child: ElevatedButton(
                                               onPressed: () async {
+                                                setState(() {
+                                                  isLoading = true;
+                                                });
                                                 var res =
                                                     await productController
                                                         .getMostLikedProducts(
@@ -132,6 +137,7 @@ class _PopularProductScreenState extends State<PopularProductScreen> {
                                                   page++;
                                                   filteredPopularProductList
                                                       .addAll(res);
+                                                  isLoading = false;
                                                 });
                                               },
                                               style: ElevatedButton.styleFrom(
@@ -143,10 +149,15 @@ class _PopularProductScreenState extends State<PopularProductScreen> {
                                                       BorderRadius.circular(20),
                                                 ),
                                               ),
-                                              child: const Text(
-                                                "See More",
-                                                style: TextStyle(fontSize: 20),
-                                              ),
+                                              child: isLoading
+                                                  ? const CircularProgressIndicator(
+                                                      color: Colors.white,
+                                                    )
+                                                  : const Text(
+                                                      "See More",
+                                                      style: TextStyle(
+                                                          fontSize: 20),
+                                                    ),
                                             ),
                                           ),
                               ),

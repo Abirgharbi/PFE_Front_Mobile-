@@ -214,6 +214,9 @@ class OrderController extends GetxController {
         '{"spend": ${orderSum.value}}', "user/customer/spending/$customerId");
 
     productCarts.clear();
+
+    productCarts.value = [];
+    sharedPrefs.removePref("cart");
     orderSum.value = 0.0;
     sharedPrefs.setPref('orderSum', orderSum.value.toString());
   }

@@ -35,6 +35,7 @@ class LoginPageState extends State<LoginPage> {
     }
   }
 
+  LoginController loginController = Get.put(LoginController());
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -88,23 +89,48 @@ class LoginPageState extends State<LoginPage> {
                             margin: const EdgeInsets.all(15),
                             width: gWidth / 2,
                             height: gHeight / 12,
-                            child: isEnabled == true
-                                ?
-                                 SPSolidButton(
-                                    backgroundColor: MaterialStateProperty.all(
-                                        MyColors.btnColor),
-                                    text: "LogIn",
-                                    minWidth: 0,
-                                    onPressed: () {
-                                      loginController.login();
-                                    })
-                                    
-                                : SPSolidButton(
-                                    backgroundColor: MaterialStateProperty.all(
-                                        MyColors.btnColor.withOpacity(0.7)),
-                                    text: "LogIn",
-                                    minWidth: 0,
-                                    onPressed: null),
+                            child: Obx(
+                              () {
+                                return ElevatedButton(
+                                  style: isEnabled == true
+                                      ? ElevatedButton.styleFrom(
+                                          fixedSize: const Size(50, 50),
+                                          backgroundColor: MyColors.btnColor,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                          ),
+                                        )
+                                      : ElevatedButton.styleFrom(
+                                          fixedSize: const Size(50, 50),
+                                          backgroundColor: MyColors.btnColor
+                                              .withOpacity(0.7),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                          ),
+                                        ),
+                                  onPressed: isEnabled == true
+                                      ? () async {
+                                          await loginController.login();
+                                        }
+                                      : null,
+                                  child: loginController.isLogginIn.value
+                                      ? const Center(
+                                          child: CircularProgressIndicator(
+                                            color: Colors.white,
+                                          ),
+                                        )
+                                      : const Text(
+                                          "LogIn",
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                );
+                              },
+                            ),
                           )),
                       const OrText(),
                       const SizedBox(

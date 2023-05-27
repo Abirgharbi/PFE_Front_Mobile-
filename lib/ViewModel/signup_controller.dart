@@ -24,9 +24,10 @@ class SignupScreenController extends GetxController {
   RxBool checkboxValue = false.obs;
   RxBool validName = false.obs;
   RxBool validEmail = false.obs;
+  RxBool isLogginIn = false.obs;
 
   void signUp() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    isLogginIn.value = true;
 
     isEnabledName.value = true;
     privacy.value = true;
@@ -34,7 +35,9 @@ class SignupScreenController extends GetxController {
         email: emailEditingController.text, name: nameEditingController.text);
     var response = await NetworkHandler.post(
         customerModelToJson(customerModel), "user/register");
-    print(response);
+        
+    isLogginIn.value = false;
+
     var data = await json.decode(response);
     if (data["message"] == "Email already exists") {
       QuickAlert.show(
@@ -69,8 +72,6 @@ class SignupScreenController extends GetxController {
       sharedPrefs.setPref(
           'zipCode', adressData['address'][0]['zipCode'].toString());
       sharedPrefs.setPref('address', address);
-
-      Get.to(() => const LandingPage());
     }
   }
 

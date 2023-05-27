@@ -7,10 +7,10 @@ String customerModelToJson(CustomerModel data) => json.encode(data.toJson());
 
 class CustomerModel {
   CustomerModel(
-      {this.id,
-      this.email,
-      this.name,
-      this.phone,
+      {this.id = '',
+      this.email = '',
+      this.name = '',
+      this.phone = '',
       this.image =
           "https://res.cloudinary.com/dbkivxzek/image/upload/v1681248811/ARkea/s8mz71cwjnuxpq5tylyn.png"});
 

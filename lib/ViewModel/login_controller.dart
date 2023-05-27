@@ -24,50 +24,55 @@ class LoginController extends GetxController {
   RxString customerEmail = "userMail".obs;
   RxString customerImage = "".obs;
   var isNameEnabled = true.obs;
+  RxBool isLogginIn = false.obs;
 
-  void login() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-
+  login() async {
+    isLogginIn.value = true;
     isNameEnabled.value = true;
     CustomerModel customerModel =
         CustomerModel(email: emailEditingController.text);
+    print(customerModelToJson(customerModel));
 
-    var response = await NetworkHandler.post(
-        customerModelToJson(customerModel), "user/login");
-    print(response);
-    var data = json.decode(response);
+    try {
+      var response = await NetworkHandler.post(
+          customerModelToJson(customerModel), "user/login");
+      var data = json.decode(response);
 
-    sharedPrefs.setPref('token', data['token']);
-
-    print(await sharedPrefs.getPref('token'));
-
-    var message = json.decode(response)["message"];
-    if (message == "Please create an account.") {
-      QuickAlert.show(
-        context: context!,
-        type: QuickAlertType.warning,
-        text: message,
-      );
-    }
-    if (message == "Verify your Account.") {
-      QuickAlert.show(
-        context: context!,
-        type: QuickAlertType.warning,
-        text: message,
-      );
-    } else {
+      sharedPrefs.setPref('token', data['token'].toString());
       if (data['token'].toString().isNotEmpty) {
+        isLogginIn.value = false;
+      }
+
+      var message = json.decode(response)["message"];
+      if (message == "Please create an account.") {
         QuickAlert.show(
           context: context!,
-          type: QuickAlertType.success,
-          text: "verify your magic link in your inbox",
+          type: QuickAlertType.warning,
+          text: message,
         );
+      }
+      if (message == "Verify your Account.") {
+        QuickAlert.show(
+          context: context!,
+          type: QuickAlertType.warning,
+          text: message,
+        );
+      } else {
+        if (data['token'].toString().isNotEmpty) {
+          QuickAlert.show(
+            context: context!,
+            type: QuickAlertType.success,
+            text: "verify your magic link in your inbox",
+          );
+        }
+        isLogginIn.value = false;
       }
 
       var customerAdress = await NetworkHandler.get(
           "user/customer/address/${data['customer']['email']}");
       var adressData = json.decode(customerAdress);
       print(adressData);
+
       String address =
           "${adressData['address'][0]['line1']}, ${adressData['address'][0]['city']}, ${adressData['address'][0]['country']}";
       sharedPrefs.setPref('city', address);
@@ -89,12 +94,29 @@ class LoginController extends GetxController {
       sharedPrefs.setPref('state', adressData['address'][0]['state']);
       sharedPrefs.setPref(
           'zipCode', adressData['address'][0]['zipCode'].toString());
+    } catch (e) {
+      isLogginIn.value = false;
+      print(e);
     }
   }
 
   void logOut() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove('token');
+    await prefs.remove('customerId');
+    await prefs.remove('customerName');
+    await prefs.remove('customerEmail');
+    await prefs.remove('customerImage');
+    await prefs.remove('customerPhoneNumber');
+    await prefs.remove('city');
+    await prefs.remove('country');
+    await prefs.remove('line1');
+    await prefs.remove('line2');
+    await prefs.remove('state');
+    await prefs.remove('zipCode');
+    // if i wanna clear all the shared preferences i can use this
+    //  SharedPreferences preferences = await SharedPreferences.getInstance();
+    //     await preferences.clear();
 
     await FacebookAuth.instance.logOut();
     await signupController.googleSignIn.signOut();

@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../Views/screens/auth/login_page.dart';
 import '../Views/screens/onBoardingscreen/boarding_page.dart';
 
 class SplashScreenController extends GetxController {
@@ -13,7 +12,6 @@ class SplashScreenController extends GetxController {
   ProductController productController = Get.put(ProductController());
   @override
   void onInit() {
-    // TODO: implement onInit
     super.onInit();
     productController.getRecentProducts();
     productController.getMostLikedProducts(0);
@@ -23,17 +21,17 @@ class SplashScreenController extends GetxController {
   bool? seenOnboard;
   Future startAnimation() async {
     WidgetsFlutterBinding.ensureInitialized();
-    // to show status bar
+
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
         overlays: [SystemUiOverlay.bottom, SystemUiOverlay.top]);
-    // to load onboard for the first time only
+
     SharedPreferences pref = await SharedPreferences.getInstance();
     seenOnboard = pref.getBool('seenOnboard') ?? false;
-    await Future.delayed(const Duration(milliseconds: 5000));
 
     animate.value = true;
 
-    await Future.delayed(const Duration(milliseconds: 5000));
-    Get.to(() => seenOnboard == true ? LandingPage() : boradingScreen());
+    await Future.delayed(const Duration(milliseconds: 3000));
+    Get.to(() =>
+        seenOnboard == true ? const LandingPage() : const boradingScreen());
   }
 }

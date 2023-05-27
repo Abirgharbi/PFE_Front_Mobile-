@@ -81,11 +81,12 @@ class _CheckoutState extends State<Checkout> {
                 ),
               ),
               Text(
-                "\$ $orderSum",
+                "\$ ${double.parse(orderSum).toStringAsFixed(2)}",
                 style: const TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                    color: MyColors.btnBorderColor),
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: MyColors.btnBorderColor,
+                ),
               )
             ],
           ),

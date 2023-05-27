@@ -33,13 +33,13 @@ import 'Views/screens/profil_page/AddressScreen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await sharedPrefs.init();
-  await GetStorage.init();
+  sharedPrefs.init();
+  GetStorage.init();
   WidgetsFlutterBinding.ensureInitialized();
   Stripe.publishableKey = stripePublishableKey;
   Stripe.merchantIdentifier = 'merchant.flutter.stripe.test';
   Stripe.urlScheme = 'flutterstripe';
-  await Stripe.instance.applySettings();
+  Stripe.instance.applySettings();
   runApp(const MyApp());
 }
 

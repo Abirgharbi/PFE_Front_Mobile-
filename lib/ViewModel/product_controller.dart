@@ -103,17 +103,108 @@ class ProductController extends GetxController {
 
   void addToWishlist(Product product) {
     product.liked = true;
-    wishlist.add(product);
+
+    bool productExists = wishlist.any((p) => p.id == product.id);
+
+    if (!productExists) {
+      wishlist.add(product);
+    }
+
+    for (var p in productList) {
+      if (p.id == product.id) {
+        p.liked = true;
+      }
+    }
+
+    productByCategoryList.forEach((p) {
+      if (p.id == product.id) {
+        p.liked = true;
+      }
+    });
+
+    mostLikedProductList.forEach((p) {
+      if (p.id == product.id) {
+        p.liked = true;
+      }
+    });
+
+    recentProductsList.forEach((p) {
+      if (p.id == product.id) {
+        p.liked = true;
+      }
+    });
+
+    filtredProductsList.forEach((p) {
+      if (p.id == product.id) {
+        p.liked = true;
+      }
+    });
+
+    discountedProductsList.forEach((p) {
+      if (p.id == product.id) {
+        p.liked = true;
+      }
+    });
+
     sharedPrefs.setStringList(
-        "wishlist", wishlist.map((e) => jsonEncode(e.toJson())).toList());
+      "wishlist",
+      wishlist.map((e) => jsonEncode(e.toJson())).toList(),
+    );
+
     updateLikedStatus();
   }
 
   void removeFromWishlist(Product product) {
     product.liked = false;
-    wishlist.remove(product);
+
+    final removedProduct = wishlist.firstWhere(
+      (p) => p.id == product.id,
+    );
+    if (removedProduct != null) {
+      wishlist.remove(removedProduct);
+    }
+
+    productList.forEach((p) {
+      if (p.id == product.id) {
+        p.liked = false;
+      }
+    });
+
+    productByCategoryList.forEach((p) {
+      if (p.id == product.id) {
+        p.liked = false;
+      }
+    });
+
+    mostLikedProductList.forEach((p) {
+      if (p.id == product.id) {
+        p.liked = false;
+      }
+    });
+
+    recentProductsList.forEach((p) {
+      if (p.id == product.id) {
+        p.liked = false;
+      }
+    });
+
+    filtredProductsList.forEach((p) {
+      if (p.id == product.id) {
+        p.liked = false;
+      }
+    });
+
+    discountedProductsList.forEach((p) {
+      if (p.id == product.id) {
+        p.liked = false;
+      }
+    });
+
     sharedPrefs.setStringList(
-        "wishlist", wishlist.map((e) => jsonEncode(e.toJson())).toList());
+      "wishlist",
+      wishlist.map((e) => jsonEncode(e.toJson())).toList(),
+    );
+
     updateLikedStatus();
   }
 

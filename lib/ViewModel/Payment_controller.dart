@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:ARkea/ViewModel/order_controller.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:get/get.dart';
 import 'package:ARkea/utils/shared_preferences.dart';
@@ -23,6 +24,13 @@ class PaymentController extends GetxController {
     email = await sharedPrefs.getPref('customerEmail');
     phone = await sharedPrefs.getPref('customerPhoneNumber');
     city = await sharedPrefs.getPref('city');
+    print(city);
+    print('=------------------');
+    print(city.isEmpty);
+    // if (city.isEmpty) {
+    //   Get.snackbar("Please fill in your address", "Redirecting...");
+    //   Get.toNamed('/address');
+    // }
     country = await sharedPrefs.getPref('country');
     state = await sharedPrefs.getPref('state');
     zipCode = await sharedPrefs.getPref('zipCode');

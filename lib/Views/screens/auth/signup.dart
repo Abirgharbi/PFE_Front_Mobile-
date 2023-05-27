@@ -93,28 +93,74 @@ class SignUpState extends State<SignUp> {
                     FadeInDown(
                       delay: const Duration(milliseconds: 1400),
                       child: Container(
-                          margin: const EdgeInsets.all(15),
-                          width: gWidth / 2,
-                          height: gHeight / 12,
-                          child: Obx(
-                            () => signUpController.checkboxValue.value &&
-                                    signUpController.validName.value &&
-                                    signUpController.validEmail.value
-                                ? SPSolidButton(
-                                    backgroundColor: MaterialStateProperty.all(
-                                        MyColors.btnColor),
-                                    text: "Sign Up",
-                                    minWidth: 0,
-                                    onPressed: () {
+                        margin: const EdgeInsets.all(15),
+                        width: gWidth / 2,
+                        height: gHeight / 12,
+                        // child: Obx(
+                        //   () => signUpController.checkboxValue.value &&
+                        //           signUpController.validName.value &&
+                        //           signUpController.validEmail.value
+                        //       ? SPSolidButton(
+                        //           backgroundColor: MaterialStateProperty.all(
+                        //               MyColors.btnColor),
+                        //           text: "Sign Up",
+                        //           minWidth: 0,
+                        //           onPressed: () {
+                        //             signUpController.signUp();
+                        //           })
+                        //       : SPSolidButton(
+                        //           backgroundColor: MaterialStateProperty.all(
+                        //               MyColors.btnColor.withOpacity(0.7)),
+                        //           text: "Sign Up",
+                        //           minWidth: 0,
+                        //           onPressed: null),
+                        // )
+
+                        child: Obx(
+                          () {
+                            return ElevatedButton(
+                              style: signUpController.checkboxValue.value &&
+                                      signUpController.validName.value &&
+                                      signUpController.validEmail.value
+                                  ? ElevatedButton.styleFrom(
+                                      fixedSize: const Size(50, 50),
+                                      backgroundColor: MyColors.btnColor,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
+                                    )
+                                  : ElevatedButton.styleFrom(
+                                      fixedSize: const Size(50, 50),
+                                      backgroundColor:
+                                          MyColors.btnColor.withOpacity(0.7),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
+                                    ),
+                              onPressed: signUpController.checkboxValue.value &&
+                                      signUpController.validName.value &&
+                                      signUpController.validEmail.value
+                                  ? () async {
                                       signUpController.signUp();
-                                    })
-                                : SPSolidButton(
-                                    backgroundColor: MaterialStateProperty.all(
-                                        MyColors.btnColor.withOpacity(0.7)),
-                                    text: "Sign Up",
-                                    minWidth: 0,
-                                    onPressed: null),
-                          )),
+                                    }
+                                  : null,
+                              child: signUpController.isLogginIn.value
+                                  ? const Center(
+                                      child: CircularProgressIndicator(
+                                        color: Colors.white,
+                                      ),
+                                    )
+                                  : const Text(
+                                      "Sign Up",
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                            );
+                          },
+                        ),
+                      ),
                     ),
                     const OrText(),
                     const SizedBox(

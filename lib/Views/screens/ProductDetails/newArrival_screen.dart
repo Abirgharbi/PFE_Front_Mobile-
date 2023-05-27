@@ -20,20 +20,21 @@ class NewArrivalScreen extends StatefulWidget {
 class _NewArrivalScreenState extends State<NewArrivalScreen> {
   var productController = Get.put(ProductController());
   List<Product> filteredNewArrivalProductList = [];
-  bool fetching = false;
+  bool isFetching = false;
+  bool isLoading = false;
   int page = 0;
 
   @override
   void initState() {
     super.initState();
-    fetching = true;
+    isFetching = true;
     filteredNewArrivalProductList = Get.arguments['recentProducts'];
   }
 
   void filterProducts(List<Product> productList) {
     setState(() {
       filteredNewArrivalProductList = productList;
-      fetching = false;
+      isFetching = false;
     });
   }
 
@@ -73,7 +74,7 @@ class _NewArrivalScreenState extends State<NewArrivalScreen> {
                               Expanded(
                                 child: GridView.builder(
                                   shrinkWrap: true,
-                                  physics: NeverScrollableScrollPhysics(),
+                                  physics: const NeverScrollableScrollPhysics(),
                                   gridDelegate:
                                       const SliverGridDelegateWithFixedCrossAxisCount(
                                     crossAxisCount: 2, // Number of columns
@@ -120,6 +121,9 @@ class _NewArrivalScreenState extends State<NewArrivalScreen> {
                                             padding: const EdgeInsets.all(10),
                                             child: ElevatedButton(
                                               onPressed: () async {
+                                                setState(() {
+                                                  isLoading = true;
+                                                });
                                                 var res =
                                                     await productController
                                                         .getMostLikedProducts(
@@ -131,6 +135,7 @@ class _NewArrivalScreenState extends State<NewArrivalScreen> {
                                                   page++;
                                                   filteredNewArrivalProductList
                                                       .addAll(res);
+                                                  isLoading = false;
                                                 });
                                               },
                                               style: ElevatedButton.styleFrom(
@@ -142,10 +147,15 @@ class _NewArrivalScreenState extends State<NewArrivalScreen> {
                                                       BorderRadius.circular(20),
                                                 ),
                                               ),
-                                              child: const Text(
-                                                "See More",
-                                                style: TextStyle(fontSize: 20),
-                                              ),
+                                              child: isLoading
+                                                  ? const CircularProgressIndicator(
+                                                      color: Colors.white,
+                                                    )
+                                                  : const Text(
+                                                      "See More",
+                                                      style: TextStyle(
+                                                          fontSize: 20),
+                                                    ),
                                             ),
                                           ),
                               ),
@@ -156,7 +166,6 @@ class _NewArrivalScreenState extends State<NewArrivalScreen> {
           ],
         ),
       ),
-    
     );
   }
 }

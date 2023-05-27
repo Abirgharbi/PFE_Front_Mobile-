@@ -18,7 +18,7 @@ class SplashScreen extends StatelessWidget {
           children: [
             Obx(
               () => AnimatedPositioned(
-                duration: const Duration(milliseconds: 1600),
+                duration: const Duration(milliseconds: 800),
                 top: splashController.animate.value ? -100 : -200,
                 left: splashController.animate.value ? -50 : -90,
                 child: const Image(
@@ -30,11 +30,11 @@ class SplashScreen extends StatelessWidget {
               ),
             ),
             Obx(() => AnimatedPositioned(
-                duration: const Duration(milliseconds: 1600),
+                duration: const Duration(milliseconds: 800),
                 top: 100,
                 left: splashController.animate.value ? tDefaultSize : -80,
                 child: AnimatedOpacity(
-                  duration: const Duration(milliseconds: 1600),
+                  duration: const Duration(milliseconds: 800),
                   opacity: splashController.animate.value ? 1 : 0,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -45,15 +45,11 @@ class SplashScreen extends StatelessWidget {
                           style: Theme.of(context).textTheme.displaySmall,
                         ),
                       ),
-                      // Text(
-                      //   "ARkea. \nHappy To Help",
-                      //   style: Theme.of(context).textTheme.displayMedium,
-                      // )
                     ],
                   ),
                 ))),
             Obx(() => AnimatedPositioned(
-                duration: const Duration(milliseconds: 1600),
+                duration: const Duration(milliseconds: 800),
                 bottom: splashController.animate.value ? 150 : 0,
                 left: 80,
                 child: AnimatedOpacity(
@@ -65,7 +61,7 @@ class SplashScreen extends StatelessWidget {
                   ),
                 ))),
             Obx(() => AnimatedPositioned(
-                duration: const Duration(milliseconds: 2400),
+                duration: const Duration(milliseconds: 1200),
                 bottom: splashController.animate.value ? 40 : 0,
                 right: tDefaultSize,
                 child: AnimatedOpacity(
@@ -76,7 +72,7 @@ class SplashScreen extends StatelessWidget {
                       height: tSplashContainerSize,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(100),
-                        color: Color(0xffFF7742),
+                        color: const Color(0xffFF7742),
                       ),
                     ))))
           ],
