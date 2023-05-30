@@ -32,6 +32,7 @@ class _NewArrivalScreenState extends State<NewArrivalScreen> {
   }
 
   void filterProducts(List<Product> productList) {
+    print('filtering products');
     setState(() {
       filteredNewArrivalProductList = productList;
       isFetching = false;
