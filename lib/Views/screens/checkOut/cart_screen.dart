@@ -30,8 +30,6 @@ class _CartScreenState extends State<CartScreen> {
 
   getCartlist() async {
     List<String> productsCart = await sharedPrefs.getStringList("cart");
-    print("productsCart ======");
-    print(productsCart);
     addedProducts =
         productsCart.map((e) => Cart.fromJson(jsonDecode(e))).toList();
     setState(() {

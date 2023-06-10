@@ -196,8 +196,11 @@ class OrderController extends GetxController {
       ..addressId = addressId
       ..customerId = customerId;
 
-    var response = await NetworkHandler.post(order, "order/add");
+    print(jsonEncode(order));
 
+    var response = await NetworkHandler.post(order, "order/add");
+    print('-----------------');
+    print(response);
     Map<String, dynamic> payload = {
       'spend': orderSum.value,
       'products': productCarts.map((cart) {

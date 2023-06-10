@@ -25,6 +25,8 @@ class ReviewController extends GetxController {
     var response = await NetworkHandler.post(
         '{"comment": "$comment", "rating": "$rating" ,"customerImage": "$image","customerName":"$name","productId": "$productId"}',
         "review/add");
+    print('---------');
+    print(response);
     var res = await NetworkHandler.put(
         '{"rating": $rating}', "product/update-rating/$productId");
     print(res);
