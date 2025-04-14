@@ -6,6 +6,7 @@ import '../Model/service/network_handler.dart';
 import '../utils/shared_preferences.dart';
 
 class ProductComposite {
+  
   List<ProductModel> products;
   RxBool isLoading;
   RxInt productNumber;

@@ -8,6 +8,7 @@ import '../utils/shared_preferences.dart';
 
 
 class CategoryComposite {
+  
   List<CategoryModel> categories;
   RxBool isLoading;
   RxInt categoryNumber;

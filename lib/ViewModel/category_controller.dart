@@ -15,11 +15,12 @@ class CategoryController extends GetxController {
 
   List<Category> CategorieList = [];
   RxList<CategoryModel> categories = <CategoryModel>[].obs;
-  
+
   late CategoryComposite allCategories;
 
   @override
   void onInit() {
+    
     super.onInit();
     getCategories();
       allCategories = CategoryComposite(

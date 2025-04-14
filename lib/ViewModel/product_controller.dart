@@ -7,6 +7,7 @@ import '../Model/service/network_handler.dart';
 import '../utils/shared_preferences.dart';
 
 class ProductController extends GetxController {
+  
   RxBool isLoading = false.obs;
   RxInt countPopular = 0.obs;
   RxInt count = 0.obs;
