@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ARkea/Views/screens/Home/filter_page.dart';
+import 'package:arkea/Views/screens/Home/filter_page.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
@@ -73,13 +73,13 @@ class _SearchBarState extends State<SearchBar> {
             ),
           ),
         ),
-       onChanged: (value) {
-  _filteredProductList = widget.productList
-      .where((product) => product.name.toLowerCase().contains(value.toLowerCase()))
-      .toList();
-  widget.onFilter(_filteredProductList);
-},
-
+        onChanged: (value) {
+          _filteredProductList = widget.productList
+              .where((product) =>
+                  product.name.toLowerCase().contains(value.toLowerCase()))
+              .toList();
+          widget.onFilter(_filteredProductList);
+        },
       ),
     );
   }

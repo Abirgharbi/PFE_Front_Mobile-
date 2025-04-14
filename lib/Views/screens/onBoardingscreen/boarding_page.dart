@@ -1,4 +1,4 @@
-import 'package:ARkea/Views/screens/landing_page.dart';
+import 'package:arkea/Views/screens/landing_page.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

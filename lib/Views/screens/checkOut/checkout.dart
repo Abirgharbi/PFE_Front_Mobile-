@@ -1,5 +1,5 @@
-import 'package:ARkea/Views/screens/checkOut/shipping-information.dart';
-import 'package:ARkea/utils/colors.dart';
+import 'package:arkea/Views/screens/checkOut/shipping-information.dart';
+import 'package:arkea/utils/colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

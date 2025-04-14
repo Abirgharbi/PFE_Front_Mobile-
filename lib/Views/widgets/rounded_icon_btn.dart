@@ -1,4 +1,4 @@
-import 'package:ARkea/utils/colors.dart';
+import 'package:arkea/utils/colors.dart';
 import 'package:flutter/material.dart';
 
 import '../../utils/sizes.dart';

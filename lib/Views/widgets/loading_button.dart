@@ -1,13 +1,13 @@
 import 'dart:developer';
 
-import 'package:ARkea/utils/colors.dart';
+import 'package:arkea/utils/colors.dart';
 import 'package:flutter/material.dart';
 
 class LoadingButton extends StatefulWidget {
   final Future Function()? onPressed;
   final String text;
 
-  const   LoadingButton({Key? key, required this.onPressed, required this.text})
+  const LoadingButton({Key? key, required this.onPressed, required this.text})
       : super(key: key);
 
   @override

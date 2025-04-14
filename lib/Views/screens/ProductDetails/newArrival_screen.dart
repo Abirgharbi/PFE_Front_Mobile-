@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../Model/product_model.dart';
-
 import '../../../ViewModel/product_controller.dart';
 import '../../../utils/colors.dart';
 import '../../../utils/sizes.dart';
 import '../../widgets/app_bar.dart';
-import '../../widgets/search_bar.dart';
+// Use an alias for the custom SearchBar widget to avoid naming conflict
+import '../../widgets/search_bar.dart' as custom_search_bar;
 import '../../widgets/product_card.dart';
+
 
 class NewArrivalScreen extends StatefulWidget {
   const NewArrivalScreen({super.key});
@@ -32,7 +33,7 @@ class _NewArrivalScreenState extends State<NewArrivalScreen> {
   }
 
   void filterProducts(List<Product> productList) {
-    print('filtering products');
+    print('Filtering products');
     setState(() {
       filteredNewArrivalProductList = productList;
       isFetching = false;
@@ -43,77 +44,62 @@ class _NewArrivalScreenState extends State<NewArrivalScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const CustomAppBar(
-        title: 'new arrival products',
+        title: 'New Arrival Products',
       ),
       backgroundColor: const Color(0xFFF5F6F9),
       body: SafeArea(
         child: Column(
           children: [
-            const SizedBox(
-              height: 10,
-            ),
-            SearchBar(
+            const SizedBox(height: 10),
+            // Use the alias for SearchBar widget
+            custom_search_bar.SearchBar(
               productList: filteredNewArrivalProductList,
               onFilter: filterProducts,
             ),
-            const SizedBox(
-              height: 15,
-            ),
+            const SizedBox(height: 15),
             Obx(
               () => productController.isLoading.value
-                  ? const Center(
-                      child: CircularProgressIndicator(),
-                    )
+                  ? const Center(child: CircularProgressIndicator())
                   : filteredNewArrivalProductList.isEmpty
-                      ? const Center(
-                          child: Text('No Products Found'),
-                        )
+                      ? const Center(child: Text('No Products Found'))
                       : Expanded(
                           child: ListView(
                             shrinkWrap: true,
                             children: [
-                              Expanded(
-                                child: GridView.builder(
-                                  shrinkWrap: true,
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  gridDelegate:
-                                      const SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 2, // Number of columns
-                                    crossAxisSpacing: 16,
-                                    mainAxisSpacing: 16,
-                                    childAspectRatio: 1,
-                                  ),
-                                  itemCount:
-                                      filteredNewArrivalProductList.length,
-                                  itemBuilder: (context, index) {
-                                    final product =
-                                        filteredNewArrivalProductList[index];
-                                    return ProductCard(
-                                      product: product,
-                                    );
-                                  },
+                              // GridView to display product cards
+                              GridView.builder(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                gridDelegate:
+                                    const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2, // Number of columns
+                                  crossAxisSpacing: 16,
+                                  mainAxisSpacing: 16,
+                                  childAspectRatio: 1,
                                 ),
+                                itemCount: filteredNewArrivalProductList.length,
+                                itemBuilder: (context, index) {
+                                  final product = filteredNewArrivalProductList[index];
+                                  return ProductCard(
+                                    product: product,
+                                  );
+                                },
                               ),
-                              const SizedBox(
-                                height: 25,
-                              ),
+                              const SizedBox(height: 25),
                               Obx(
                                 () => productController.isLoading.value
                                     ? Container()
                                     : (filteredNewArrivalProductList.length >=
-                                            productController
-                                                .popularProductNumber.value)
+                                            productController.popularProductNumber.value)
                                         ? Center(
                                             child: SizedBox(
                                                 height: 20,
                                                 width: 100,
                                                 child: Text(
                                                   "No More products to load",
-                                                  style: kEncodeSansSemibold
-                                                      .copyWith(
+                                                  style: kEncodeSansSemibold.copyWith(
                                                     color: kDarkBrown,
-                                                    fontSize:
-                                                        gWidth / 100 * 3.5,
+                                                    fontSize: gWidth / 100 * 3.5,
                                                   ),
                                                 )),
                                           )
@@ -125,37 +111,26 @@ class _NewArrivalScreenState extends State<NewArrivalScreen> {
                                                 setState(() {
                                                   isLoading = true;
                                                 });
-                                                var res =
-                                                    await productController
-                                                        .getMostLikedProducts(
-                                                            page);
-                                                productController.length.value =
-                                                    filteredNewArrivalProductList
-                                                        .length;
+                                                var res = await productController.getMostLikedProducts(page);
+                                                productController.length.value = filteredNewArrivalProductList.length;
                                                 setState(() {
                                                   page++;
-                                                  filteredNewArrivalProductList
-                                                      .addAll(res);
+                                                  filteredNewArrivalProductList.addAll(res);
                                                   isLoading = false;
                                                 });
                                               },
                                               style: ElevatedButton.styleFrom(
                                                 fixedSize: const Size(50, 50),
-                                                backgroundColor:
-                                                    MyColors.btnColor,
+                                                backgroundColor: MyColors.btnColor,
                                                 shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(20),
+                                                  borderRadius: BorderRadius.circular(20),
                                                 ),
                                               ),
                                               child: isLoading
-                                                  ? const CircularProgressIndicator(
-                                                      color: Colors.white,
-                                                    )
+                                                  ? const CircularProgressIndicator(color: Colors.white)
                                                   : const Text(
                                                       "See More",
-                                                      style: TextStyle(
-                                                          fontSize: 20),
+                                                      style: TextStyle(fontSize: 20),
                                                     ),
                                             ),
                                           ),

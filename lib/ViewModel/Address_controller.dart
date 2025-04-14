@@ -1,7 +1,7 @@
 import 'dart:convert';
-import 'package:ARkea/utils/shared_preferences.dart';
+import 'package:arkea/utils/shared_preferences.dart';
 
-import 'package:ARkea/Model/Address_model.dart';
+import 'package:arkea/Model/Address_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -49,6 +49,8 @@ class AddressController extends GetxController {
 
     String address = "${line1.text}, ${city.text}, ${country.text}";
     sharedPrefs.setPref('address', address);
+
+    
 
     var response = await NetworkHandler.post(
         addressModelToJson(addressModel), "user/customer/address");

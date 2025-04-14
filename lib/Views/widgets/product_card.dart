@@ -75,7 +75,7 @@ class _ProductCardState extends State<ProductCard> {
                       height: 35,
                       child: Icon(
                         widget.product.liked == true
-                            ? LineAwesomeIcons.heart_1
+                            ? LineAwesomeIcons.heartbeat_solid
                             : LineAwesomeIcons.heart,
                         size: 20,
                         color: widget.product.liked == true

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../Model/service/network_handler.dart';
 import '../../utils/sizes.dart';
-import 'package:ARkea/utils/shared_preferences.dart';
+import 'package:arkea/utils/shared_preferences.dart';
 
 class SideMenu extends StatefulWidget {
   const SideMenu({super.key});

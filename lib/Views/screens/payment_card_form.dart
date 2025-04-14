@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:ARkea/Views/screens/checkOut/checkout.dart';
-import 'package:ARkea/Views/screens/profil_page/noLoggedIn_profilPage.dart';
+import 'package:arkea/Views/screens/checkOut/checkout.dart';
+import 'package:arkea/Views/screens/profil_page/noLoggedIn_profilPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:http/http.dart' as http;

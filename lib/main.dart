@@ -1,12 +1,12 @@
-import 'package:ARkea/Views/screens/splash_screen.dart';
-import 'package:ARkea/utils/shared_preferences.dart';
+import 'package:arkea/Views/screens/splash_screen.dart';
+import 'package:arkea/utils/shared_preferences.dart';
 
 import 'Views/screens/ProductDetails/popular_products_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:responsive_framework/responsive_wrapper.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 
 import 'ViewModel/bindings.dart';
 import 'Views/screens/Home/home_page.dart';
@@ -50,33 +50,29 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       builder: (context, child) => ResponsiveWrapper.builder(
-        child,
+        child ?? Container(),
         maxWidth: 1200,
         minWidth: 480,
         defaultScale: true,
         breakpoints: [
-          const ResponsiveBreakpoint.resize(480, name: MOBILE),
-          const ResponsiveBreakpoint.autoScale(800, name: TABLET),
-          const ResponsiveBreakpoint.resize(1000, name: DESKTOP),
+          ResponsiveBreakpoint.resize(480, name: MOBILE),
+          ResponsiveBreakpoint.autoScale(800, name: TABLET),
+          ResponsiveBreakpoint.resize(1000, name: DESKTOP),
         ],
       ),
       title: "ARkea",
       theme: ThemeData(
-          textTheme: TTtextTheme.lightTextTheme,
-          brightness: Brightness.light,
-          fontFamily: "Gordita"),
+        textTheme: TTtextTheme.lightTextTheme,
+        brightness: Brightness.light,
+        fontFamily: "Gordita",
+      ),
       themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
       defaultTransition: Transition.fade,
       initialRoute: "/splash",
       initialBinding: MyBindings(),
       getPages: [
-        GetPage(
-          name: '/landing',
-          page: () => const LandingPage(),
-          transition: Transition.leftToRightWithFade,
-          transitionDuration: const Duration(milliseconds: 500),
-        ),
+        GetPage(name: '/landing', page: () => const LandingPage()),
         GetPage(name: '/home', page: () => const HomeScreen()),
         GetPage(name: '/login', page: () => const LoginPage()),
         GetPage(name: '/signup', page: () => const SignUp()),

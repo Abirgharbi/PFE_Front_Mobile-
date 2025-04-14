@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import '../../../../ViewModel/review_controller.dart';
 import '../../../../utils/sizes.dart';
 
-class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
+class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final double rating;
   final String thumbnail;
   final String productId;

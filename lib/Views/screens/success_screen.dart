@@ -1,4 +1,4 @@
-import 'package:ARkea/Views/screens/landing_page.dart';
+import 'package:arkea/Views/screens/landing_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -15,7 +15,7 @@ class Success extends StatelessWidget {
         SizedBox(height: gHeight * 0.04),
         Image.asset(
           "assets/images/success.png",
-          height: gHeight * 0.4, 
+          height: gHeight * 0.4,
         ),
         SizedBox(height: gHeight * 0.08),
         const Text(

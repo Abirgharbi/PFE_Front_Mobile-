@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:ARkea/utils/shared_preferences.dart';
+import 'package:arkea/utils/shared_preferences.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
@@ -20,6 +20,8 @@ class ProfileController extends GetxController {
     super.onInit();
     name.text = await sharedPrefs.getPref('customerName');
     phoneNumber.text = await sharedPrefs.getPref('customerPhoneNumber');
+
+    
   }
 
   void updateProfile(String? imageUrl) async {

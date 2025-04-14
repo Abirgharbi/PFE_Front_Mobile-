@@ -1,11 +1,11 @@
 import 'dart:convert';
 
-import 'package:ARkea/ViewModel/order_controller.dart';
-import 'package:ARkea/ViewModel/product_controller.dart';
-import 'package:ARkea/ViewModel/signup_controller.dart';
-import 'package:ARkea/Views/screens/checkOut/cart_screen.dart';
+import 'package:arkea/ViewModel/order_controller.dart';
+import 'package:arkea/ViewModel/product_controller.dart';
+import 'package:arkea/ViewModel/signup_controller.dart';
+import 'package:arkea/Views/screens/checkOut/cart_screen.dart';
 
-import 'package:ARkea/Views/screens/profil_page/profil_page.dart';
+import 'package:arkea/Views/screens/profil_page/profil_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';

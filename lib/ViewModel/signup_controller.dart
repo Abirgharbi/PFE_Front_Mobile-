@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:ARkea/utils/shared_preferences.dart';
+import 'package:arkea/utils/shared_preferences.dart';
 
-import 'package:ARkea/Views/screens/landing_page.dart';
+import 'package:arkea/Views/screens/landing_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:get/get.dart';
@@ -14,6 +14,8 @@ import '../Model/customer_model.dart';
 import '../Model/service/network_handler.dart';
 
 class SignupScreenController extends GetxController {
+
+  
   TextEditingController emailEditingController = TextEditingController();
   TextEditingController nameEditingController = TextEditingController();
   BuildContext? context = Get.key.currentContext;
@@ -35,7 +37,7 @@ class SignupScreenController extends GetxController {
         email: emailEditingController.text, name: nameEditingController.text);
     var response = await NetworkHandler.post(
         customerModelToJson(customerModel), "user/register");
-        
+
     isLogginIn.value = false;
 
     var data = await json.decode(response);

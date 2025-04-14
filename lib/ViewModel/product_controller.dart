@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:arkea/ViewModel/ProductComposite.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../Model/product_model.dart';
@@ -21,8 +22,15 @@ class ProductController extends GetxController {
   List<Product> recentProductsList = [];
   List<Product> filtredProductsList = [];
   List<Product> discountedProductsList = [];
+  RxList<ProductModel> products = <ProductModel>[].obs;
 
   RxList<Product> wishlist = <Product>[].obs;
+
+
+  late ProductComposite allProducts;
+
+  // Exemple d'ajout d’une nouvelle section de produits comme "Flash Sales"
+  late ProductComposite flashSalesProducts;
 
   @override
   void onInit() {
@@ -31,7 +39,47 @@ class ProductController extends GetxController {
     getProductDetails();
     getMostLikedProducts(0);
     loadWishlist();
+
+
+   // Instance pour produits normaux
+     allProducts = ProductComposite(
+      products: [],
+      isLoading: isLoading,
+      productNumber: productNumber,
+    );
+
+     // Instance pour Flash Sales
+    flashSalesProducts = ProductComposite(
+    products: [],
+    isLoading: false.obs,
+    productNumber: 0.obs,
+  );
+
+
+     // Chargement
+      getAllProducts();
+      getFlashSalesProducts();
   }
+
+   void getAllProducts() async {
+    await allProducts.fetchProducts("product/all");
+  }
+
+  void getFlashSalesProducts() async {
+  await flashSalesProducts.fetchProducts("product/flashsales");
+}
+
+// Sans Composite 
+
+  //   Future<void> fetchProducts() async {
+  //   isLoading.value = true;
+  //   var response = await NetworkHandler.get("product/all");
+  //   var jsonData = json.decode(response);
+  //   var data = jsonData['products'] as List;
+  //   products.assignAll(data.map((e) => ProductModel.fromJson(e)).toList());
+  //   productNumber.value = products.length;
+  //   isLoading.value = false;
+  // }
 
   getRecentProducts() async {
     isLoading(true);

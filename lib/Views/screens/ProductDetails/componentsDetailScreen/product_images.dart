@@ -1,5 +1,5 @@
-import 'package:ARkea/utils/colors.dart';
-import 'package:ARkea/utils/sizes.dart';
+import 'package:arkea/utils/colors.dart';
+import 'package:arkea/utils/sizes.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../Model/product_model.dart';
