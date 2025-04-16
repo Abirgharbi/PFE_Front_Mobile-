@@ -1,9 +1,11 @@
-import 'package:ARkea/utils/colors.dart';
+
+import 'package:convert/convert.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 
 import '../../../../ViewModel/order_controller.dart';
+import '../../../../utils/colors.dart';
 import '../../../../utils/sizes.dart';
 import '../../payment_card_form.dart';
 
@@ -63,7 +65,7 @@ class CheckoutCard extends StatelessWidget {
                         controller: orderController.promoCode,
                         decoration: InputDecoration(
                           suffixIcon: const Icon(
-                            LineAwesomeIcons.percent,
+                            LineAwesomeIcons.percent_solid,
                             color: MyColors.btnBorderColor,
                           ),
                           contentPadding: const EdgeInsets.symmetric(
