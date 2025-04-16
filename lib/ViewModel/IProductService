@@ -1,10 +1,10 @@
 abstract class IProductService {
-  /// Récupère une liste de produits depuis un endpoint spécifique.
+  /// Récupère une liste de produits
   Future<List<Product>> getProducts(String endpoint, {Map<String, dynamic>? queryParams});
 
-  /// Ajoute un produit à la wishlist via une API ou une base locale.
+  /// Ajoute un produit à la wishlist 
   Future<void> addToWishlist(Product product);
 
-  /// Supprime un produit de la wishlist via une API ou une base locale.
+  /// Supprime un produit de la wishlist 
   Future<void> removeFromWishlist(Product product);
 }

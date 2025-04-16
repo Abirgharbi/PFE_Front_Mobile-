@@ -1,6 +1,6 @@
 class ProductController extends GetxController {
 
-  final IProductService _productService;
+  final IProductService _productService; 
 
   RxBool isLoading = false.obs;
   RxInt countPopular = 0.obs;

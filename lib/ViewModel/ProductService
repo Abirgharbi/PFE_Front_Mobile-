@@ -34,4 +34,4 @@ class ProductService implements IProductService {
       await sharedPrefs.setStringList("wishlist", wishlist);
     });
   }
-}
+}  
