@@ -1,0 +1,37 @@
+import 'dart:convert';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import '../Model/product_model.dart';
+import '../Model/service/network_handler.dart';
+import '../utils/shared_preferences.dart';
+class ProductService implements IProductService {
+  @override
+  Future<List<Product>> getProducts(String endpoint, {Map<String, dynamic>? queryParams}) async {
+    String url = endpoint;
+    if (queryParams != null) {
+      url += '?${Uri(queryParameters: queryParams).query}';
+    }
+
+    var response = await NetworkHandler.get(url);
+    ProductModel productModel = ProductModel.fromJson(json.decode(response));
+    return productModel.products;
+  }
+
+  @override
+  Future<void> addToWishlist(Product product) async {
+    sharedPrefs.getStringList("wishlist").then((savedWishlist) async {
+      List<String> wishlist = savedWishlist ?? [];
+      wishlist.add(jsonEncode(product.toJson()));
+      await sharedPrefs.setStringList("wishlist", wishlist);
+    });
+  }
+
+  @override
+  Future<void> removeFromWishlist(Product product) async {
+    sharedPrefs.getStringList("wishlist").then((savedWishlist) async {
+      List<String> wishlist = savedWishlist ?? [];
+      wishlist.removeWhere((item) => jsonDecode(item)['id'] == product.id);
+      await sharedPrefs.setStringList("wishlist", wishlist);
+    });
+  }
+}

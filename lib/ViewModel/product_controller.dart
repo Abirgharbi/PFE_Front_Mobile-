@@ -83,8 +83,9 @@ class ProductController extends GetxController {
   }
 
   getProductsByCategory(String categoryId) async {
-    var response =
-        await NetworkHandler.get("product/product-by-category/$categoryId");
+    var response = await NetworkHandler.get(
+      "product/product-by-category/$categoryId",
+    );
     ProductModel productModel = ProductModel.fromJson(json.decode(response));
     productByCategoryList = productModel.products;
     return productByCategoryList;
@@ -157,9 +158,7 @@ class ProductController extends GetxController {
   void removeFromWishlist(Product product) {
     product.liked = false;
 
-    final removedProduct = wishlist.firstWhere(
-      (p) => p.id == product.id,
-    );
+    final removedProduct = wishlist.firstWhere((p) => p.id == product.id);
     if (removedProduct != null) {
       wishlist.remove(removedProduct);
     }
@@ -217,7 +216,8 @@ class ProductController extends GetxController {
   getFiltredProducts(RangeValues rangeValue, double rating) async {
     isLoading(true);
     var response = await NetworkHandler.get(
-        "product/filter?rating=$rating&min=${rangeValue.start}&max=${rangeValue.end}");
+      "product/filter?rating=$rating&min=${rangeValue.start}&max=${rangeValue.end}",
+    );
     ProductModel productModel = ProductModel.fromJson(json.decode(response));
     filtredProductsList = productModel.products;
     isLoading(false);
@@ -225,8 +225,9 @@ class ProductController extends GetxController {
   }
 
   getDiscountedProducts(int discount) async {
-    var response =
-        await NetworkHandler.get("product/discount?discount=$discount");
+    var response = await NetworkHandler.get(
+      "product/discount?discount=$discount",
+    );
     ProductModel productModel = ProductModel.fromJson(json.decode(response));
     discountedProductsList = productModel.products;
     return discountedProductsList;

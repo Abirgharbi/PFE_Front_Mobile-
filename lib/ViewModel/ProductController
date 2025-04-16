@@ -1,0 +1,79 @@
+class ProductController extends GetxController {
+
+  final IProductService _productService;
+
+  RxBool isLoading = false.obs;
+  RxInt countPopular = 0.obs;
+  RxInt countRecent = 0.obs;
+  RxInt length = 5.obs;
+
+  List<Product> productList = [];
+  List<Product> mostLikedProductList = [];
+  List<Product> recentProductsList = [];
+  List<Product> filtredProductsList = [];
+
+  RxList<Product> wishlist = <Product>[].obs;
+
+  ProductController(this._productService);
+
+  @override
+  void onInit() {
+    super.onInit();
+    getRecentProducts();
+    getProductDetails();
+    getMostLikedProducts(0);
+    loadWishlist();
+  }
+
+  Future<void> getRecentProducts() async {
+    isLoading(true);
+    recentProductsList = await _productService.getProducts("product/recent", queryParams: {"page": "0"});
+    isLoading(false);
+  }
+  Future<void> getfavoris() async {
+    isLoading(true);
+    recentProductsList = await _productService.getProducts("product/favoris", queryParams: {"page": "0"});
+    isLoading(false);
+  }
+
+  Future<void> getMostLikedProducts(int page) async {
+    mostLikedProductList = await _productService.getProducts("product/popular", queryParams: {"page": "$page"});
+  }
+
+  Future<void> getProductDetails() async {
+    isLoading(true);
+    productList = await _productService.getProducts("product/get", queryParams: {"page": "0"});
+    isLoading(false);
+  }
+
+  Future<void> getFiltredProducts(RangeValues rangeValue, double rating) async {
+    isLoading(true);
+    filtredProductsList = await _productService.getProducts(
+      "product/filter",
+      queryParams: {
+        "rating": "$rating",
+        "min": "${rangeValue.start}",
+        "max": "${rangeValue.end}",
+      },
+    );
+    isLoading(false);
+  }
+
+  void loadWishlist() {
+    sharedPrefs.getStringList("wishlist").then((savedWishlist) {
+      if (savedWishlist != null) {
+        wishlist.addAll(savedWishlist.map((e) => Product.fromJson(json.decode(e))));
+      }
+    });
+  }
+
+  void addToWishlist(Product product) async {
+    await _productService.addToWishlist(product);
+    wishlist.add(product);
+  }
+
+  void removeFromWishlist(Product product) async {
+    await _productService.removeFromWishlist(product);
+    wishlist.removeWhere((p) => p.id == product.id);
+  }
+}
