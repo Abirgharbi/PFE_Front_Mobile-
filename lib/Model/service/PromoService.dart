@@ -14,6 +14,7 @@ import 'package:get/get.dart';
 
 
 class PromoService {
+  
   TextEditingController promoCode = TextEditingController();
   RxString message = ''.obs;
   RxBool applyDisabled = false.obs;

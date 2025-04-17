@@ -13,6 +13,7 @@ import 'package:get/get.dart';
 
 
 class CartService {
+  
   RxList<Cart> productCarts = <Cart>[].obs;
   RxDouble orderSum = 0.0.obs;
   double orderCost = 0.0;

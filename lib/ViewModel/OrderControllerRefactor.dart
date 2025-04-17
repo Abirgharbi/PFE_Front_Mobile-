@@ -18,6 +18,7 @@ import '../Model/promo_model.dart';
 import '../Model/service/network_handler.dart';
 
 class OrderController extends GetxController {
+  
   final cartService = CartService();
   final promoService = PromoService();
   final orderService = OrderService();

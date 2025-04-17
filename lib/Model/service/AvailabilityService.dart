@@ -13,6 +13,7 @@ import 'package:get/get.dart';
 
 
 class AvailabilityService {
+  
   void checkAvailability(CartService cartService) async {
     Map<String, int> products = {
       for (var item in cartService.productCarts)
