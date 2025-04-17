@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ARkea/Views/screens/Home/filter_page.dart';
+import 'package:arkea/Views/screens/Home/filter_page.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
@@ -7,11 +7,11 @@ import '../../Model/product_model.dart';
 import '../../utils/colors.dart';
 import '../screens/Home/home_page.dart';
 
-class SearchBar extends StatefulWidget {
+class CustomSearchBar  extends StatefulWidget {
   final List<Product> productList;
   final void Function(List<Product>) onFilter;
 
-  const SearchBar({
+  const CustomSearchBar ({
     Key? key,
     required this.productList,
     required this.onFilter,
@@ -21,7 +21,7 @@ class SearchBar extends StatefulWidget {
   _SearchBarState createState() => _SearchBarState();
 }
 
-class _SearchBarState extends State<SearchBar> {
+class _SearchBarState extends State<CustomSearchBar> {
   final TextEditingController _searchController = TextEditingController();
   List<Product> _filteredProductList = [];
 

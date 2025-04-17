@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:ARkea/Views/screens/landing_page.dart';
+import 'package:arkea/Views/screens/landing_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

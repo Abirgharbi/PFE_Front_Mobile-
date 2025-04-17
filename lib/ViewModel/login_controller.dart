@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:ARkea/utils/shared_preferences.dart';
-import 'package:ARkea/Views/screens/landing_page.dart';
+import 'landingPage_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:get/get.dart';
@@ -9,7 +8,8 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl/intl.dart';
 import 'package:quickalert/models/quickalert_type.dart';
 import 'package:quickalert/widgets/quickalert_dialog.dart';
-
+import 'package:arkea/utils/shared_preferences.dart';
+import 'package:arkea/Views/screens/landing_page.dart';
 import '../Model/customer_model.dart';
 import '../Model/service/network_handler.dart';
 import 'signup_controller.dart';

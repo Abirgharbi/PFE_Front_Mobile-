@@ -1,13 +1,13 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:ARkea/ViewModel/signup_controller.dart';
+import 'package:arkea/ViewModel/signup_controller.dart';
 import 'package:cloudinary/cloudinary.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
-import 'package:ARkea/utils/shared_preferences.dart';
+import 'package:arkea/utils/shared_preferences.dart';
 
 import '../../../Model/service/network_handler.dart';
 import '../../../ViewModel/login_controller.dart';
@@ -23,8 +23,8 @@ var signUpController = Get.put(SignupScreenController());
 const String apiKey = '674684268545591';
 const String apiSecret = 'QbAEIGv7obzNQFMgfVCIwXQnKLs';
 const String cloudName = 'dbkivxzek';
-const String folder = 'ARkea';
-const String uploadPreset = 'ARkea-dashboard';
+const String folder = 'arkea';
+const String uploadPreset = 'arkea-dashboard';
 
 final cloudinary = Cloudinary.signedConfig(
   cloudName: cloudName,
@@ -140,7 +140,7 @@ class EditProfileScreenState extends State<EditProfileScreen> {
                                       color: MyColors.btnBorderColor),
                                   child: IconButton(
                                     icon: const Icon(
-                                      LineAwesomeIcons.camera,
+                                      LineAwesomeIcons.camera_solid,
                                       size: 20,
                                       color: Colors.white,
                                     ),
@@ -248,7 +248,7 @@ class EditProfileScreenState extends State<EditProfileScreen> {
                                 label: "Email",
                                 enabled: false,
                                 initialValue: "${snapshot.data} ",
-                                prefIcon: Icon(LineAwesomeIcons.envelope_1,
+                                prefIcon: Icon(LineAwesomeIcons.envelope,
                                     color: MyColors.captionColor),
                               ),
                             ),
@@ -288,7 +288,7 @@ class EditProfileScreenState extends State<EditProfileScreen> {
                               padding: const EdgeInsets.only(top: 16),
                               child: FormTextFiled(
                                   label: "Phone N°",
-                                  prefIcon: Icon(LineAwesomeIcons.phone,
+                                  prefIcon: Icon(LineAwesomeIcons.phone_solid,
                                       color: MyColors.captionColor),
                                   controller: profileController.phoneNumber),
                             ),

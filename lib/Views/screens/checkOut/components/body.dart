@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:ARkea/ViewModel/order_controller.dart';
-import 'package:ARkea/utils/sizes.dart';
+import 'package:arkea/ViewModel/order_controller.dart';
+import 'package:arkea/utils/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

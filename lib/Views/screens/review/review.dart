@@ -1,5 +1,5 @@
-import 'package:ARkea/Model/review_model.dart';
-import 'package:ARkea/ViewModel/review_controller.dart';
+import 'package:arkea/Model/review_model.dart';
+import 'package:arkea/ViewModel/review_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';

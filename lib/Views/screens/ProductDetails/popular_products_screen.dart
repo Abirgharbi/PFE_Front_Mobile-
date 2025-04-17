@@ -52,7 +52,7 @@ class _PopularProductScreenState extends State<PopularProductScreen> {
             const SizedBox(
               height: 10,
             ),
-            SearchBar(
+            CustomSearchBar (
               productList: filteredPopularProductList,
               onFilter: filterProducts,
             ),

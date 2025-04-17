@@ -1,11 +1,11 @@
 import 'dart:convert';
-import 'package:ARkea/utils/shared_preferences.dart';
+import 'package:arkea/utils/shared_preferences.dart';
 
-import 'package:ARkea/Model/cart_model.dart';
-import 'package:ARkea/Model/product_card_model.dart';
-import 'package:ARkea/Model/product_model.dart';
-import 'package:ARkea/ViewModel/product_controller.dart';
-import 'package:ARkea/utils/colors.dart';
+import 'package:arkea/Model/cart_model.dart';
+import 'package:arkea/Model/product_card_model.dart';
+import 'package:arkea/Model/product_model.dart';
+import 'package:arkea/ViewModel/product_controller.dart';
+import 'package:arkea/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

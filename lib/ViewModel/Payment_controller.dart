@@ -1,10 +1,10 @@
 import 'dart:convert';
 
-import 'package:ARkea/ViewModel/order_controller.dart';
+import 'package:arkea/ViewModel/order_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:get/get.dart';
-import 'package:ARkea/utils/shared_preferences.dart';
+import 'package:arkea/utils/shared_preferences.dart';
 
 import '../Model/service/network_handler.dart';
 

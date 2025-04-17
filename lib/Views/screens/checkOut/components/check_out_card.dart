@@ -1,4 +1,4 @@
-import 'package:ARkea/utils/colors.dart';
+import 'package:arkea/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
@@ -63,7 +63,7 @@ class CheckoutCard extends StatelessWidget {
                         controller: orderController.promoCode,
                         decoration: InputDecoration(
                           suffixIcon: const Icon(
-                            LineAwesomeIcons.percent,
+                            LineAwesomeIcons.percent_solid,
                             color: MyColors.btnBorderColor,
                           ),
                           contentPadding: const EdgeInsets.symmetric(

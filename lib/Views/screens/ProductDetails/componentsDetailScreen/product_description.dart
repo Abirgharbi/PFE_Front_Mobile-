@@ -1,5 +1,5 @@
-import 'package:ARkea/utils/colors.dart';
-import 'package:ARkea/utils/sizes.dart';
+import 'package:arkea/utils/colors.dart';
+import 'package:arkea/utils/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
@@ -87,7 +87,7 @@ class _ProductDescriptionState extends State<ProductDescription> {
                 },
                 icon: Icon(
                   widget.product.liked == true
-                      ? LineAwesomeIcons.heart_1
+                      ? LineAwesomeIcons.heart
                       : LineAwesomeIcons.heart,
                   size: 30,
                   color: widget.product.liked == true

@@ -1,6 +1,6 @@
-import 'package:ARkea/Views/screens/auth/login_page.dart';
-import 'package:ARkea/Views/screens/auth/signup.dart';
-import 'package:ARkea/utils/colors.dart';
+import 'package:arkea/Views/screens/auth/login_page.dart';
+import 'package:arkea/Views/screens/auth/signup.dart';
+import 'package:arkea/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
@@ -44,7 +44,7 @@ class noLoggedIn_profilPage extends StatelessWidget {
                               height: 50,
                               child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                  primary: MyColors.btnColor,
+                                  backgroundColor: MyColors.btnColor,
                                   elevation: 0,
                                 ),
                                 onPressed: () {
@@ -76,8 +76,7 @@ class noLoggedIn_profilPage extends StatelessWidget {
                               height: 50,
                               child: OutlinedButton(
                                 style: OutlinedButton.styleFrom(
-                                  primary: MyColors.btnColor,
-                                  side: const BorderSide(
+                                  foregroundColor: MyColors.btnColor, side: const BorderSide(
                                     color: MyColors.btnBorderColor,
                                   ),
                                 ),
@@ -169,7 +168,7 @@ class ProfileMenuWidget extends StatelessWidget {
                     borderRadius: BorderRadius.circular(100),
                     color: Colors.grey.withOpacity(0.1)),
                 child: const Icon(
-                  LineAwesomeIcons.angle_right,
+                  LineAwesomeIcons.angle_right_solid,
                   size: 18.0,
                   color: Colors.grey,
                 ),

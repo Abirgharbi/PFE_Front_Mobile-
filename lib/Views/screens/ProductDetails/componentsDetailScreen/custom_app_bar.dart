@@ -4,25 +4,25 @@ import 'package:get/get.dart';
 import '../../../../ViewModel/review_controller.dart';
 import '../../../../utils/sizes.dart';
 
-class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
+class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final double rating;
   final String thumbnail;
   final String productId;
 
-  CustomAppBar(
-      {required this.rating,
-      required this.thumbnail,
-      required this.productId,
-      Key? key})
-      : super(key: key);
+  const CustomAppBar({
+    required this.rating,
+    required this.thumbnail,
+    required this.productId,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Size get preferredSize => Size.fromHeight(AppBar().preferredSize.height);
 
-  ReviewController _reviewController = Get.put(ReviewController());
-
   @override
   Widget build(BuildContext context) {
+    final ReviewController _reviewController = Get.find();
+
     return SafeArea(
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: (20 / 375.0) * gWidth),
@@ -32,17 +32,16 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
               height: (40 / 375.0) * gWidth,
               width: (40 / 375.0) * gWidth,
               child: TextButton(
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(40),
-                    ),
-                    backgroundColor: Colors.white,
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 14, vertical: 5),
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(40),
                   ),
-                  onPressed: () => Get.back(),
-                  child: const Icon(Icons.arrow_back,
-                      color: Colors.black, weight: 15)),
+                  backgroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 5),
+                ),
+                onPressed: () => Get.back(),
+                child: const Icon(Icons.arrow_back, color: Colors.black),
+              ),
             ),
             const Spacer(),
             GestureDetector(
@@ -52,13 +51,12 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
                   '/review',
                   arguments: [
                     {'thumbnail': thumbnail},
-                    {'productId': productId}
+                    {'productId': productId},
                   ],
                 );
               },
               child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 14, vertical: 5),
+                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 5),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(14),
@@ -66,7 +64,7 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
                 child: Row(
                   children: [
                     Text(
-                      "${rating.toStringAsFixed(2)}",
+                      rating.toStringAsFixed(2),
                       style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,

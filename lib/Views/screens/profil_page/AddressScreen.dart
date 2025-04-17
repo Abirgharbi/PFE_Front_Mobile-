@@ -1,9 +1,9 @@
-import 'package:ARkea/utils/colors.dart';
-import 'package:ARkea/utils/sizes.dart';
+import 'package:arkea/utils/colors.dart';
+import 'package:arkea/utils/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
-import 'package:ARkea/utils/shared_preferences.dart';
+import 'package:arkea/utils/shared_preferences.dart';
 
 import '../../../Model/service/network_handler.dart';
 import '../../../ViewModel/Address_controller.dart';
@@ -42,7 +42,7 @@ class _AddressState extends State<AddressScreen> {
                         child: FormTextFiled(
                             label: "City",
                             prefIcon: Icon(
-                              LineAwesomeIcons.map_marker,
+                              LineAwesomeIcons.map_marked_alt_solid,
                               color: MyColors.captionColor,
                             ),
                             controller: addressController.city),
@@ -86,7 +86,7 @@ class _AddressState extends State<AddressScreen> {
                         child: FormTextFiled(
                             label: 'State',
                             prefIcon: Icon(
-                              LineAwesomeIcons.map_marker,
+                              LineAwesomeIcons.map_marked_solid,
                               color: MyColors.captionColor,
                             ),
                             controller: addressController.state),
@@ -128,7 +128,7 @@ class _AddressState extends State<AddressScreen> {
                         child: FormTextFiled(
                             label: 'Country',
                             prefIcon: Icon(
-                              LineAwesomeIcons.map_marker,
+                              LineAwesomeIcons.map_marker_solid,
                               color: MyColors.captionColor,
                             ),
                             controller: addressController.country),
@@ -170,7 +170,7 @@ class _AddressState extends State<AddressScreen> {
                         child: FormTextFiled(
                             label: 'Zip Code',
                             prefIcon: Icon(
-                              LineAwesomeIcons.map_marker,
+                              LineAwesomeIcons.map_marker_solid,
                               color: MyColors.captionColor,
                             ),
                             controller: addressController.zipCode),
@@ -212,7 +212,7 @@ class _AddressState extends State<AddressScreen> {
                         child: FormTextFiled(
                             label: 'line 1',
                             prefIcon: Icon(
-                              LineAwesomeIcons.map_marker,
+                              LineAwesomeIcons.map_marker_solid,
                               color: MyColors.captionColor,
                             ),
                             controller: addressController.line1),
@@ -254,7 +254,7 @@ class _AddressState extends State<AddressScreen> {
                         child: FormTextFiled(
                             label: 'line 2',
                             prefIcon: Icon(
-                              LineAwesomeIcons.map_marker,
+                              LineAwesomeIcons.map_marker_solid,
                               color: MyColors.captionColor,
                             ),
                             controller: addressController.line2),

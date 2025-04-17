@@ -1,8 +1,8 @@
 import 'dart:convert';
-import 'package:ARkea/Model/review_model.dart';
+import 'package:arkea/Model/review_model.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:ARkea/utils/shared_preferences.dart';
+import 'package:arkea/utils/shared_preferences.dart';
 
 import '../Model/service/network_handler.dart';
 

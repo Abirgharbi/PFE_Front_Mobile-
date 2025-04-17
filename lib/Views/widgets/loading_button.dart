@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:ARkea/utils/colors.dart';
+import 'package:arkea/utils/colors.dart';
 import 'package:flutter/material.dart';
 
 class LoadingButton extends StatefulWidget {

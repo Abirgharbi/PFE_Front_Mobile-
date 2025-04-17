@@ -52,7 +52,7 @@ class _NewArrivalScreenState extends State<NewArrivalScreen> {
             const SizedBox(
               height: 10,
             ),
-            SearchBar(
+            CustomSearchBar(
               productList: filteredNewArrivalProductList,
               onFilter: filterProducts,
             ),

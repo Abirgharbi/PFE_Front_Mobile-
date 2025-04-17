@@ -1,12 +1,12 @@
-import 'package:ARkea/Views/screens/landing_page.dart';
-import 'package:ARkea/Views/screens/profil_page/noLoggedIn_profilPage.dart';
+import 'package:arkea/Views/screens/landing_page.dart';
+import 'package:arkea/Views/screens/profil_page/noLoggedIn_profilPage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 
 import '../../../Model/service/network_handler.dart';
 import '../../../ViewModel/login_controller.dart';
-import 'package:ARkea/utils/shared_preferences.dart';
+import 'package:arkea/utils/shared_preferences.dart';
 
 import '../../../ViewModel/signup_controller.dart';
 import '../../../utils/colors.dart';
@@ -214,7 +214,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ///Menu
                     ProfileMenuWidget(
                       title: "My orders",
-                      icon: LineAwesomeIcons.dolly,
+                      icon: LineAwesomeIcons.dolly_solid,
                       onPress: () {
                         Get.to(OrderHistoryScreen());
                       },
@@ -222,7 +222,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                     ProfileMenuWidget(
                       title: "Address",
-                      icon: LineAwesomeIcons.map_marker,
+                      icon: LineAwesomeIcons.map,
                       onPress: () {
                         Get.toNamed('/address');
                       },
@@ -230,7 +230,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                     ProfileMenuWidget(
                       title: "Help Center",
-                      icon: LineAwesomeIcons.headset,
+                      icon: LineAwesomeIcons.headset_solid,
                       onPress: () {
                         Get.toNamed('/help');
                       },
@@ -243,7 +243,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                     ProfileMenuWidget(
                       title: "About Us",
-                      icon: LineAwesomeIcons.info_circle,
+                      icon: LineAwesomeIcons.info_circle_solid,
                       onPress: () {
                         Get.toNamed('/about');
                       },
@@ -257,7 +257,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       title: "Logout ",
                       textColor: Colors.red,
                       endIcon: false,
-                      icon: LineAwesomeIcons.alternate_sign_out,
+                      icon: LineAwesomeIcons.sign_out_alt_solid,
                       onPress: () {
                         loginController.logOut();
                       },
@@ -315,7 +315,7 @@ class ProfileMenuWidget extends StatelessWidget {
                     borderRadius: BorderRadius.circular(100),
                     color: Colors.grey.withOpacity(0.1)),
                 child: const Icon(
-                  LineAwesomeIcons.angle_right,
+                  LineAwesomeIcons.angle_double_right_solid,
                   size: 18.0,
                   color: Colors.grey,
                 ),

@@ -1,10 +1,10 @@
 import 'dart:convert';
 
-import 'package:ARkea/Model/product_model.dart';
-import 'package:ARkea/utils/sizes.dart';
+import 'package:arkea/Model/product_model.dart';
+import 'package:arkea/utils/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ARkea/utils/shared_preferences.dart';
+import 'package:arkea/utils/shared_preferences.dart';
 
 // import '../../ViewModel/product_controller.dart';
 import '../widgets/product_card.dart';

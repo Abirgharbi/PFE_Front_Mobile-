@@ -1,5 +1,5 @@
-import 'package:ARkea/ViewModel/product_controller.dart';
-import 'package:ARkea/Views/screens/landing_page.dart';
+import 'package:arkea/ViewModel/product_controller.dart';
+import 'package:arkea/Views/screens/landing_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';

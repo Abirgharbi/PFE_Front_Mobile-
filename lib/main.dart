@@ -1,5 +1,6 @@
-import 'package:ARkea/Views/screens/splash_screen.dart';
-import 'package:ARkea/utils/shared_preferences.dart';
+import 'package:arkea/Views/screens/splash_screen.dart';
+import 'package:arkea/utils/shared_preferences.dart';
+import 'package:arkea/utils/shared_preferences.dart';
 
 import 'Views/screens/ProductDetails/popular_products_screen.dart';
 import 'package:flutter/material.dart';
@@ -60,7 +61,7 @@ class MyApp extends StatelessWidget {
           const ResponsiveBreakpoint.resize(1000, name: DESKTOP),
         ],
       ),
-      title: "ARkea",
+      title: "arkea",
       theme: ThemeData(
           textTheme: TTtextTheme.lightTextTheme,
           brightness: Brightness.light,

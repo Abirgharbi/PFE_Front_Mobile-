@@ -1,5 +1,5 @@
-import 'package:ARkea/Views/screens/ProductDetails/componentsDetailScreen/ArView.dart';
-import 'package:ARkea/utils/sizes.dart';
+import 'package:arkea/Views/screens/ProductDetails/componentsDetailScreen/ArView.dart';
+import 'package:arkea/utils/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../Model/product_model.dart';

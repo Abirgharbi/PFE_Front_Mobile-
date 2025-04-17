@@ -1,6 +1,6 @@
-import 'package:ARkea/Views/screens/Home/categories.dart';
-import 'package:ARkea/Views/screens/Home/filter_page.dart';
-import 'package:ARkea/utils/sizes.dart';
+import 'package:arkea/Views/screens/Home/categories.dart';
+import 'package:arkea/Views/screens/Home/filter_page.dart';
+import 'package:arkea/utils/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -50,7 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
           const SizedBox(
             height: 50,
           ),
-          SearchBar(
+          CustomSearchBar(
             productList: filteredProductList,
             onFilter: filterProducts,
           ),
