@@ -12,8 +12,6 @@ import 'signup.dart';
 
 var loginController = Get.put(LoginController());
 
-bool isEnabled = false;
-
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -22,20 +20,27 @@ class LoginPage extends StatefulWidget {
 }
 
 class LoginPageState extends State<LoginPage> {
+
+
+  // String? validateValue(String? value) {
+  //   if (value == null || value.isEmpty) {
+  //     loginController.isEnabled.value = false; 
+  //     return "Field could not be Empty";
+  //   } else if (!GetUtils.isEmail(value)) {
+  //     loginController.isEnabled.value = false;
+  //     return "Please Enter a Valid Email";
+  //   } else {
+  //     loginController.isEnabled.value = true; 
+  //     return null;
+  //   }
+  // }
+
+  
+  // Utilisation du validateEmail du controller
   String? validateValue(String? value) {
-    if (value == null || value.isEmpty) {
-      isEnabled = false;
-      return "Field could not be Empty";
-    } else if (!GetUtils.isEmail(value)) {
-      isEnabled = false;
-      return "Please Enter a Valid Email";
-    } else {
-      isEnabled = true;
-      return null;
-    }
+    return loginController.validateEmail(value);
   }
 
-  LoginController loginController = Get.put(LoginController());
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -92,7 +97,7 @@ class LoginPageState extends State<LoginPage> {
                             child: Obx(
                               () {
                                 return ElevatedButton(
-                                  style: isEnabled == true
+                                  style: loginController.isEnabled.value == true
                                       ? ElevatedButton.styleFrom(
                                           fixedSize: const Size(50, 50),
                                           backgroundColor: MyColors.btnColor,
@@ -110,7 +115,7 @@ class LoginPageState extends State<LoginPage> {
                                                 BorderRadius.circular(20),
                                           ),
                                         ),
-                                  onPressed: isEnabled == true
+                                  onPressed: loginController.isEnabled.value == true
                                       ? () async {
                                           await loginController.login();
                                         }

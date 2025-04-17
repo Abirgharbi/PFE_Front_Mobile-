@@ -23,8 +23,24 @@ class LoginController extends GetxController {
   RxString customer = "user".obs;
   RxString customerEmail = "userMail".obs;
   RxString customerImage = "".obs;
+  RxBool isEnabled = false.obs;
   var isNameEnabled = true.obs;
   RxBool isLogginIn = false.obs;
+
+  RxBool isEmailValid = false.obs;
+
+   String? validateEmail(String? value) {
+    if (value == null || value.isEmpty) {
+      isEnabled.value = false;
+      return "Field could not be Empty";
+    } else if (!GetUtils.isEmail(value)) {
+      isEnabled.value = false;
+      return "Please Enter a Valid Email";
+    } else {
+      isEnabled.value = true;
+      return null;
+    }
+  }
 
   login() async {
     isLogginIn.value = true;
