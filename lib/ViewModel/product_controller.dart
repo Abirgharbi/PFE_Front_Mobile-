@@ -29,7 +29,6 @@ class ProductController extends GetxController {
 
 
   late ProductComposite allProducts;
-
   // Exemple d'ajout d’une nouvelle section de produits comme "Flash Sales"
   late ProductComposite flashSalesProducts;
 
@@ -56,18 +55,17 @@ class ProductController extends GetxController {
     productNumber: 0.obs,
   );
 
-
      // Chargement
       getAllProducts();
       getFlashSalesProducts();
   }
 
    void getAllProducts() async {
-    await allProducts.fetchProducts("product/all");
+    await allProducts.fetchData("product/all");
   }
 
   void getFlashSalesProducts() async {
-  await flashSalesProducts.fetchProducts("product/flashsales");
+  await flashSalesProducts.fetchData("product/flashsales");
 }
 
 // Sans Composite 

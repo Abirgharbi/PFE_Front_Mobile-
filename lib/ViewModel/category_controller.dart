@@ -32,7 +32,7 @@ class CategoryController extends GetxController {
   }
 
     void getAllCategories() async {
-    await allCategories.fetchCategories("category/all");
+    await allCategories.fetchData("category/all");
   }
 
 // Sans Composite 

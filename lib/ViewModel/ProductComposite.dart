@@ -1,11 +1,12 @@
 import 'dart:convert';
+import 'package:arkea/ViewModel/component.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../Model/product_model.dart';
 import '../Model/service/network_handler.dart';
 import '../utils/shared_preferences.dart';
 
-class ProductComposite {
+class ProductComposite extends IDataComposite {
   
   List<ProductModel> products;
   RxBool isLoading;
@@ -17,7 +18,9 @@ class ProductComposite {
     required this.productNumber,
   });
 
-  Future<void> fetchProducts(String endpoint) async {
+  
+  @override
+  Future<void> fetchData(String endpoint) async {
     try {
       isLoading.value = true;
       final response = await NetworkHandler.get(endpoint);

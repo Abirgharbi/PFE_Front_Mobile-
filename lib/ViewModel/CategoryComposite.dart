@@ -5,9 +5,11 @@ import 'package:get/get.dart';
 import '../Model/product_model.dart';
 import '../Model/service/network_handler.dart';
 import '../utils/shared_preferences.dart';
+import 'component.dart';
 
 
-class CategoryComposite {
+
+class CategoryComposite extends IDataComposite {
   
   List<CategoryModel> categories;
   RxBool isLoading;
@@ -19,7 +21,9 @@ class CategoryComposite {
     required this.categoryNumber,
   });
 
-  Future<void> fetchCategories(String endpoint) async {
+  
+  @override
+  Future<void> fetchData(String endpoint)  async {
     try {
       isLoading.value = true;
       final response = await NetworkHandler.get(endpoint);
@@ -31,6 +35,6 @@ class CategoryComposite {
     } finally {
       isLoading.value = false;
     }
-  }
+}
 }
 
