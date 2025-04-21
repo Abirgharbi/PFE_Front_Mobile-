@@ -1,0 +1,94 @@
+import 'package:get/get.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:arkea/utils/shared_preferences.dart';
+import 'package:arkea/ViewModel/order_controller.dart';
+
+class PaymentController extends GetxController {
+  final PaymentApiService paymentApiService;
+  final StripeService stripeService;
+
+  PaymentController({
+    required this.paymentApiService,
+    required this.stripeService,
+  });
+
+  var email = '';
+  var phone = '';
+  var city = '';
+  var country = '';
+  var state = '';
+  var zipCode = '';
+  var line1 = '';
+  var line2 = '';
+
+  OrderController orderController = Get.put(OrderController());
+
+  @override
+  void onInit() async {
+    super.onInit();
+    email = await sharedPrefs.getPref('customerEmail');
+    phone = await sharedPrefs.getPref('customerPhoneNumber');
+    city = await sharedPrefs.getPref('city');
+    country = await sharedPrefs.getPref('country');
+    state = await sharedPrefs.getPref('state');
+    zipCode = await sharedPrefs.getPref('zipCode');
+    line1 = await sharedPrefs.getPref('line1');
+    line2 = await sharedPrefs.getPref('line2');
+  }
+
+  Future<void> handlePayPress() async {
+    try {
+      var billingDetails = BillingDetails(
+        email: email,
+        phone: phone,
+        address: Address(
+          city: city,
+          country: country,
+          line1: line1,
+          line2: line2,
+          state: state,
+          postalCode: zipCode,
+        ),
+      );
+//GRASP indirection 
+      final paymentMethod = await stripeService.createPaymentMethod(
+        params: PaymentMethodParams.card(
+          paymentMethodData: PaymentMethodData(
+            billingDetails: billingDetails,
+          ),
+        ),
+      );
+//GRASP indirection 
+      final paymentIntentResult = await paymentApiService.payEndpointMethodId(
+        useStripeSdk: true,
+        paymentMethodId: paymentMethod.id,
+        currency: 'usd',
+        items: ['id-1'],
+      );
+
+      if (paymentIntentResult['error'] != null) {
+        Get.snackbar("Error", '${paymentIntentResult['error']}');
+        return;
+      }
+
+      if (paymentIntentResult['clientSecret'] != null &&
+          paymentIntentResult['requiresAction'] == null) {
+        orderController.addOrder();
+        Get.snackbar("Success", "Payment succeeded");
+        Get.toNamed('/landing');
+        return;
+      }
+
+      if (paymentIntentResult['clientSecret'] != null &&
+          paymentIntentResult['requiresAction'] == true) {
+        final paymentIntent = await stripeService.handleNextAction(
+          paymentIntentResult['clientSecret'],
+        );
+      }
+    } catch (e) {
+      Get.snackbar("Error", '$e');
+      rethrow;
+    }
+  }
+}

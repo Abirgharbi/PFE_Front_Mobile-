@@ -1,0 +1,22 @@
+import 'dart:convert';
+import 'package:arkea/Model/service/network_handler.dart';
+
+class DefaultPaymentApiService implements PaymentApiService {
+  @override
+  Future<Map<String, dynamic>> payEndpointMethodId({
+    required bool useStripeSdk,
+    required String paymentMethodId,
+    required String currency,
+    List<String>? items,
+  }) async {
+    var body = json.encode({
+      'useStripeSdk': useStripeSdk,
+      'paymentMethodId': paymentMethodId,
+      'currency': currency,
+      'amount': 1000, // Exemple : montant fixe ou dynamique via OrderController
+    });
+
+    var response = await NetworkHandler.post(body, "order/pay");
+    return json.decode(response);
+  }
+}

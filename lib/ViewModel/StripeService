@@ -1,0 +1,9 @@
+import 'package:flutter_stripe/flutter_stripe.dart';
+
+abstract class StripeService { 
+  Future<PaymentMethod> createPaymentMethod({
+    required PaymentMethodParams params,
+  });
+
+  Future<Map<String, dynamic>> handleNextAction(String clientSecret);
+}

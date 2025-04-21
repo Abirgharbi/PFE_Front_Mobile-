@@ -1,0 +1,15 @@
+import 'package:flutter_stripe/flutter_stripe.dart';
+
+class DefaultStripeService implements StripeService {
+  @override
+  Future<PaymentMethod> createPaymentMethod({
+    required PaymentMethodParams params,
+  }) {
+    return Stripe.instance.createPaymentMethod(params: params);
+  }
+
+  @override
+  Future<Map<String, dynamic>> handleNextAction(String clientSecret) {
+    return Stripe.instance.handleNextAction(clientSecret);
+  }
+}

@@ -1,0 +1,8 @@
+abstract class PaymentApiService {
+  Future<Map<String, dynamic>> payEndpointMethodId({
+    required bool useStripeSdk,
+    required String paymentMethodId,
+    required String currency,
+    List<String>? items,
+  });
+}
