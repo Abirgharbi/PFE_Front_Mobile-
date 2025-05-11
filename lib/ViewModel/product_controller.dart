@@ -44,14 +44,12 @@ class ProductController extends GetxController {
    // Instance pour produits normaux
      allProducts = ProductComposite(
       products: [],
-      isLoading: isLoading,
       productNumber: productNumber,
     );
 
      // Instance pour Flash Sales
     flashSalesProducts = ProductComposite(
     products: [],
-    isLoading: false.obs,
     productNumber: 0.obs,
   );
 

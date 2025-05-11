@@ -286,7 +286,7 @@ class EditProfileScreenState extends State<EditProfileScreen> {
                           children = <Widget>[
                             Padding(
                               padding: const EdgeInsets.only(top: 16),
-                              child: FormTextFiled(
+                              child: (
                                   label: "Phone N°",
                                   prefIcon: Icon(Icons.phone,
                                       color: MyColors.captionColor),

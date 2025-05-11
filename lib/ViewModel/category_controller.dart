@@ -25,7 +25,6 @@ class CategoryController extends GetxController {
     getCategories();
       allCategories = CategoryComposite(
       categories: [],
-      isLoading: isLoading,
       categoryNumber: categoryNumber,
     );
     getAllCategories();

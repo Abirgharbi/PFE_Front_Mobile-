@@ -6,17 +6,12 @@ import '../Model/product_model.dart';
 import '../Model/service/network_handler.dart';
 import '../utils/shared_preferences.dart';
 
-class ProductComposite extends IDataComposite {
-  
+class ProductComposite extends DataComposite {
+
   List<ProductModel> products;
-  RxBool isLoading;
   RxInt productNumber;
 
-  ProductComposite({
-    required this.products,
-    required this.isLoading,
-    required this.productNumber,
-  });
+ ProductComposite({required this.products, required this.productNumber,});
 
   
   @override
